@@ -1,0 +1,114 @@
+{   
+    "Gear_standard_parameters":{
+        "coefficientOfFriction": 0.3,
+        "pressureAngleDEG": 20
+    },
+    "Lewis_params": {
+        "FOS": 1.2,
+        "serviceFactor": 2.0
+    },
+    "Material_properties":{
+        "Steel": {
+            "density": 7850,
+            "maxAllowableStressMPa": 400
+        },
+        "Aluminum": {
+            "density": 2710
+        }
+    },
+    "Motors": {
+        "MotorU12_framed": {
+            "maxTorque": 8.83,
+            "power": 4000,
+            "mass": 0.778,
+            "dia": 106.8,
+            "length": 47.6
+        },
+        "MotorU12_frameless": {
+            "maxTorque": 8.83,
+            "power": 4000,
+            "mass": 0.578,
+            "dia": 106.8,
+            "length": 47.6,
+            "statorID": 70,
+            "statorOD": 95,
+            "statorHeight": 45.6
+        },
+        "Motor8020_framed": {
+            "maxTorque": 5.5,
+            "power": 1900,
+            "mass": 0.710,
+            "dia": 89,
+            "length": 50
+        },
+        "Motor8020_frameless": {
+            "maxTorque": 5.5,
+            "power": 1900,
+            "mass": 0.560,
+            "dia": 89,
+            "length": 31.5,
+            "statorID": 58,
+            "statorOD": 77,
+            "statorHeight": 29.5
+        },
+        "MotorU8_framed": {
+            "maxTorque": 1.15,
+            "power": 180,
+            "mass": 0.240,
+            "dia": 86.8,
+            "length": 26.5
+        },
+        "MotorU8_frameless": {
+            "maxTorque": 1.15,
+            "power": 180,
+            "mass": 0.140,
+            "dia": 86.8,
+            "length": 18.25,
+            "statorID": 60,
+            "statorOD": 80
+        },
+        "MotorU10_framed": {
+            "maxTorque": 3.184,
+            "power": 1500,
+            "mass": 0.405,
+            "dia": 86.8,
+            "length": 38.5
+        },
+        "MotorU10_frameless": {
+            "maxTorque": 3.184,
+            "power": 1500,
+            "mass": 0.280,
+            "dia": 86.8,
+            "length": 27.5,
+            "statorID": 60,
+            "statorOD": 80
+        },
+        "MotorMN8014_framed": {
+            "maxTorque": 4.19,
+            "power": 2423,
+            "mass": 0.392,
+            "dia": 87.8,
+            "length": 29.0
+        },
+        "MotorMaxonIR_framed": {
+            "maxTorque": 20.0,
+            "power": 2423,
+            "mass": 1.000,
+            "dia": 108.0,
+            "length": 43
+        }
+    },
+    "Design_parameters":{
+        "Internal_designs": {
+            "ringRadialWidthMM": 2.5,
+            "ringHousingWidthMM": 2.0
+        },
+        "External_designs": {
+            "ringRadialWidthMM": 5.0
+        }
+    },
+    "Cost_gain_parameters":{
+        "K_Mass": 1,
+        "K_Eff": -2
+    }
+}
