@@ -1,0 +1,41 @@
+{   
+    "sspg_design_parameters":{
+        "ringRadialWidthMM"            : 3.0,
+        "planetMinDistanceMM"          : 5.0,
+        "sCarrierExtrusionDiaMM"       : 8.0,
+        "sCarrierExtrusionClearanceMM" : 1.0,
+        "carrier1ShaftHeightMM"        : 10,
+        "mainCase2AttachmentHeightMM"  : 6,
+        "baseThicknessMM"              : 3,
+        "sCarrierThicknessMM"          : 5,
+        "mainCoverThicknessMM"         : 2,
+        "planetBoreMM"                 : 8,
+        "sunBoreMM"                    : 6,
+        "couplerRadiusMM"              : 16.5,
+        "couplerThicknessMM"           : 3,
+        "couplerShaftHeightMM"         : 12,
+        "clearanceMotorandCaseMM"      : 2.3,
+        "clearanceRingandCaseMM"       : 1.5,
+        "clearance1RingandCaseMM"      : 1.5,
+        "clearanceCarrierPlanetMM"     : 1.5,
+        "upperHousingHeight"           : 5,
+        "clearanceSCarrierMotorMM"     : 2,
+        "carrierIDClearanceMM"         : 2,
+        "sCarrierIDClearanceMM"        : 2,
+        "bearingIDClearanceMM"         : 10,
+        "smallBearingMassKG"           : 0.015,
+        "smallBearingODMM"             : 19,
+        "smallBearingWidth"            : 5
+    },
+    "sspg_optimization_parameters":{
+        "GEAR_RATIO_MIN"       : 4.0,
+        "GEAR_RATIO_MAX"       : 15.0,
+        "GEAR_RATIO_STEP"      : 0.1,
+        "MODULE_MIN"           : 0.5,
+        "MODULE_MAX"           : 1.2,
+        "NUM_PLANET_MIN"       : 3,
+        "NUM_PLANET_MAX"       : 7,
+        "NUM_TEETH_SUN_MIN"    : 18,
+        "NUM_TEETH_PLANET_MIN" : 18
+    }
+}
