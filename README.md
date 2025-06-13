@@ -3,4 +3,4 @@ Design Automation of 3d printed Actuators
 
 
 ## Link for the CAD files
-[[Link]([https://iitracin-my.sharepoint.com/:f:/g/personal/deepak_k1_ph_iitr_ac_in/Eoou-iV_3kdOqubWmV4J-BoB4wz8Vb77-5okr7BEyRHx-g?e=jbbmFa](https://iitracin-my.sharepoint.com/:f:/g/personal/deepak_k1_ph_iitr_ac_in/Eoou-iV_3kdOqubWmV4J-BoBR-ziahhJzfxHoIa2yg4qnw?e=0qEaW6))]
+[[Link](https://iitracin-my.sharepoint.com/:f:/r/personal/deepak_k1_ph_iitr_ac_in/Documents/IISc_3DP_Actuators?csf=1&web=1&e=UnbMRG)]
