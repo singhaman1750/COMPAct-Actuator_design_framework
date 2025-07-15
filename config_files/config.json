@@ -30,7 +30,9 @@
             "power": 4000,
             "mass": 0.778,
             "dia": 106.8,
-            "length": 47.6
+            "length": 47.6,
+            "output_hole_PCD" : 23,
+            "output_hole_dia" : 4
         },
         "MotorU12_frameless": {
             "maxTorque": 8.83,
@@ -47,7 +49,9 @@
             "power": 1900,
             "mass": 0.710,
             "dia": 89,
-            "length": 50
+            "length": 50,
+            "output_hole_PCD" : 23,
+            "output_hole_dia" : 4
         },
         "Motor8020_frameless": {
             "maxTorque": 5.5,
@@ -64,7 +68,9 @@
             "power": 180,
             "mass": 0.240,
             "dia": 86.8,
-            "length": 26.5
+            "length": 26.5,
+            "output_hole_PCD" : 23,
+            "output_hole_dia" : 4
         },
         "MotorU8_frameless": {
             "maxTorque": 1.15,
@@ -76,11 +82,13 @@
             "statorOD": 80
         },
         "MotorU10_framed": {
-            "maxTorque": 3.184,
-            "power": 1500,
-            "mass": 0.500,
-            "dia": 86.8,
-            "length": 43
+            "maxTorque"       : 3.184,
+            "power"           : 1500,
+            "mass"            : 0.500,
+            "dia"             : 86.8,
+            "length"          : 43,
+            "output_hole_PCD" : 23,
+            "output_hole_dia" : 4
         },
         "MotorU10_frameless": {
             "maxTorque": 3.184,
@@ -96,7 +104,9 @@
             "power": 2423,
             "mass": 0.392,
             "dia": 87.8,
-            "length": 29.0
+            "length": 29.0,
+            "output_hole_PCD" : 23,
+            "output_hole_dia" : 4
         },
         "MotorMaxonIR_framed": {
             "maxTorque": 20.0,
