@@ -1198,7 +1198,6 @@ class singleStagePlanetaryActuator:
                 f'"bearing_retainer_thickness"= {self.bearing_retainer_thickness}\n',
             ])
 
-
     #--------------------------------------------
     # Gear tooth stress analysis
     #--------------------------------------------
@@ -2187,6 +2186,24 @@ class optimizationSingleStageActuator:
             Cost       = self.K_Mass * mass + self.K_Eff * eff
             Torque_Density = peakTorque / mass
             print(iter,",", gearRatio,",",module,",", Ns,",", Np,",", Nr,",", numPlanet,",",  fwSunMM,",", fwPlanetMM,",", fwRingMM,",",Opt_PSC_sun,",", Opt_PSC_planet,",", Opt_PSC_ring,",", Opt_CD_SP, ",", Opt_CD_PR,",", mass,",", eff,",", peakTorque,",", Cost, ",", Torque_Density)
+
+    def genOptimalActuator(self, Actuator=singleStagePlanetaryActuator, gear_ratio = 6.0, UsePSCasVariable = 1, log = 0, csv = 1):
+        self.GEAR_RATIO_MIN = gear_ratio
+        self.gearRatioIter = self.GEAR_RATIO_MIN
+        self.GEAR_RATIO_STEP = 1.0
+        self.GEAR_RATIO_MAX = gear_ratio
+        
+        self.UsePSCasVariable = UsePSCasVariable
+        totalTime = 0
+        if UsePSCasVariable == 0:
+            totalTime = self.optimizeActuatorWithoutPSC(Actuator, log, csv)
+        elif UsePSCasVariable == 1:
+            totalTime = self.optimizeActuatorWith_MINLP_PSC(Actuator, log, csv)
+        else:
+            totalTime = 0
+            print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
+        
+        return totalTime
 
     def optimizeActuator(self, Actuator=singleStagePlanetaryActuator, UsePSCasVariable = 1, log = 0, csv = 1):
         self.UsePSCasVariable = UsePSCasVariable

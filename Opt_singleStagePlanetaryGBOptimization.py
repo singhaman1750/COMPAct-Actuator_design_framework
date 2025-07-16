@@ -291,7 +291,8 @@ Optimizer_U12 = optimizationSingleStageActuator(design_params        = sspg_desi
                                                 GEAR_RATIO_STEP      = GEAR_RATIO_STEP     )
 
 # U8
-totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
+totalTime_U8 = Optimizer_U8.genOptimalActuator(Actuator_U8, UsePSCasVariable = 0, gear_ratio=5, log=0, csv=1)
+# totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
 print("Optimization Completed : U8 SSPG : Time taken:", totalTime_U8, " sec")
 # 
 # U10
