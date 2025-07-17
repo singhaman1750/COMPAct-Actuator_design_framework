@@ -158,7 +158,7 @@ maxGearboxDiameter_VT8020  = Motor8020.motorDiaMM - 2*sspg_design_params["ringRa
 maxGearboxDiameter_U12     = MotorU12.motorDiaMM - 2*sspg_design_params["ringRadialWidthMM"] 
 
 # U8-Actuator
-Actuator_U8    = singleStagePlanetaryActuator(design_params            = sspg_design_params,
+Actuator_U8    = singleStagePlanetaryActuator(design_params             = sspg_design_params,
                                                motor                    = MotorU8,
                                                planetaryGearbox         = PlanetaryGearbox,
                                                FOS                      = MIT_params["FOS"],
