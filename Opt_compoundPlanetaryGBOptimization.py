@@ -140,7 +140,7 @@ compoundPlanetaryGearboxInstance = compoundPlanetaryGearbox(design_parameters   
 #-----------------------------------------------------
 # Actuator
 #-----------------------------------------------------
-maxGearboxDiameter_U8     = 1.5 * MotorU8.motorDiaMM     # - 2*cpg_design_params["ringRadialWidthMM"]
+maxGearboxDiameter_U8     = 1 * MotorU8.motorDiaMM     # - 2*cpg_design_params["ringRadialWidthMM"]
 maxGearboxDiameter_U10    = 1.5 * MotorU10.motorDiaMM    # - 2*cpg_design_params["ringRadialWidthMM"]
 maxGearboxDiameter_MN8014 = 1.5 * MotorMN8014.motorDiaMM # - 2*cpg_design_params["ringRadialWidthMM"]
 maxGearboxDiameter_VT8020 = 1.5 * Motor8020.motorDiaMM   # - 2*cpg_design_params["ringRadialWidthMM"]
@@ -301,11 +301,11 @@ Optimizer_U12 = optimizationCompoundPlanetaryActuator(design_parameters         
 #-------------------------------------------------
 # Optimize
 #-------------------------------------------------
-# totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 1, log=0, csv=1)
-# print("Optimization Completed : CPG U8 : Total Time:", totalTime_U8)
+totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
+print("Optimization Completed : CPG U8 : Total Time:", totalTime_U8)
 
-totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
-print("Optimization Completed : CPG U10 : Total Time:", totalTime_U10)
+# totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
+# print("Optimization Completed : CPG U10 : Total Time:", totalTime_U10)
 
 # totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 1, log=0, csv=1)
 # print("Optimization Completed : CPG MN8014 : Total Time:", totalTime_MN8014)

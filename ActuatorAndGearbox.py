@@ -2611,8 +2611,8 @@ class compoundPlanetaryActuator:
         self.clearance_sun_coupler_sec_carrier = self.standard_clearance_1_5mm
 
         #-----------Motor----------------------------
-        self.motor_OD            = 80
-        self.motor_height         = 27
+        self.motor_OD            = 86.8
+        self.motor_height         = 26.5
         self.motor_mount_hole_PCD = 32
         self.motor_mount_hole_dia = 4
         self.motor_mount_hole_num = 4
@@ -2762,6 +2762,7 @@ class compoundPlanetaryActuator:
 
     def genEquationFile(self):
         # writing values into text file imported which is imported into solidworks
+        self.setVariables()
         file_path = os.path.join(os.path.dirname(__file__), 'CPG', 'cpg_equations.txt')
         with open(file_path, 'w') as eqFile:
             l = [
