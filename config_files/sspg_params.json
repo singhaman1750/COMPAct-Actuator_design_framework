@@ -38,7 +38,7 @@
         "NUM_TEETH_SUN_MIN"    : 18,
         "NUM_TEETH_PLANET_MIN" : 18
     },
-    "sspg_3DP_design_parameters":{
+    "sspg_3DP_design_parameters_old":{
         "ringRadialWidthMM"            : 5.0,
         "planetMinDistanceMM"          : 5.0,
         "sCarrierExtrusionDiaMM"       : 8.0,
@@ -60,7 +60,7 @@
         "planet_bore"                  : 10,
         "bearing_retainer_thickness"   : 2
     },
-    "sspg_3DP_design_parameters_new":{
+    "sspg_3DP_design_parameters":{
         "ringRadialWidthMM"                                      : 5.0,
         "planetMinDistanceMM"                                    : 5.0,
         "sCarrierExtrusionDiaMM"                                 : 8.0,
