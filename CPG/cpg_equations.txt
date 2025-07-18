@@ -54,7 +54,7 @@
 "case_mounting_bolt_depth"= 4.5
 "ring_radial_thickness"= 5
 "ring_OD"= 82.0
-"ring_to_chamfer_clearance"= 2.0
+"ring_to_chamfer_clearance"= 2
 "Motor_case_OD_base_to_chamfer"= 5
 "pattern_offset_from_motor_case_OD_base"= 3
 "pattern_bulge_dia"= 3
