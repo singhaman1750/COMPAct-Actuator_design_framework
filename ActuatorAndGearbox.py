@@ -2656,26 +2656,26 @@ class compoundPlanetaryActuator:
         self.clr_tip_root = self.h_f - self.h_a
 
         self.dp_s      = self.module * self.Ns
-        self.db_s      = self.dp_s * np.cos(np.radians(self.pressure_angle))
-        self.alpha_s   = (np.sqrt(self.dp_s ** 2 - self.db_s ** 2) / self.db_s) * 180 / np.pi - self.pressure_angle
+        self.db_s      = self.dp_s * np.cos((self.pressure_angle))
+        self.alpha_s   = (np.sqrt(self.dp_s ** 2 - self.db_s ** 2) / self.db_s) * 180 / np.pi - self.pressure_angle_deg
         self.beta_s    = (360 / (4 * self.Ns) - self.alpha_s) * 2
         self.fw_s_calc = self.compoundPlanetaryGearbox.fwSunMM
 
         self.dp_p_b    = self.module * self.Np_b
-        self.db_p_b    = self.dp_p_b * np.cos(np.radians(self.pressure_angle))
-        self.alpha_p_b = (np.sqrt(self.dp_p_b ** 2 - self.db_p_b ** 2) / self.db_p_b) * 180 / np.pi - self.pressure_angle
+        self.db_p_b    = self.dp_p_b * np.cos((self.pressure_angle))
+        self.alpha_p_b = (np.sqrt(self.dp_p_b ** 2 - self.db_p_b ** 2) / self.db_p_b) * 180 / np.pi - self.pressure_angle_deg
         self.beta_p_b  = (360 / (4 * self.Np_b) - self.alpha_p_b) * 2
         self.fw_p_b    = self.compoundPlanetaryGearbox.fwPlanetBigMM
         
         self.dp_r    = self.module * self.Nr
-        self.db_r    = self.dp_r * np.cos(np.radians(self.pressure_angle))
-        self.alpha_r = (np.sqrt(self.dp_r ** 2 - self.db_r ** 2) / self.db_r) * 180 / np.pi - self.pressure_angle
+        self.db_r    = self.dp_r * np.cos((self.pressure_angle))
+        self.alpha_r = (np.sqrt(self.dp_r ** 2 - self.db_r ** 2) / self.db_r) * 180 / np.pi - self.pressure_angle_deg
         self.beta_r  = (360 / (4 * self.Nr) + self.alpha_r) * 2
         self.fw_r    = self.compoundPlanetaryGearbox.fwRingMM
 
         self.dp_p_s    = self.module * self.Np_s
-        self.db_p_s    = self.dp_p_s * np.cos(np.radians(self.pressure_angle))
-        self.alpha_p_s = (np.sqrt(self.dp_p_s ** 2 - self.db_p_s ** 2) / self.db_p_s) * 180 / np.pi - self.pressure_angle
+        self.db_p_s    = self.dp_p_s * np.cos((self.pressure_angle))
+        self.alpha_p_s = (np.sqrt(self.dp_p_s ** 2 - self.db_p_s ** 2) / self.db_p_s) * 180 / np.pi - self.pressure_angle_deg
         self.beta_p_s  = (360 / (4 * self.Np_s) - self.alpha_p_s) * 2
         self.fw_p_s    = self.fw_r + self.clearance_planet
 
@@ -3740,7 +3740,6 @@ class optimizationSingleStageActuator:
                                             effActuator = Actuator.planetaryGearbox.getEfficiency()
                                             # massActuator = Actuator.getMassKG_3DP()
                                             massActuator = Actuator.getMassKG_3DP()
-
                                             self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
                                             #self.Cost = massActuator/effActuator
                                             if self.Cost <= MinCost:
@@ -4238,7 +4237,7 @@ class optimizationCompoundPlanetaryActuator:
                                                                                                  FOS                      = Actuator.FOS,
                                                                                                  serviceFactor            = Actuator.serviceFactor,
                                                                                                  maxGearboxDiameter       = Actuator.maxGearboxDiameter, # mm 
-                                                                                                 stressAnalysisMethodName = "Lewis") # Lewis or AGMA
+                                                                                                 stressAnalysisMethodName = "MIT") # Lewis or AGMA
                                                         # self.printOptimizationResults(Actuator, log, csv)
                                             Actuator.compoundPlanetaryGearbox.setNumPlanet(Actuator.compoundPlanetaryGearbox.numPlanet + 1)
                                         # Actuator.compoundPlanetaryGearbox.setNr(Actuator.compoundPlanetaryGearbox.Nr + 1)
