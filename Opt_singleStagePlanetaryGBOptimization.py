@@ -145,8 +145,8 @@ PlanetaryGearbox = singleStagePlanetaryGearbox(design_params             = sspg_
                                                gear_standard_parameters  = Gear_standard_parameters,
                                                maxGearAllowableStressMPa = PLA["maxAllowableStressMPa"], # MPa
                                                densityGears              = PLA["density"],    # kg/m^3
-                                               densityCarrier            = Aluminum["density"], # kg/m^3
-                                               densityStructure          = Aluminum["density"]) # kg/m^3
+                                               densityCarrier            = PLA["density"], # kg/m^3
+                                               densityStructure          = PLA["density"]) # kg/m^3
 
 #--------------------------------------------------------
 # Actuators

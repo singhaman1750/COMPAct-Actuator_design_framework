@@ -33,11 +33,13 @@ material_properties = config_data["Material_properties"]
 
 Gear_standard_parameters = config_data["Gear_standard_parameters"]
 Lewis_params             = config_data["Lewis_params"]
+MIT_params               = config_data["MIT_params"]
 
 Steel    = material_properties["Steel"]
 Aluminum = material_properties["Aluminum"]
+PLA      = material_properties["PLA"]
 
-cpg_design_params       = cpg_params["cpg_design_parameters"]
+cpg_design_params       = cpg_params["cpg_3DP_design_parameters"]
 cpg_optimization_params = cpg_params["cpg_optimization_parameters"]
 
 #--------------------------------------------------------
@@ -133,63 +135,63 @@ MotorU12 = motor(maxMotorAngVelRPM = MotorU12_maxMotorAngVelRPM,
 #-------------------------------------------------------
 compoundPlanetaryGearboxInstance = compoundPlanetaryGearbox(design_parameters         = cpg_design_params,
                                                             gear_standard_parameters  = Gear_standard_parameters,
-                                                            gearMaterialDensity       = Steel["density"],
-                                                            carrierMaterialDensity    = Aluminum["density"],
-                                                            maxGearAllowableStressMPa = Steel["maxAllowableStressMPa"])
+                                                            gearMaterialDensity       = PLA["density"],
+                                                            carrierMaterialDensity    = PLA["density"],
+                                                            maxGearAllowableStressMPa = PLA["maxAllowableStressMPa"])
 
 #-----------------------------------------------------
 # Actuator
 #-----------------------------------------------------
-maxGearboxDiameter_U8     = 1 * MotorU8.motorDiaMM     # - 2*cpg_design_params["ringRadialWidthMM"]
-maxGearboxDiameter_U10    = 1.5 * MotorU10.motorDiaMM    # - 2*cpg_design_params["ringRadialWidthMM"]
-maxGearboxDiameter_MN8014 = 1.5 * MotorMN8014.motorDiaMM # - 2*cpg_design_params["ringRadialWidthMM"]
-maxGearboxDiameter_VT8020 = 1.5 * Motor8020.motorDiaMM   # - 2*cpg_design_params["ringRadialWidthMM"]
-maxGearboxDiameter_U12    = 1.5 * MotorU12.motorDiaMM    # - 2*cpg_design_params["ringRadialWidthMM"] 
+maxGearboxDiameter_U8     = 1 * MotorU8.motorDiaMM       
+maxGearboxDiameter_U10    = 1 * MotorU10.motorDiaMM    
+maxGearboxDiameter_MN8014 = 1 * MotorMN8014.motorDiaMM 
+maxGearboxDiameter_VT8020 = 1 * Motor8020.motorDiaMM   
+maxGearboxDiameter_U12    = 1 * MotorU12.motorDiaMM     
 
 # U8-Actuator
 Actuator_U8 = compoundPlanetaryActuator(design_parameters        = cpg_design_params,
                                         motor                    = MotorU8,  
                                         compoundPlanetaryGearbox = compoundPlanetaryGearboxInstance, 
-                                        FOS                      = Lewis_params["FOS"], 
-                                        serviceFactor            = Lewis_params["serviceFactor"], 
+                                        FOS                      = MIT_params["FOS"], 
+                                        serviceFactor            = MIT_params["serviceFactor"], 
                                         maxGearboxDiameter       = maxGearboxDiameter_U8,
-                                        stressAnalysisMethodName = "Lewis")
+                                        stressAnalysisMethodName = "MIT")
 
 # U10-Actuator
 Actuator_U10 = compoundPlanetaryActuator(design_parameters        = cpg_design_params,
                                          motor                    = MotorU10,  
                                          compoundPlanetaryGearbox = compoundPlanetaryGearboxInstance, 
-                                         FOS                      = Lewis_params["FOS"], 
-                                         serviceFactor            = Lewis_params["serviceFactor"], 
+                                         FOS                      = MIT_params["FOS"], 
+                                         serviceFactor            = MIT_params["serviceFactor"], 
                                          maxGearboxDiameter       = maxGearboxDiameter_U10,
-                                         stressAnalysisMethodName = "Lewis")
+                                         stressAnalysisMethodName = "MIT")
 
 # MN8014-Actuator
 Actuator_MN8014 = compoundPlanetaryActuator(design_parameters        = cpg_design_params,
                                             motor                    = MotorMN8014,  
                                             compoundPlanetaryGearbox = compoundPlanetaryGearboxInstance, 
-                                            FOS                      = Lewis_params["FOS"], 
-                                            serviceFactor            = Lewis_params["serviceFactor"], 
+                                            FOS                      = MIT_params["FOS"], 
+                                            serviceFactor            = MIT_params["serviceFactor"], 
                                             maxGearboxDiameter       = maxGearboxDiameter_MN8014,
-                                            stressAnalysisMethodName = "Lewis")
+                                            stressAnalysisMethodName = "MIT")
 
 # VT8020-Actuator
 Actuator_VT8020 = compoundPlanetaryActuator(design_parameters        = cpg_design_params,
                                             motor                    = Motor8020,  
                                             compoundPlanetaryGearbox = compoundPlanetaryGearboxInstance, 
-                                            FOS                      = Lewis_params["FOS"], 
-                                            serviceFactor            = Lewis_params["serviceFactor"], 
+                                            FOS                      = MIT_params["FOS"], 
+                                            serviceFactor            = MIT_params["serviceFactor"], 
                                             maxGearboxDiameter       = maxGearboxDiameter_VT8020,
-                                            stressAnalysisMethodName = "Lewis")
+                                            stressAnalysisMethodName = "MIT")
 
 # U12-Actuator
 Actuator_U12 = compoundPlanetaryActuator(design_parameters        = cpg_design_params,
                                          motor                    = MotorU12,  
                                          compoundPlanetaryGearbox = compoundPlanetaryGearboxInstance, 
-                                         FOS                      = Lewis_params["FOS"], 
-                                         serviceFactor            = Lewis_params["serviceFactor"], 
+                                         FOS                      = MIT_params["FOS"], 
+                                         serviceFactor            = MIT_params["serviceFactor"], 
                                          maxGearboxDiameter       = maxGearboxDiameter_U12,
-                                         stressAnalysisMethodName = "Lewis")
+                                         stressAnalysisMethodName = "MIT")
 
 #-----------------------------------------------------
 # Optimization

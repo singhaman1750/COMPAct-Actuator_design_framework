@@ -1583,32 +1583,33 @@ class singleStagePlanetaryActuator:
         # self.planetMinDistanceMM          = 5.0
         # self.sCarrierExtrusionDiaMM       = 8.0
         # self.sCarrierExtrusionClearanceMM = 1.0
-        self.bearingIDClearanceMM           = self.design_params["bearingIDClearanceMM"]
         
         # --- Clearances -----------------
         self.clearance_planet                           = self.design_params["clearance_planet"]                           # 1.5
         self.clearance_case_mount_holes_shell_thickness = self.design_params["clearance_case_mount_holes_shell_thickness"] # 1
         self.standard_clearance_1_5mm                   = self.design_params["standard_clearance_1_5mm"]                   # 1.5
-        self.clearance_sun_coupler_sec_carrier          = self.design_params["clearance_sun_coupler_sec_carrier"]          # 1.5
-        self.ring_to_chamfer_clearance                  = self.design_params["ring_to_chamfer_clearance"]                  # 2
+        self.case_mounting_nut_clearance                = self.design_params["case_mounting_nut_clearance"]                # 2
         self.standard_fillet_1_5mm                      = self.design_params["standard_fillet_1_5mm"]                      # 1.5
         self.standard_bearing_insertion_chamfer         = self.design_params["standard_bearing_insertion_chamfer"]         # 0.5
+        self.bearingIDClearanceMM                       = self.design_params["bearingIDClearanceMM"]
+        self.clearance_sun_coupler_sec_carrier          = self.design_params["clearance_sun_coupler_sec_carrier"]          # 1.5
+        self.ring_to_chamfer_clearance                  = self.design_params["ring_to_chamfer_clearance"]                  # 2
+
 
         # --- Secondary Carrier dimensions ---
         self.sec_carrier_thickness = self.design_params["sec_carrier_thickness"] # 5
 
         # --- Sun coupler, sun gear & sun gear dimensions ---
-        self.sun_coupler_hub_thickness = self.design_params["sun_coupler_hub_thickness"] # 4
-        self.sun_shaft_bearing_OD      = self.design_params["sun_shaft_bearing_OD"]      # 16
-        self.sun_shaft_bearing_width   = self.design_params["sun_shaft_bearing_width"]   # 5
         self.sun_shaft_bearing_ID      = self.design_params["sun_shaft_bearing_ID"]      # 8
+        self.sun_shaft_bearing_OD      = self.design_params["sun_shaft_bearing_OD"]      # 16
+        self.sun_coupler_hub_thickness = self.design_params["sun_coupler_hub_thickness"] # 4
+        self.sun_shaft_bearing_width   = self.design_params["sun_shaft_bearing_width"]   # 5
         self.sun_central_bolt_dia      = self.design_params["sun_central_bolt_dia"]      # 5
 
         # --- casing Motor and gearbox casing dimensions ---
         self.case_mounting_surface_height             = self.design_params["case_mounting_surface_height"] # 4
         self.case_mounting_hole_dia                   = self.design_params["case_mounting_hole_dia"] # 3
         self.case_mounting_bolt_depth                 = self.design_params["case_mounting_bolt_depth"] # 4.5
-        self.case_mounting_nut_clearance              = self.design_params["case_mounting_nut_clearance"] # 2
         self.base_plate_thickness                     = self.design_params["base_plate_thickness"] # 4
         self.Motor_case_thickness                     = self.design_params["Motor_case_thickness"] # 2.5
         self.air_flow_hole_offset                     = self.design_params["air_flow_hole_offset"] # 3
@@ -1667,7 +1668,7 @@ class singleStagePlanetaryActuator:
         self.wire_slot_radius           = self.motor.wire_slot_radius
 
         #------------------------------------------------------
-        # Depent variables
+        # Dependent variables
         #------------------------------------------------------
         # --- Gear Profile parameters ---
         self.h_a          = 1 * self.module
@@ -2533,202 +2534,198 @@ class compoundPlanetaryActuator:
         #============================================
         # Actuator Design Parameters
         #============================================
+        self.design_params = design_parameters
+
         #--------------------------------------------
         # Independent Parameters
         #--------------------------------------------
-        self.ringRadialWidthMM    = self.compoundPlanetaryGearbox.ringRadialWidthMM
-        self.baseThicknessMM      = design_parameters["baseThicknessMM"]      # 3
-        self.sCarrierThicknessMM  = design_parameters["sCarrierThicknessMM"]  # 5
-        self.mainCoverThicknessMM = design_parameters["mainCoverThicknessMM"] # 2
-        self.planetBoreMM         = design_parameters["planetBoreMM"]         # 8
-        self.sunBoreMM            = design_parameters["sunBoreMM"]            # 6
-        self.couplerRadiusMM      = design_parameters["couplerRadiusMM"]      # 16.5
-        self.couplerThicknessMM   = design_parameters["couplerThicknessMM"]   # 3
-        self.couplerShaftHeightMM = design_parameters["couplerShaftHeightMM"] # 12
-
-        self.sCarrierExtrusionDiaMM       = self.compoundPlanetaryGearbox.sCarrierExtrusionDiaMM
-        self.sCarrierExtrusionClearanceMM = self.compoundPlanetaryGearbox.sCarrierExtrusionClearanceMM
-
-        self.clearanceMotorandCaseMM  = design_parameters["clearanceMotorandCaseMM"]  # 2.3
-        self.clearanceCarrierPlanetMM = design_parameters["clearanceCarrierPlanetMM"] # 1.5
-        self.upperHousingHeight       = design_parameters["upperHousingHeight"]       # 5
-        self.clearanceSCarrierMotorMM = design_parameters["clearanceSCarrierMotorMM"] # 2
-
-        self.bearingIDClearanceMM  = design_parameters["bearingIDClearanceMM"]  # 10
-        self.carrierIDClearanceMM  = design_parameters["carrierIDClearanceMM"]  # 2
-        self.sCarrierIDClearanceMM = design_parameters["sCarrierIDClearanceMM"] # 2   
+        self.ringRadialWidthMM    = self.compoundPlanetaryGearbox.ringRadialWidthMM  
 
         #-----------------------------------------------------
         # Dependent parameters
         #-----------------------------------------------------
-        # Initializing here with None values
-        # Will be updated in Mass calculation function
-        #-----------------------------------------------------
-        self.InnerDiaBearingMM                 : float | None = None # InnerDiaBearingMM                
-        self.OuterDiaBearingMM                 : float | None = None # OuterDiaBearingMM                
-        self.WidthBearingMM                    : float | None = None # WidthBearingMM                   
-        self.RingOuterRadiusMM                 : float | None = None # RingOuterRadiusMM                
-        self.CarrierInnerDiameterMM            : float | None = None # CarrierInnerDiameterMM           
-        self.SCarrierInnerDiameterMM           : float | None = None # SCarrierInnerDiameterMM          
-        self.LengthMainCoverMM                 : float | None = None # LengthMainCoverMM                
-        self.CarrierThicknessMM                : float | None = None # CarrierThicknessMM               
-        self.MainCoverInnerRadiusMM            : float | None = None # MainCoverInnerRadiusMM           
-        self.MainCoverOuterRadiusMM            : float | None = None # MainCoverOuterRadiusMM           
-        self.MainCoverProtrusion1RadiusMM      : float | None = None # MainCoverProtrusion1RadiusMM     
-        self.HeightMainCoverProtrusion1MM      : float | None = None # HeightMainCoverProtrusion1MM     
-        self.MainCoverProtrusion2RadiusMM      : float | None = None # MainCoverProtrusion2RadiusMM     
-        self.HeightMainCoverProtrusion2MM      : float | None = None # HeightMainCoverProtrusion2MM     
-        self.RadiusBaseMM                      : float | None = None # RadiusBaseMM                     
-        self.RadiusCouplerShaftMM              : float | None = None # RadiusCouplerShaftMM             
-        self.SecondaryCarrierOuterDiameterMM   : float | None = None # SecondaryCarrierOuterDiameterMM  
-        self.CarrierExtrusionDiameterMM        : float | None = None # CarrierExtrusionDiameterMM       
-        self.CarrierExtrusionHeightMM          : float | None = None # CarrierExtrusionHeightMM         
-        self.SecondaryCarrierExtrusionHeightMM : float | None = None # SecondaryCarrierExtrusionHeightMM
-        self.SecondaryCarrierOuterDiameterMM   : float | None = None # SecondaryCarrierOuterDiameterMM  
-        self.UpperHousingRadius                : float | None = None # UpperHousingRadius
+
 
         self.setVariables()
 
     def setVariables(self):
-
         #--------- Optimization Variable-----------
-        self.Ns = self.compoundPlanetaryGearbox.Ns
-        self.Np_b = self.compoundPlanetaryGearbox.NpBig
-        self.Np_s = self.compoundPlanetaryGearbox.NpSmall
-        self.Nr = self.Ns + self.Np_b + self.Np_s
+        self.Ns         = self.compoundPlanetaryGearbox.Ns
+        self.Np_b       = self.compoundPlanetaryGearbox.NpBig
+        self.Np_s       = self.compoundPlanetaryGearbox.NpSmall
+        self.Nr         = self.Ns + self.Np_b + self.Np_s
         self.num_planet = self.compoundPlanetaryGearbox.numPlanet
-        self.module = self.compoundPlanetaryGearbox.moduleBig
+        self.module     = self.compoundPlanetaryGearbox.moduleBig
+
+        #------------------------------------------------------
+        # Indepent Constant variables
+        #------------------------------------------------------
+        #----------------- Gear Profile --------------------
+        self.pressure_angle     = self.compoundPlanetaryGearbox.getPressureAngleRad() # 20
+        self.pressure_angle_deg = self.compoundPlanetaryGearbox.getPressureAngleRad() * 180 / np.pi # 20
 
         #-------------Clearances---------------------
-        self.clearance_planet = 1.5
-        self.clearance_case_mount_holes_shell_thickness = 1
-        self.standard_clearance_1_5mm = 1.5
-        self.ring_to_chamfer_clearance = self.clearance_planet
-        self.case_mounting_nut_clearance = 2
-        self.standard_fillet_1_5mm = 1.5
-        self.standard_bearing_insertion_chamfer = 0.5
-        self.bearingIDClearanceMM = 10
-        self.clearance_sun_coupler_sec_carrier = self.standard_clearance_1_5mm
+        self.clearance_planet                           = self.design_params["clearance_planet"]                           # 1.5
+        self.clearance_case_mount_holes_shell_thickness = self.design_params["clearance_case_mount_holes_shell_thickness"] # 1
+        self.standard_clearance_1_5mm                   = self.design_params["standard_clearance_1_5mm"]                   # 1.5
+        self.case_mounting_nut_clearance                = self.design_params["case_mounting_nut_clearance"]                # 2
+        self.standard_fillet_1_5mm                      = self.design_params["standard_fillet_1_5mm"]                      # 1.5
+        self.standard_bearing_insertion_chamfer         = self.design_params["standard_bearing_insertion_chamfer"]         # 0.5
+        self.bearingIDClearanceMM                       = self.design_params["bearingIDClearanceMM"]                       # 10
+        self.clearance_sun_coupler_sec_carrier          = self.design_params["clearance_sun_coupler_sec_carrier"]          # standard_clearance_1_5mm
+        self.ring_to_chamfer_clearance                  = self.design_params["ring_to_chamfer_clearance"]                  # clearance_planet
 
         #-----------Motor----------------------------
-        self.motor_OD            = 86.8
-        self.motor_height         = 26.5
-        self.motor_mount_hole_PCD = 32
-        self.motor_mount_hole_dia = 4
-        self.motor_mount_hole_num = 4
-        self.motor_output_hole_PCD = 23
-        self.motor_output_hole_dia = 4
-        self.motor_output_hole_num = 4
-        self.motor_output_hole_CSK_OD = 9
-        self.motor_output_hole_CSK_head_height = 2.5
-        self.central_hole_offset_from_motor_mount_PCD = 5
-        self.wire_slot_dist_from_center = 30
-        self.wire_slot_length = 10
-        self.wire_slot_radius = 4
+        self.motor_OD                   = self.motorDiaMM                     # 86.8
+        self.motor_height               = self.motorLengthMM                  # 26.5
+        self.motor_mount_hole_PCD       = self.motor.motor_mount_hole_PCD     # 32
+        self.motor_mount_hole_dia       = self.motor.motor_mount_hole_dia     # 4
+        self.motor_mount_hole_num       = self.motor.motor_mount_hole_num     # 4
+        self.motor_output_hole_PCD      = self.motor.motor_output_hole_PCD    # 23
+        self.motor_output_hole_dia      = self.motor.motor_output_hole_dia    # 4
+        self.motor_output_hole_num      = self.motor.motor_output_hole_num    # 4
+        self.wire_slot_dist_from_center = self.motor.wire_slot_dist_from_center # 30
+        self.wire_slot_length           = self.motor.wire_slot_length         # 10
+        self.wire_slot_radius           = self.motor.wire_slot_radius         # 4
 
-        self.driver_upper_holes_dist_from_center = 23
-        self.driver_lower_holes_dist_from_center = 15
-        self.driver_side_holes_dist_from_center = 20
-        self.driver_mount_holes_dia = 2.5
-        self.driver_mount_inserts_OD = 3.5
-        self.driver_mount_thickness = 1.5
-        self.driver_mount_height = 4
+        self.driver_upper_holes_dist_from_center = self.design_params["driver_upper_holes_dist_from_center"] # 23
+        self.driver_lower_holes_dist_from_center = self.design_params["driver_lower_holes_dist_from_center"] # 15
+        self.driver_side_holes_dist_from_center  = self.design_params["driver_side_holes_dist_from_center"]  # 20
+        self.driver_mount_holes_dia              = self.design_params["driver_mount_holes_dia"]  # 2.5
+        self.driver_mount_inserts_OD             = self.design_params["driver_mount_inserts_OD"] # 3.5
+        self.driver_mount_thickness              = self.design_params["driver_mount_thickness"]  # 1.5
+        self.driver_mount_height                 = self.design_params["driver_mount_height"]     # 4
 
+        self.central_hole_offset_from_motor_mount_PCD = self.design_params["central_hole_offset_from_motor_mount_PCD"] # 5
 
-        #----------------- Gear Profile --------------------
-        self.pressure_angle = 20
-        self.pressure_angle = 20
-        self.h_a = 1 * self.module
-        self.h_b = 1.25 * self.module
-        self.h_f = 1.25 * self.module
+        # --- Planet pin and bearing ---
+        self.planet_pin_bolt_dia      = self.design_params["planet_pin_bolt_dia"] # 5
+        self.planet_shaft_dia         = self.design_params["planet_shaft_dia"] # 8
+        self.planet_shaft_step_offset = self.design_params["planet_shaft_step_offset"] # 1
+        self.planet_bearing_OD        = self.design_params["planet_bearing_OD"] # 12
+        self.planet_bearing_width     = self.design_params["planet_bearing_width"] # 3
+        self.planet_bore              = self.design_params["planet_bore"] # 10
+
+        # --- Sun coupler and sun central bolt ---
+        self.sun_shaft_bearing_ID      = self.design_params["sun_shaft_bearing_ID"] # 8
+        self.sun_shaft_bearing_OD      = self.design_params["sun_shaft_bearing_OD"] # 16
+        self.sun_coupler_hub_thickness = self.design_params["sun_coupler_hub_thickness"] # 4
+        self.sun_shaft_bearing_width   = self.design_params["sun_shaft_bearing_width"] # 4
+        self.sun_central_bolt_dia      = self.design_params["sun_central_bolt_dia"] # 5
+
+        # --- Bearings ---         
+        self.bearing_retainer_thickness = self.design_params["bearing_retainer_thickness"] # 2
+
+        # --- Carrier & Sec Carrier ---
+        self.sec_carrier_thickness = self.design_params["sec_carrier_thickness"] # 5
+
+        self.carrier_trapezoidal_support_sun_offset                 = self.design_params["carrier_trapezoidal_support_sun_offset"]# 5
+        self.carrier_trapezoidal_support_hole_PCD_offset_bearing_ID = self.design_params["carrier_trapezoidal_support_hole_PCD_offset_bearing_ID"]# 4
+        self.carrier_trapezoidal_support_hole_dia                   = self.design_params["carrier_trapezoidal_support_hole_dia"]# 3
+        self.carrier_bearing_step_width                             = self.design_params["carrier_bearing_step_width"]# 1.5
+
+        # --- Casings ---
+        self.case_mounting_surface_height = self.design_params["case_mounting_surface_height"] # 4
+        self.case_mounting_hole_dia       = self.design_params["case_mounting_hole_dia"] # 3
+        self.case_mounting_bolt_depth     = self.design_params["case_mounting_bolt_depth"] # 4.5
+
+        self.base_plate_thickness = self.design_params["base_plate_thickness"] # 4
+        self.Motor_case_thickness = self.design_params["Motor_case_thickness"] # 2.5
+        self.air_flow_hole_offset = self.design_params["air_flow_hole_offset"] # 3
+
+        self.output_mounting_hole_dia  = self.design_params["output_mounting_hole_dia"]  # 4
+        self.output_mounting_nut_depth = self.design_params["output_mounting_nut_depth"] # 3
+        self.output_mounting_hole_num  = self.design_params["output_mounting_hole_num"]  # 4
+
+        self.Motor_case_OD_base_to_chamfer          = self.design_params["Motor_case_OD_base_to_chamfer"] # 5
+        self.pattern_offset_from_motor_case_OD_base = self.design_params["pattern_offset_from_motor_case_OD_base"] # 3
+        self.pattern_bulge_dia                      = self.design_params["pattern_bulge_dia"] # 3
+        self.pattern_num_bulge                      = self.design_params["pattern_num_bulge"] # 18
+        self.pattern_depth                          = self.design_params["pattern_depth"] # 2
+
+        #------------------------------------------------------
+        # Dependent variables
+        #------------------------------------------------------
+        #---------------------------------------------------
+        # Gear 
+        #---------------------------------------------------
+        # --- Gear Profile ---
+        self.h_a          = 1 * self.module
+        self.h_b          = 1.25 * self.module
+        self.h_f          = 1.25 * self.module
         self.clr_tip_root = self.h_f - self.h_a
 
-        self.dp_s = self.module * self.Ns
-        self.db_s = self.dp_s * np.cos(np.radians(self.pressure_angle))
-        self.alpha_s = (np.sqrt(self.dp_s ** 2 - self.db_s ** 2) / self.db_s) * 180 / np.pi - self.pressure_angle
-        self.beta_s = (360 / (4 * self.Ns) - self.alpha_s) * 2
-        self.fw_s_calc = 10
+        self.dp_s      = self.module * self.Ns
+        self.db_s      = self.dp_s * np.cos(np.radians(self.pressure_angle))
+        self.alpha_s   = (np.sqrt(self.dp_s ** 2 - self.db_s ** 2) / self.db_s) * 180 / np.pi - self.pressure_angle
+        self.beta_s    = (360 / (4 * self.Ns) - self.alpha_s) * 2
+        self.fw_s_calc = self.compoundPlanetaryGearbox.fwSunMM
 
-        self.dp_p_b = self.module * self.Np_b
-        self.db_p_b = self.dp_p_b * np.cos(np.radians(self.pressure_angle))
+        self.dp_p_b    = self.module * self.Np_b
+        self.db_p_b    = self.dp_p_b * np.cos(np.radians(self.pressure_angle))
         self.alpha_p_b = (np.sqrt(self.dp_p_b ** 2 - self.db_p_b ** 2) / self.db_p_b) * 180 / np.pi - self.pressure_angle
-        self.beta_p_b = (360 / (4 * self.Np_b) - self.alpha_p_b) * 2
-        self.fw_p_b = 8
+        self.beta_p_b  = (360 / (4 * self.Np_b) - self.alpha_p_b) * 2
+        self.fw_p_b    = self.compoundPlanetaryGearbox.fwPlanetBigMM
         
-        self.dp_r = self.module * self.Nr
-        self.db_r = self.dp_r * np.cos(np.radians(self.pressure_angle))
+        self.dp_r    = self.module * self.Nr
+        self.db_r    = self.dp_r * np.cos(np.radians(self.pressure_angle))
         self.alpha_r = (np.sqrt(self.dp_r ** 2 - self.db_r ** 2) / self.db_r) * 180 / np.pi - self.pressure_angle
-        self.beta_r = (360 / (4 * self.Nr) + self.alpha_r) * 2
-        self.fw_r = 10
+        self.beta_r  = (360 / (4 * self.Nr) + self.alpha_r) * 2
+        self.fw_r    = self.compoundPlanetaryGearbox.fwRingMM
 
-        self.dp_p_s = self.module * self.Np_s
-        self.db_p_s = self.dp_p_s * np.cos(np.radians(self.pressure_angle))
+        self.dp_p_s    = self.module * self.Np_s
+        self.db_p_s    = self.dp_p_s * np.cos(np.radians(self.pressure_angle))
         self.alpha_p_s = (np.sqrt(self.dp_p_s ** 2 - self.db_p_s ** 2) / self.db_p_s) * 180 / np.pi - self.pressure_angle
-        self.beta_p_s = (360 / (4 * self.Np_s) - self.alpha_p_s) * 2
-        self.fw_p_s = self.fw_r + self.clearance_planet
+        self.beta_p_s  = (360 / (4 * self.Np_s) - self.alpha_p_s) * 2
+        self.fw_p_s    = self.fw_r + self.clearance_planet
 
-        self.planet_pin_bolt_wrench_size = 8
-        self.planet_bearing_OD = 12
-        self.planet_bearing_width = 3
-        self.planet_bore = 10
-        self.planet_pin_bolt_dia = 5
-        self.planet_pin_socket_head_dia = 8.5
-        self.planet_shaft_dia = 8
-        self.planet_shaft_step_offset = 1
+        # --- Motor ---
+        motor_output_hole_bolt = nuts_and_bolts_dimensions(bolt_dia = self.motor_output_hole_dia, bolt_type="CSK")
 
-        self.sun_shaft_bearing_ID = 8
-        self.sun_coupler_hub_thickness = 4
+        self.motor_output_hole_CSK_OD          = motor_output_hole_bolt.bolt_head_dia   
+        self.motor_output_hole_CSK_head_height = motor_output_hole_bolt.bolt_head_height
+
+        # --- Planet Pin and Bearing ---
+        planet_pin_bolt = nuts_and_bolts_dimensions(bolt_dia=self.planet_pin_bolt_dia, bolt_type="socket_head")
+
+        self.planet_pin_socket_head_dia  = planet_pin_bolt.bolt_head_dia # 8.5
+        self.planet_pin_bolt_wrench_size = planet_pin_bolt.nut_width_across_flats # 8        
+
+        # --- Sun coupler and sun central bolt ---
+        sun_central_bolt = nuts_and_bolts_dimensions(bolt_dia = self.sun_central_bolt_dia, bolt_type="socket_head")
+        self.sun_central_bolt_socket_head_dia = sun_central_bolt.bolt_head_dia # 8.5
+        
         self.sun_hub_dia = self.motor_output_hole_PCD + self.motor_output_hole_dia + self.standard_clearance_1_5mm * 4
-        self.sun_central_bolt_dia = 5
-        self.sun_central_bolt_socket_head_dia = 8.5
-        self.sun_shaft_bearing_OD = 16
-        self.sun_shaft_bearing_width = 4
 
         #----------------------- Bearings------------------------------------
         IdrequiredMM = self.module * (self.Ns + self.Np_b) + self.bearingIDClearanceMM
-        Bearings          = bearings_continuous(IdrequiredMM)
+        Bearings            = bearings_continuous(IdrequiredMM)
         self.bearing_ID     = Bearings.getBearingIDMM()
         self.bearing_OD     = Bearings.getBearingODMM()
         self.bearing_height = Bearings.getBearingWidthMM()
-        self.bearing_retainer_thickness = 2
 
         #------------------- Carrier & Sec Carrier-----------------------------
-        self.sec_carrier_thickness = 5
         self.carrier_PCD = (self.Np_b + self.Ns) * self.module
-        self.carrier_trapezoidal_support_sun_offset = 5
-        self.carrier_trapezoidal_support_hole_PCD_offset_bearing_ID = 4
-        self.carrier_trapezoidal_support_hole_dia = 3
-        self.carrier_trapezoidal_support_hole_socket_head_dia = 5.5
-        self.carrier_bearing_step_width = 1.5
-        self.carrier_trapezoidal_support_hole_wrench_size = 5.5
         
+        carrier_trapezoidal_support_hole = nuts_and_bolts_dimensions(bolt_dia=self.carrier_trapezoidal_support_hole_dia, bolt_type="socket_head")
+
+        self.carrier_trapezoidal_support_hole_socket_head_dia = carrier_trapezoidal_support_hole.bolt_head_dia
+        self.carrier_trapezoidal_support_hole_wrench_size     = carrier_trapezoidal_support_hole.nut_width_across_flats        
 
         #--------------------- Casings------------------------------------------
+        case_mounting_hole_bolt = nuts_and_bolts_dimensions(bolt_dia=self.case_mounting_hole_dia, bolt_type="socket_head")
 
-        self.case_mounting_surface_height = 4
+        self.case_mounting_hole_allen_socket_dia = case_mounting_hole_bolt.bolt_head_dia # 5.5
+        self.case_mounting_wrench_size           = case_mounting_hole_bolt.nut_width_across_flats # 5.5
+        self.case_mounting_nut_thickness         = case_mounting_hole_bolt.nut_thickness # 2.4
+
+        output_mounting_hole_bolt = nuts_and_bolts_dimensions(bolt_dia=self.output_mounting_hole_dia, bolt_type="socket_head")
+
+        self.output_mounting_nut_thickness   = output_mounting_hole_bolt.nut_thickness # 3.2
+        self.output_mounting_nut_wrench_size = output_mounting_hole_bolt.nut_width_across_flats # 7
+
         self.case_dist = self.sec_carrier_thickness + self.clearance_planet * 2 + self.sun_coupler_hub_thickness + self.fw_p_b - self.case_mounting_surface_height
-        self.case_mounting_hole_allen_socket_dia = 5.5
-        self.case_mounting_hole_dia = 3
-
-        self.output_mounting_hole_dia = 4
-        self.output_mounting_hole_num = 4
-        self.output_mounting_nut_thickness = 3.2
-        self.output_mounting_nut_depth = 3
-        self.output_mounting_nut_wrench_size = 7
-        self.case_mounting_bolt_depth = 4.5
         self.case_mounting_hole_shift = self.case_mounting_hole_dia / 2 - 0.5
-        self.Motor_case_thickness = 2.5
-
-        self.Motor_case_OD_base_to_chamfer = 5
-        self.pattern_offset_from_motor_case_OD_base = 3
-        self.pattern_bulge_dia = 3
-        self.pattern_num_bulge = 18
-        self.pattern_depth = 2
-        self.case_mounting_wrench_size = 5.5
-        self.base_plate_thickness = 4
-        self.case_mounting_nut_thickness = 2.4
-        self.air_flow_hole_offset = 3
-
 
         # IIF: clearance_motor_and_case
         if (self.Ns + self.Np_b * 2) * self.module < self.motor_OD:
@@ -2773,8 +2770,8 @@ class compoundPlanetaryActuator:
                     f'"module"= {self.module}\n',
                     f'"motor_OD"= {self.motor_OD}\n',
                     f'"motor_height"= {self.motor_height}\n',
-                    f'"pressure_angle"= {self.pressure_angle}\n',
-                    f'"pressure angle"= {self.pressure_angle}\n',
+                    f'"pressure_angle"= {self.pressure_angle_deg}\n',
+                    f'"pressure angle"= {self.pressure_angle_deg}\n',
                     f'"h_a"= {self.h_a}\n',
                     f'"h_b"= {self.h_b}\n',
                     f'"clr_tip_root"= {self.clr_tip_root}\n',
@@ -3478,7 +3475,6 @@ class compoundPlanetaryActuator:
         print("bearing_retainer_mass: ",        1000 * self.bearing_retainer_mass)
         print("Motor mass:",                    1000 * self.motorMassKG)
         print("---------------------------------------------------")
-
 
 #========================================================================
 # Class: Actuator Optimization
