@@ -2759,7 +2759,6 @@ class compoundPlanetaryActuator:
         self.ring_OD = self.Nr * self.module + self.ring_radial_thickness * 2
         self.fw_s_used = self.fw_p_s + self.fw_p_b + self.clearance_planet + self.sec_carrier_thickness + self.standard_clearance_1_5mm #TODO: Move to bottom
 
-
     def genEquationFile(self):
         # writing values into text file imported which is imported into solidworks
         self.setVariables()
@@ -3003,7 +3002,76 @@ class compoundPlanetaryActuator:
         # print(f"bMin_ring = {bMin_ring}")
 
     def mitStressAnalysisMinFacewidth(self):
-        pass
+        if not self.compoundPlanetaryGearbox.geometricConstraint():
+            print("Geometric constraint not satisfied")
+            return
+        if not self.compoundPlanetaryGearbox.meshingConstraint():
+            print("Meshing constraint not satisfied")
+            return
+        if not self.compoundPlanetaryGearbox.noPlanetInterferenceConstraint():
+            print("No planet interference constraint not satisfied")
+            return
+
+        Ns          = self.compoundPlanetaryGearbox.Ns
+        NpBig       = self.compoundPlanetaryGearbox.NpBig
+        NpSmall     = self.compoundPlanetaryGearbox.NpSmall
+        Nr          = self.compoundPlanetaryGearbox.Nr
+        numPlanet   = self.compoundPlanetaryGearbox.numPlanet
+        moduleBig   = self.compoundPlanetaryGearbox.moduleBig
+        moduleSmall = self.compoundPlanetaryGearbox.moduleSmall
+
+        wSun     = self.motor.getMaxMotorAngVelRadPerSec()
+        wPlanet  = (-Ns / (NpBig + NpSmall) ) * wSun
+        wCarrier = wSun/self.compoundPlanetaryGearbox.gearRatio()
+
+        [Ft_sp, Ft_rp] = self.getToothForces(constraintCheck=False)
+
+        # Lewis static load capacity
+        _,_,CR_SP = self.compoundPlanetaryGearbox.contactRatio_sunPlanet()
+        _,_,CR_PR = self.compoundPlanetaryGearbox.contactRatio_planetRing()
+
+        qe1 = 1 / CR_SP
+        qe2 = 1 / CR_PR
+
+        # qk = 1.85 + 0.35 * (np.log(Ns) / np.log(100)) 
+        qk1 = (7.65734266e-08 * Ns**4
+             - 2.19500130e-05 * Ns**3
+             + 2.33893357e-03 * Ns**2
+             - 1.13320908e-01 * Ns
+             + 4.44727778)
+        qk2 = (7.65734266e-08 * NpSmall**4
+             - 2.19500130e-05 * NpSmall**3
+             + 2.33893357e-03 * NpSmall**2
+             - 1.13320908e-01 * NpSmall
+             + 4.44727778)
+        
+        # Lewis static load capacity
+        bMin_sun_mit         = (self.FOS * Ft_sp * qe1 * qk1 / (self.compoundPlanetaryGearbox.maxGearAllowableStressPa * moduleBig * 0.001)) # m
+        bMin_planetBig_mit   = (self.FOS * Ft_sp * qe1 * qk1 / (self.compoundPlanetaryGearbox.maxGearAllowableStressPa * moduleBig * 0.001))
+        bMin_planetSmall_mit = (self.FOS * Ft_rp * qe2 * qk2 / (self.compoundPlanetaryGearbox.maxGearAllowableStressPa * moduleSmall * 0.001))
+        bMin_ring_mit        = (self.FOS * Ft_rp * qe2 * qk2 / (self.compoundPlanetaryGearbox.maxGearAllowableStressPa * moduleSmall * 0.001))
+
+
+        #------------- Contraint in planet to accomodate its bearings------------------------------------------
+        if ((bMin_planetBig_mit + bMin_planetSmall_mit) * 1000 < (self.planet_bearing_width*2 + self.standard_clearance_1_5mm * 2 / 3)) : 
+            if ((bMin_planetBig_mit) * 1000 < (self.planet_bearing_width + self.standard_clearance_1_5mm * 1 / 3)): 
+                bMin_planetBig_mit = (self.planet_bearing_width + self.standard_clearance_1_5mm * 1 / 3) / 1000
+            if ((bMin_planetSmall_mit) * 1000 < (self.planet_bearing_width + self.standard_clearance_1_5mm * 1 / 3)): 
+                bMin_planetSmall_mit = (self.planet_bearing_width + self.standard_clearance_1_5mm * 1 / 3) / 1000
+            bMin_ring_mit = bMin_planetSmall_mit # FT on both are same
+
+        bMin_sun_mitMM         = bMin_sun_mit * 1000
+        bMin_planetBig_mitMM   = bMin_planetBig_mit * 1000
+        bMin_planetSmall_mitMM = bMin_planetSmall_mit * 1000
+        bMin_ring_mitMM        = bMin_ring_mit * 1000
+
+
+        self.compoundPlanetaryGearbox.setfwSunMM         ( bMin_sun_mit         * 1000)
+        self.compoundPlanetaryGearbox.setfwPlanetBigMM   ( bMin_planetBig_mit   * 1000)
+        self.compoundPlanetaryGearbox.setfwPlanetSmallMM ( bMin_planetSmall_mit * 1000)
+        self.compoundPlanetaryGearbox.setfwRingMM        ( bMin_ring_mit        * 1000)
+
+        return bMin_sun_mitMM, bMin_planetBig_mitMM, bMin_planetSmall_mitMM, bMin_ring_mitMM
 
     def AGMAStressAnalysisMinFacewidth(self):
         # Check if the constraints are satisfied
@@ -3398,7 +3466,19 @@ class compoundPlanetaryActuator:
         return Actuator_mass
 
     def print_mass_of_parts_3DP(self):
-        pass
+        print("Motor_case_mass: ",              1000 * self.Motor_case_mass)
+        print("gearbox_casing_mass: ",          1000 * self.gearbox_casing_mass)
+        print("carrier_mass: ",                 1000 * self.carrier_mass)
+        print("sun_mass: ",                     1000 * self.sun_mass)
+        print("sec_carrier_mass: ",             1000 * self.sec_carrier_mass)
+        print("planet_mass: ",                  1000 * self.planet_mass)
+        print("planet_bearing_combined_mass: ", 1000 * self.planet_bearing_combined_mass)
+        print("sun_shaft_bearing_mass: ",       1000 * self.sun_shaft_bearing_mass)
+        print("bearing_mass: ",                 1000 * self.bearing_mass)
+        print("bearing_retainer_mass: ",        1000 * self.bearing_retainer_mass)
+        print("Motor mass:",                    1000 * self.motorMassKG)
+        print("---------------------------------------------------")
+
 
 #========================================================================
 # Class: Actuator Optimization
