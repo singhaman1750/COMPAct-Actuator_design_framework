@@ -24,7 +24,7 @@
         "GEAR_RATIO_MIN"       : 4.0,
         "GEAR_RATIO_MAX"       : 15.0,
         "GEAR_RATIO_STEP"      : 1.0,
-        "MODULE_MIN"           : 0.8,
+        "MODULE_MIN"           : 0.6,
         "MODULE_MAX"           : 1.0,
         "NUM_PLANET_MIN"       : 3,
         "NUM_PLANET_MAX"       : 7,

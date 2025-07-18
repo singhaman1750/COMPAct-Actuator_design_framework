@@ -4109,6 +4109,24 @@ class optimizationCompoundPlanetaryActuator:
             
             print(iter, ",", gearRatio, ",", moduleBig, ",", moduleSmall, ",", Ns, ",", NpBig, ",", NpSmall, ",", Nr, ",", numPlanet, ",", fwSunMM, ",", fwPlanetBigMM, ",", fwPlanetSmallMM, ",", fwRingMM, ",", Opt_PSC_sun, ",", Opt_PSC_planetBig, ",", Opt_PSC_planetSmall, ",", Opt_PSC_ring, ",", CenterDist_SP, ",", CenterDist_PR, ",", mass, ",", eff, ",", peakTorque, ",", Cost, ",", tooth_forces, ",", Torque_Density)
 
+    def genOptimalActuator(self, Actuator=compoundPlanetaryActuator, gear_ratio = 10.0, UsePSCasVariable = 1, log = 0, csv = 1):
+        self.GEAR_RATIO_MIN = gear_ratio
+        self.gearRatioIter = self.GEAR_RATIO_MIN
+        self.GEAR_RATIO_STEP = 1.0
+        self.GEAR_RATIO_MAX = gear_ratio
+        
+        self.UsePSCasVariable = UsePSCasVariable
+        totalTime = 0
+        if UsePSCasVariable == 0:
+            totalTime = self.optimizeActuatorWithoutPSC(Actuator, log, csv)
+        elif UsePSCasVariable == 1:
+            totalTime = self.optimizeActuatorWith_MINLP_PSC(Actuator, log, csv)
+        else:
+            totalTime = 0
+            print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
+        
+        return totalTime
+
     def optimizeActuator(self, Actuator=compoundPlanetaryActuator, UsePSCasVariable = 1, log=1, csv=0):   
         self.UsePSCasVariable = UsePSCasVariable
         totalTime = 0

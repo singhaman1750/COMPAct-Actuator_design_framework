@@ -303,14 +303,16 @@ Optimizer_U12 = optimizationCompoundPlanetaryActuator(design_parameters         
 #-------------------------------------------------
 # Optimize
 #-------------------------------------------------
-totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
+# totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
+totalTime_U8 = Optimizer_U8.genOptimalActuator(Actuator_U8, UsePSCasVariable = 0, gear_ratio= 10.97, log=0, csv=1)
 print("Optimization Completed : CPG U8 : Total Time:", totalTime_U8)
 
 # totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
 # print("Optimization Completed : CPG U10 : Total Time:", totalTime_U10)
 
-# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 1, log=0, csv=1)
-# print("Optimization Completed : CPG MN8014 : Total Time:", totalTime_MN8014)
+#totalTime_MN8014 = Optimizer_MN8014.genOptimalActuator(Actuator_MN8014, UsePSCasVariable = 0, gear_ratio= 7, log=0, csv=1)
+# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1)
+#print("Optimization Completed : CPG MN8014 : Total Time:", totalTime_MN8014)
 
 # totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 1, log=0, csv=1)
 # print("Optimization Completed : CPG VT8020 : Total Time:", totalTime_VT8020)

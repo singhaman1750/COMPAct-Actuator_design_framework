@@ -8,11 +8,11 @@ FOS, serviceFactor, stressAnalysisMethodName, maxGearBoxDia, maxGearAllowableStr
  
 Optimization Parameters:
 K_mass, K_Eff, MODULE_MIN, MODULE_MAX, NUM_PLANET_MIN, NUM_PLANET_MAX, NUM_TEETH_SUN_MIN, NUM_TEETH_PLANET_MIN, GEAR_RATIO_MIN, GEAR_RATIO_MAX, GEAR_RATIO_STEP
-1 , 0 , 0.5 , 1.2 , 3 , 7 , 18 , 18 , 5 , 5 , 1.0
+1 , 0 , 0.5 , 1.2 , 3 , 7 , 18 , 18 , 5.97 , 5.97 , 1.0
  
 iter, gearRatio, module, Ns, Np, Nr, numPlanet, fwSunMM, fwPlanetMM, fwRingMM, PSCs, PSCp, PSCr, CD_SP, CD_PR, mass, eff, peakTorque, Cost, Torque_Density
-7 , 5.428571428571429 , 0.6 , 21 , 36 , 93 , 3 , 7.775 , 8.0 , 8.0 , 0 , 0 , 0 , 17.099999999999998 , 17.099999999999998 , 0.463 , 0.948 , 6.243 , 0.463 , 13.483801295896328
+4 , 6.0 , 0.7 , 19 , 38 , 95 , 3 , 6.532 , 8.0 , 8.0 , 0 , 0 , 0 , 19.95 , 19.95 , 0.471 , 0.946 , 6.9 , 0.471 , 14.649681528662422
 
 
 Running Time (sec)
-0.031249523162841797
+0.029999256134033203
