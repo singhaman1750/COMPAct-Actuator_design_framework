@@ -3319,8 +3319,6 @@ class compoundPlanetaryActuator:
         #-----------------------------------------------------
         # Dependent parameters
         #-----------------------------------------------------
-
-
         self.setVariables()
 
     def setVariables(self):
@@ -4285,8 +4283,7 @@ class wolfromPlanetaryActuator:
         self.MaxMotorTorque          = self.motor.maxMotorTorque
         self.MaxMotorAngVelRPM       = self.motor.maxMotorAngVelRPM
         self.MaxMotorAngVelRadPerSec = self.motor.maxMotorAngVelRadPerSec
-        self.MotorInnerDiaMM         = self.motor.motorStatorIDMM
-        self.motorRotorWidthMM       = self.motor.motorRotorWidthMM
+
 
         #-----------------------------------------
         # Actuator Design Free Parameters
@@ -4314,6 +4311,10 @@ class wolfromPlanetaryActuator:
         self.MainCover3AndCarrierClearanceMM  = design_parameters["MainCover3AndCarrierClearanceMM"] # 2
 
         self.CarrierAndMainCaseClearanceMM    = design_parameters["CarrierAndMainCaseClearanceMM"] # 3
+
+        self.gearbox_casing_thickness         = design_parameters["gearbox_casing_thickness"]
+        self.small_ring_gear_casing_thickness = design_parameters["small_ring_gear_casing_thickness"]
+        self.bearingIDClearanceMM             = design_parameters["bearingIDClearanceMM"]
 
         self.ring1RadialWidthMM = self.wolfromPlanetaryGearbox.ringRadialWidthBig   # 5
         self.ring2RadialWidthMM = self.wolfromPlanetaryGearbox.ringRadialWidthSmall # 5
@@ -4352,6 +4353,9 @@ class wolfromPlanetaryActuator:
         self.CarrierExtrusionHeightMM          : float | None = None 
         self.SecondaryCarrierExtrusionHeightMM : float | None = None 
 
+        # --- Setting the variables ---
+        self.setVariables()
+
     def setVariables(self):
         # --- Optimization Variables --- 
         self.Ns = 20
@@ -4372,6 +4376,7 @@ class wolfromPlanetaryActuator:
         self.case_mounting_nut_clearance = 2
         self.standard_clearance_1_5mm = 1.5
         self.standard_fillet_1_5mm = 1.5
+        self.standard_bearing_insertion_chamfer = 0.5
 
         # --- Gear Variables ---
         self.pressure_angle = 20 * np.pi / 180
@@ -4417,6 +4422,7 @@ class wolfromPlanetaryActuator:
         self.base_plate_thickness = 4
         self.case_mounting_nut_thickness = 2.4
         self.case_mounting_surface_height = 4
+        self.air_flow_hole_offset = 3
 
         # --- Sun gear ---
         self.sun_shaft_bearing_OD = 12
@@ -5474,18 +5480,6 @@ class wolfromPlanetaryActuator:
         MotorDiaMM    = self.motorDiaMM
         MotorMassKG   = self.motorMassKG
 
-        #-------------------------------
-        # Bearings: Bearing1 & Bearing2
-        #-------------------------------
-        IdRequiredMM      = module1 * (Ns + Np1) + self.bearingIDClearanceMM 
-                                                                               
-        Bearing           = bearings_discrete(IdRequiredMM)
-
-        InnerDiaBearingMM = Bearing.getBearingIDMM()
-        OuterDiaBearingMM = Bearing.getBearingODMM()
-        WidthBearingMM    = Bearing.getBearingWidthMM()
-        BearingMassKG     = Bearing.getBearingMassKG()
-
         #--------------------------------------
         # Independent variables
         #--------------------------------------
@@ -5507,17 +5501,30 @@ class wolfromPlanetaryActuator:
         # bearing_retainer_thickness = self.bearing_retainer_thickness 
         carrier_small_ring_inner_bearing_flap = self.carrier_small_ring_inner_bearing_flap # 2
         carrier_small_ring_inner_bearing_ID   = self.carrier_small_ring_inner_bearing_ID # 20
-        gearbox_casing_thickness              = self.gearbox_casing_thickness # 4
         gear_casing_big_ring_to_bearing_dist  = self.gear_casing_big_ring_to_bearing_dist
         Motor_case_OD_base_to_chamfer = self.Motor_case_OD_base_to_chamfer # 5
         planet_pin_socket_head_dia    = self.planet_pin_socket_head_dia
         carrier_thickness             = self.carrier_thickness # 4
-        small_ring_gear_casing_thickness = self.small_ring_gear_casing_thickness # 4
         small_ring_output_wall_thickness = self.small_ring_output_wall_thickness # 5
+        gearbox_casing_thickness         = self.gearbox_casing_thickness # 4
+        small_ring_gear_casing_thickness = self.small_ring_gear_casing_thickness # 4
+        bearingIDClearanceMM             = self.bearingIDClearanceMM
 
         # To be written in Motor JSON files
         motor_output_hole_PCD = self.motor.motor_output_hole_PCD
         motor_output_hole_dia = self.motor.motor_output_hole_dia
+
+        #-------------------------------
+        # Bearings: Bearing1 & Bearing2
+        #-------------------------------
+        IdRequiredMM      = module1 * (Ns + Np1) + bearingIDClearanceMM 
+                                                                               
+        Bearing           = bearings_discrete(IdRequiredMM)
+
+        InnerDiaBearingMM = Bearing.getBearingIDMM()
+        OuterDiaBearingMM = Bearing.getBearingODMM()
+        WidthBearingMM    = Bearing.getBearingWidthMM()
+        BearingMassKG     = Bearing.getBearingMassKG()
 
         # --- Bearing dimensions --- 
         bearing_ID     = InnerDiaBearingMM 
@@ -5605,6 +5612,29 @@ class wolfromPlanetaryActuator:
         ring_gear1_volume = np.pi * (((ring_gear1_OD*0.5)**2) - 
                                      ((ring_gear1_ID*0.5)**2)) * ring_gear1_height * 1e-9
 
+
+        #-------------------------------------------------------
+        # wpg_motor_casing
+        #-------------------------------------------------------
+        ring1_OD  = Nr1 * module1 + ring1_radial_thickness*2
+        motor_OD = self.motorDiaMM
+
+        if (ring1_OD < motor_OD):
+            clearance_motor_and_case = 5
+        else: 
+            clearance_motor_and_case = (ring1_OD - motor_OD)/2 + 5
+
+        motor_height      = self.motorLengthMM
+        Motor_case_height = motor_height + case_mounting_surface_height + standard_clearance_1_5mm
+
+        Motor_case_ID     = motor_OD + clearance_motor_and_case * 2
+        Motor_case_OD = Motor_case_ID + Motor_case_thickness * 2
+
+        Motor_case_volume = ( np.pi * ((Motor_case_OD * 0.5)**2) * base_plate_thickness 
+                            + np.pi * ((Motor_case_OD * 0.5)**2 - (Motor_case_ID * 0.5)**2) * Motor_case_height) * 1e-9
+
+        Motor_case_mass = Motor_case_volume * densityPLA
+
         # --- Case mounting structure --- 
         case_dist = (sec_carrier_thickness 
                      + clearance_planet * 2 
@@ -5624,29 +5654,6 @@ class wolfromPlanetaryActuator:
                                + spacer_wall_for_ring2_volume
                                + case_mounting_structure_volume 
                                + ring_gear1_volume) * densityPLA
-
-        #-------------------------------------------------------
-        # wpg_motor_casing
-        #-------------------------------------------------------
-        ring1_OD  = Nr1 * module1 + ring1_radial_thickness*2
-        motor_OD = self.motorDiaMM
-
-        if (ring1_OD < motor_OD):
-            clearance_motor_and_case = 5
-        else: 
-            clearance_motor_and_case = (ring1_OD - motor_OD)/2 + 5
-
-        Motor_case_ID     = motor_OD + clearance_motor_and_case * 2
-        motor_height      = self.motorLengthMM
-        Motor_case_height = motor_height + case_mounting_surface_height + standard_clearance_1_5mm
-
-        Motor_case_OD = Motor_case_ID + Motor_case_thickness * 2
-
-        Motor_case_volume = ( np.pi * ((Motor_case_OD * 0.5)**2) * base_plate_thickness 
-                            + np.pi * ((Motor_case_OD * 0.5)**2 - (Motor_case_ID * 0.5)**2) * Motor_case_height
-        ) * 1e-9
-
-        Motor_case_mass = Motor_case_volume * densityPLA
 
         #-------------------------------------------------------
         # wpg_motor
@@ -5686,7 +5693,7 @@ class wolfromPlanetaryActuator:
         
         small_ring_bearing_shaft_volume = (np.pi 
                                         * (small_ring_bearing_shaft_dia * 0.5)**2 
-                                        *  small_ring_bearing_shaft_height)
+                                        *  small_ring_bearing_shaft_height) * 1e-9
         
         small_ring_bearing_shaft_mass = small_ring_bearing_shaft_volume * densityPLA
 
@@ -5737,7 +5744,7 @@ class wolfromPlanetaryActuator:
         # --- output_wall ---
         output_wall_dia    = bearing_ID - 2 * small_ring_gear_casing_thickness
         output_wall_height = small_ring_output_wall_thickness
-        output_wall_volume = np.pi * (output_wall_dia / 2)**2 * output_wall_height
+        output_wall_volume = np.pi * (output_wall_dia / 2)**2 * output_wall_height * 1e-9
 
         # --- sun_shaft_bearing_holding_structure ---
         # truncated hollow cone Volume = 0.5 * Hollow cylinder volume. 
@@ -6776,3 +6783,523 @@ class optimizationCompoundPlanetaryActuator:
         sys.stdout = sys.__stdout__
 
         return totalTime
+
+#------------------------------------------------------------
+# Class: Optimization of Wolfrom Planetary Actuator
+#------------------------------------------------------------
+class optimizationWolfromPlanetaryActuator:
+    def __init__(self,
+                 design_parameters,
+                 gear_standard_parameters,
+                 K_Mass                     = 1,
+                 K_Eff                      = -2,
+                 MODULE_BIG_MIN             = 0.5,
+                 MODULE_BIG_MAX             = 1.2,
+                 MODULE_SMALL_MIN           = 0.5,
+                 MODULE_SMALL_MAX           = 1.2,
+                 NUM_PLANET_MIN             = 3,
+                 NUM_PLANET_MAX             = 5,
+                 NUM_TEETH_SUN_MIN          = 20,
+                 NUM_TEETH_PLANET_BIG_MIN   = 20,
+                 NUM_TEETH_PLANET_SMALL_MIN = 20,
+                 GEAR_RATIO_MIN             = 5,
+                 GEAR_RATIO_MAX             = 45,
+                 GEAR_RATIO_STEP            = 1.0):
+        self.K_Mass                     = K_Mass
+        self.K_Eff                      = K_Eff
+        self.MODULE_BIG_MIN             = MODULE_BIG_MIN
+        self.MODULE_BIG_MAX             = MODULE_BIG_MAX
+        self.MODULE_SMALL_MIN           = MODULE_SMALL_MIN
+        self.MODULE_SMALL_MAX           = MODULE_SMALL_MAX
+        self.NUM_PLANET_MIN             = NUM_PLANET_MIN
+        self.NUM_PLANET_MAX             = NUM_PLANET_MAX
+        self.NUM_TEETH_SUN_MIN          = NUM_TEETH_SUN_MIN
+        self.NUM_TEETH_PLANET_BIG_MIN   = NUM_TEETH_PLANET_BIG_MIN
+        self.NUM_TEETH_PLANET_SMALL_MIN = NUM_TEETH_PLANET_SMALL_MIN
+        self.GEAR_RATIO_MIN             = GEAR_RATIO_MIN
+        self.GEAR_RATIO_MAX             = GEAR_RATIO_MAX
+        self.GEAR_RATIO_STEP            = GEAR_RATIO_STEP
+
+        self.Cost                     = 100000
+        self.totalGearboxesWithReqGR  = 0
+        self.totalFeasibleGearboxes   = 0
+        self.cntrIterBeforeCons       = 0
+        self.iter                     = 0
+        self.gearRatioIter            = self.GEAR_RATIO_MIN
+        self.UsePSCasVariable         = 1
+        self.design_parameters        = design_parameters
+        self.gear_standard_parameters = gear_standard_parameters
+
+    def optimizeActuator(self, Actuator = wolfromPlanetaryActuator, UsePSCasVariable = 1, log = 0, csv = 1):
+        startTime = time.time()
+        self.UsePSCasVariable = UsePSCasVariable
+        if UsePSCasVariable == 0:
+            self.optimizeActuatorWithoutPSC(Actuator, log, csv)
+        elif UsePSCasVariable == 1:
+            self.optimizeActuatorWith_MINLP_PSC(Actuator, log, csv)
+        else:
+            print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
+        
+        # Print the time in the file 
+        endTime = time.time()
+        totalTime = endTime - startTime
+        # print("\n")
+        # print("Running Time (sec)")
+        # print(totalTime) 
+
+        return (totalTime)
+
+    def optimizeActuatorWithoutPSC(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
+        startTime = time.time()
+        opt_parameters = []
+        if csv and log:
+            print("WARNING: Both csv and Log cannot be true")
+            print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
+            print(" ")
+            print("ACTION:Making log to be false and csv to be true")
+            log = 0
+            csv = 1
+        elif not csv and not log:
+            print("WARNING: Both csv and Log cannot be false")
+            print("WARNING: Please set either csv or log to be 1 in \"Optimizer.optimizeActuator(Actuator)\" function")
+            print(" ")
+            print("ACTION:Making log to be False and csv to be true")
+            log = 0
+            csv = 1
+        
+        if csv:
+            fileName = f"./results/results_BruteForce_{Actuator.motor.motorName}/WPG_BRUTEFORCE_{Actuator.stressAnalysisMethodName}_{Actuator.motor.motorName}.csv"
+        elif log:
+            fileName = f"./results/results_BruteForce_{Actuator.motor.motorName}/WPG_BRUTEFORCE_{Actuator.stressAnalysisMethodName}_{Actuator.motor.motorName}_LOG.txt"
+            
+        with open(fileName, "w") as wolfromLogFile:
+            sys.stdout = wolfromLogFile
+            self.printOptimizationParameters(Actuator, log, csv)
+            if log:
+                print(" ")
+                print("*****************************************************************")
+                print("FOR MINIMUM GEAR RATIO ", self.gearRatioIter)
+                print("*****************************************************************")
+                print(" ")
+            elif csv:
+                # Printing the optimization iterations below
+                print(" ")
+                print("iter, gearRatio, moduleBig, moduleSmall, Ns, NpBig, NpSmall, NrBig, NrSmall, numPlanet, PSCs, PSCp1, PSCp2, PSCr1, PSCr2,fwSunMM, fwPlanetBigMM, fwPanetSmallMM, fwRingBigMM, fwRingSmallMM,  mass, eff, peakTorque, Cost, torque_density")
+                
+            while self.gearRatioIter <= self.GEAR_RATIO_MAX:
+                opt_done = 0
+                self.iter = 0
+                self.Cost = 100000
+                MinCost = self.Cost
+
+                Actuator.wolfromPlanetaryGearbox.setModuleBig(self.MODULE_BIG_MIN)
+                while Actuator.wolfromPlanetaryGearbox.moduleBig <= self.MODULE_BIG_MAX:
+                    # Setting Module Small
+                    Actuator.wolfromPlanetaryGearbox.setModuleSmall(self.MODULE_SMALL_MIN)
+                    while (Actuator.wolfromPlanetaryGearbox.moduleSmall <= self.MODULE_SMALL_MAX):
+                        # Setting Ns
+                        Actuator.wolfromPlanetaryGearbox.setNs(self.NUM_TEETH_SUN_MIN)
+                        while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusSunM()*1000) <= Actuator.maxGearboxDiameter:
+                            # Setting Np Big
+                            Actuator.wolfromPlanetaryGearbox.setNpBig(self.NUM_TEETH_PLANET_BIG_MIN)
+                            while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusPlanetBigM()*1000) <= Actuator.maxGearboxDiameter/2:
+                                # Setting Np Small
+                                Actuator.wolfromPlanetaryGearbox.setNpSmall(self.NUM_TEETH_PLANET_SMALL_MIN)
+                                while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusPlanetSmallM()*1000) <= Actuator.maxGearboxDiameter/2:
+                                    # Setting Nr Small
+                                    Actuator.wolfromPlanetaryGearbox.setNrSmall(Actuator.wolfromPlanetaryGearbox.NpSmall + 
+                                                                                Actuator.wolfromPlanetaryGearbox.NpBig +
+                                                                                Actuator.wolfromPlanetaryGearbox.Ns)
+                                    # Setting Nr Big
+                                    Actuator.wolfromPlanetaryGearbox.setNrBig(2*Actuator.wolfromPlanetaryGearbox.NpBig +
+                                                                                Actuator.wolfromPlanetaryGearbox.Ns)
+                                    if ((2*Actuator.wolfromPlanetaryGearbox.getPCRadiusRingBigM()*1000) <= Actuator.maxGearboxDiameter):# and Actuator.getIdRequired2MM() <= 100): # and ((2*Actuator.wolfromPlanetaryGearbox.getPCRadiusRingSmallM()*1000) <= maxGearBoxDia):
+                                        # TODO: Ask Deepak: What is getIDRequired2MM()? and also tell him to write a more meaningful function name
+                                        # Setting number of Planet
+                                        Actuator.wolfromPlanetaryGearbox.setNumPlanet(self.NUM_PLANET_MIN)
+                                        while Actuator.wolfromPlanetaryGearbox.numPlanet <= self.NUM_PLANET_MAX:
+                                            if (Actuator.wolfromPlanetaryGearbox.geometricConstraint() and 
+                                                Actuator.wolfromPlanetaryGearbox.meshingConstraint() and 
+                                                Actuator.wolfromPlanetaryGearbox.noPlanetInterferenceConstraint()):
+                                                self.totalFeasibleGearboxes += 1
+                                                # Fiter for the Gear Ratio
+                                                if (Actuator.wolfromPlanetaryGearbox.gearRatio() >= self.gearRatioIter and 
+                                                    Actuator.wolfromPlanetaryGearbox.gearRatio() <= (self.gearRatioIter + 1)):
+                                                    self.totalGearboxesWithReqGR += 1
+                                                    
+                                                    # Cost Calculation
+                                                    Actuator.updateFacewidth()
+                                                    # massActuator = Actuator.getMassStructureKG()
+                                                    massActuator = Actuator.getMassKG_3DP()
+                                                    effActuator = Actuator.wolfromPlanetaryGearbox.getEfficiency()
+                                                    self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                                    if self.Cost < MinCost:
+                                                        MinCost = self.Cost
+                                                        self.iter += 1
+                                                        opt_done = 1
+                                                        Actuator.genEquationFile()
+
+
+                                                        opt_parameters = [Actuator.wolfromPlanetaryGearbox.gearRatio(),
+                                                                          Actuator.wolfromPlanetaryGearbox.numPlanet,
+                                                                          Actuator.wolfromPlanetaryGearbox.Ns,
+                                                                          Actuator.wolfromPlanetaryGearbox.NpBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.NrBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.NpSmall,
+                                                                          Actuator.wolfromPlanetaryGearbox.NrSmall,
+                                                                          Actuator.wolfromPlanetaryGearbox.moduleBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.moduleSmall]
+                                                        opt_planetaryGearbox = wolfromPlanetaryGearbox  (design_parameters         = self.design_parameters,
+                                                                                                         gear_standard_parameters  = self.gear_standard_parameters,
+                                                                                                         Ns                        = Actuator.wolfromPlanetaryGearbox.Ns,
+                                                                                                         NpBig                     = Actuator.wolfromPlanetaryGearbox.NpBig,
+                                                                                                         NpSmall                   = Actuator.wolfromPlanetaryGearbox.NpSmall,
+                                                                                                         NrBig                     = Actuator.wolfromPlanetaryGearbox.NrBig,
+                                                                                                         NrSmall                   = Actuator.wolfromPlanetaryGearbox.NrSmall,
+                                                                                                         numPlanet                 = Actuator.wolfromPlanetaryGearbox.numPlanet,
+                                                                                                         moduleBig                 = Actuator.wolfromPlanetaryGearbox.moduleBig,
+                                                                                                         moduleSmall               = Actuator.wolfromPlanetaryGearbox.moduleSmall,
+                                                                                                         gearDensity               = Actuator.wolfromPlanetaryGearbox.gearDensity,
+                                                                                                         carrierDensity            = Actuator.wolfromPlanetaryGearbox.carrierDensity,
+                                                                                                         fwSunMM                   = Actuator.wolfromPlanetaryGearbox.fwSunMM,
+                                                                                                         fwPlanetBigMM             = Actuator.wolfromPlanetaryGearbox.fwPlanetBigMM,
+                                                                                                         fwPlanetSmallMM           = Actuator.wolfromPlanetaryGearbox.fwPlanetSmallMM,
+                                                                                                         fwRingBigMM               = Actuator.wolfromPlanetaryGearbox.fwRingBigMM,
+                                                                                                         fwRingSmallMM             = Actuator.wolfromPlanetaryGearbox.fwRingSmallMM,
+                                                                                                         maxGearAllowableStressMPa = Actuator.wolfromPlanetaryGearbox.maxGearAllowableStressMPa)
+                                                        opt_actuator = wolfromPlanetaryActuator(design_parameters        = self.design_parameters,
+                                                                                                motor                    = Actuator.motor, 
+                                                                                                wolfromPlanetaryGearbox  = opt_planetaryGearbox, 
+                                                                                                FOS                      = Actuator.FOS, 
+                                                                                                serviceFactor            = Actuator.serviceFactor, 
+                                                                                                maxGearboxDiameter       = Actuator.maxGearboxDiameter, # mm 
+                                                                                                stressAnalysisMethodName = "Lewis") # Lewis or AGMA
+                                                        
+                                                        # opt_actuator.updateFacewidth()
+                                                        # opt_actuator.getMassKG_3DP()
+                                            
+                                                        # self.printOptimizationResults(Actuator, log, csv)
+                                            Actuator.wolfromPlanetaryGearbox.setNumPlanet(Actuator.wolfromPlanetaryGearbox.numPlanet + 1)
+                                        # Actuator.wolfromPlanetaryGearbox.setNrBig(Actuator.wolfromPlanetaryGearbox.NrBig + 1)
+                                        # Actuator.wolfromPlanetaryGearbox.setNrSmall(Actuator.wolfromPlanetaryGearbox.NrSmall + 1)
+                                    Actuator.wolfromPlanetaryGearbox.setNpSmall(Actuator.wolfromPlanetaryGearbox.NpSmall + 1)
+                                Actuator.wolfromPlanetaryGearbox.setNpBig(Actuator.wolfromPlanetaryGearbox.NpBig + 1)
+                            Actuator.wolfromPlanetaryGearbox.setNs(Actuator.wolfromPlanetaryGearbox.Ns + 1)
+                        Actuator.wolfromPlanetaryGearbox.setModuleSmall(Actuator.wolfromPlanetaryGearbox.moduleSmall + 0.100)
+                        Actuator.wolfromPlanetaryGearbox.setModuleSmall(round(Actuator.wolfromPlanetaryGearbox.moduleSmall, 1)) # Round Off
+                    Actuator.wolfromPlanetaryGearbox.setModuleBig(Actuator.wolfromPlanetaryGearbox.moduleBig + 0.100)
+                    Actuator.wolfromPlanetaryGearbox.setModuleBig(round(Actuator.wolfromPlanetaryGearbox.moduleBig, 1)) # Round Off
+                if (opt_done == 1):
+                    self.printOptimizationResults(opt_actuator, log, csv)  
+                self.gearRatioIter += self.GEAR_RATIO_STEP
+    
+                if log:
+                    print("Number of iterations: ", self.iter)
+                    print("Total Feasible Gearboxes:", self.totalFeasibleGearboxes)
+                    print("Total Gearboxes with requires Gear Ratio:", self.totalGearboxesWithReqGR)
+                    print("*****************************************************************")
+                    print("----------------------------END----------------------------------")
+                    print(" ")
+
+        sys.stdout = sys.__stdout__
+
+    def optimizeActuatorWith_MINLP_PSC(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
+        if csv and log:
+            print("WARNING: Both csv and Log cannot be true")
+            print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
+            print(" ")
+            print("ACTION:Making log to be false and csv to be true")
+            log = 0
+            csv = 1
+        elif not csv and not log:
+            print("WARNING: Both csv and Log cannot be false")
+            print("WARNING: Please set either csv or log to be 1 in \"Optimizer.optimizeActuator(Actuator)\" function")
+            print(" ")
+            print("ACTION:Making log to be False and csv to be true")
+            log = 0
+            csv = 1
+        
+        if csv:
+            fileName = f"./results/results_bilevel_{Actuator.motor.motorName}/WPG_BILEVEL_{Actuator.stressAnalysisMethodName}_{Actuator.motor.motorName}_CSV.csv"
+        elif log:
+            fileName = f"./results/results_bilevel_{Actuator.motor.motorName}/WPG_BILEVEL_{Actuator.stressAnalysisMethodName}_{Actuator.motor.motorName}_LOG.txt"
+        
+        with open(fileName, "w") as wolfromLogFile:
+            sys.stdout = wolfromLogFile
+            self.printOptimizationParameters(Actuator, log, csv)
+            
+            if log:
+                print(" ")
+                print("*****************************************************************")
+                print("FOR MINIMUM GEAR RATIO ", self.gearRatioIter)
+                print("*****************************************************************")
+                print(" ")
+            elif csv:
+                # Printing the optimization iterations below
+                print(" ")
+                print("iter, gearRatio, moduleBig, moduleSmall, Ns, NpBig, NpSmall, NrBig, NrSmall, numPlanet,PSCs, PSCp1, PSCp2, PSCr1, PSCr2, fwSunMM, fwPlanetBigMM, fwPanetSmallMM, fwRingBigMM, fwRingSmallMM, CD_SP1, CD_PR1, CD_PR2, mass, eff, peakTorque, Cost, Torque_Density")
+            while self.gearRatioIter <= self.GEAR_RATIO_MAX: 
+                self.iter = 0
+                opt_done = 0
+                self.Cost = 100000
+                MinCost = self.Cost
+                opt_parameters = []
+                Actuator.wolfromPlanetaryGearbox.setModuleBig(self.MODULE_BIG_MIN)
+                while Actuator.wolfromPlanetaryGearbox.moduleBig <= self.MODULE_BIG_MAX:
+                    # Setting Module Small
+                    Actuator.wolfromPlanetaryGearbox.setModuleSmall(self.MODULE_SMALL_MIN)
+                    while (Actuator.wolfromPlanetaryGearbox.moduleSmall <= self.MODULE_SMALL_MAX):
+                        # Setting Ns
+                        Actuator.wolfromPlanetaryGearbox.setNs(self.NUM_TEETH_SUN_MIN)
+                        while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusSunM()*1000) <= Actuator.maxGearboxDiameter:
+                            # Setting Np Big
+                            Actuator.wolfromPlanetaryGearbox.setNpBig(self.NUM_TEETH_PLANET_BIG_MIN)
+                            while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusPlanetBigM()*1000) <= Actuator.maxGearboxDiameter/2:
+                                # Setting Np Small
+                                Actuator.wolfromPlanetaryGearbox.setNpSmall(self.NUM_TEETH_PLANET_SMALL_MIN)
+                                while (2*Actuator.wolfromPlanetaryGearbox.getPCRadiusPlanetSmallM()*1000) <= Actuator.maxGearboxDiameter/2:
+                                    # Setting Nr Small
+                                    Actuator.wolfromPlanetaryGearbox.setNrSmall(Actuator.wolfromPlanetaryGearbox.NpSmall + 
+                                                                                Actuator.wolfromPlanetaryGearbox.NpBig +
+                                                                                Actuator.wolfromPlanetaryGearbox.Ns)
+                                    # Setting Nr Big
+                                    Actuator.wolfromPlanetaryGearbox.setNrBig(2*Actuator.wolfromPlanetaryGearbox.NpBig +
+                                                                                Actuator.wolfromPlanetaryGearbox.Ns)
+                                    if ((2*Actuator.wolfromPlanetaryGearbox.getPCRadiusRingBigM()*1000) <= Actuator.maxGearboxDiameter and Actuator.getIdRequired2MM() <= 100): # and ((2*Actuator.wolfromPlanetaryGearbox.getPCRadiusRingSmallM()*1000) <= maxGearBoxDia):
+                                        # TODO: Ask Deepak: What is getIDRequired2MM()? and also tell him to write a more meaningful function name
+                                        # Setting number of Planet
+                                        Actuator.wolfromPlanetaryGearbox.setNumPlanet(self.NUM_PLANET_MIN)
+                                        while Actuator.wolfromPlanetaryGearbox.numPlanet <= self.NUM_PLANET_MAX:
+                                            if (Actuator.wolfromPlanetaryGearbox.geometricConstraint() and 
+                                                Actuator.wolfromPlanetaryGearbox.meshingConstraint() and 
+                                                Actuator.wolfromPlanetaryGearbox.noPlanetInterferenceConstraint()):
+                                                self.totalFeasibleGearboxes += 1
+                                                # Fiter for the Gear Ratio
+                                                if (Actuator.wolfromPlanetaryGearbox.gearRatio() >= self.gearRatioIter and 
+                                                    Actuator.wolfromPlanetaryGearbox.gearRatio() <= (self.gearRatioIter + 1)):
+                                                    
+                                                    self.totalGearboxesWithReqGR += 1
+                                                    
+                                                    # Cost Calculation
+                                                    Actuator.updateFacewidth()
+                                                    # massActuator = Actuator.getMassStructureKG()
+                                                    massActuator = Actuator.getMassKG_3DP()
+                                                    effActuator = Actuator.wolfromPlanetaryGearbox.getEfficiency()
+                                                    self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                                    
+                                                    if self.Cost < MinCost:
+                                                        MinCost = self.Cost
+                                                        self.iter += 1
+                                                        opt_done = 1
+                                                        Actuator.genEquationFile()
+
+                                                        opt_parameters = [Actuator.wolfromPlanetaryGearbox.gearRatio(),
+                                                                          Actuator.wolfromPlanetaryGearbox.numPlanet,
+                                                                          Actuator.wolfromPlanetaryGearbox.Ns,
+                                                                          Actuator.wolfromPlanetaryGearbox.NpBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.NrBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.NpSmall,
+                                                                          Actuator.wolfromPlanetaryGearbox.NrSmall,
+                                                                          Actuator.wolfromPlanetaryGearbox.moduleBig,
+                                                                          Actuator.wolfromPlanetaryGearbox.moduleSmall]
+                                                        opt_planetaryGearbox = wolfromPlanetaryGearbox  (design_parameters         = self.design_parameters,
+                                                                                                         gear_standard_parameters  = self.gear_standard_parameters,
+                                                                                                         Ns                        = Actuator.wolfromPlanetaryGearbox.Ns,
+                                                                                                         NpBig                     = Actuator.wolfromPlanetaryGearbox.NpBig,
+                                                                                                         NpSmall                   = Actuator.wolfromPlanetaryGearbox.NpSmall,
+                                                                                                         NrBig                     = Actuator.wolfromPlanetaryGearbox.NrBig,
+                                                                                                         NrSmall                   = Actuator.wolfromPlanetaryGearbox.NrSmall,
+                                                                                                         numPlanet                 = Actuator.wolfromPlanetaryGearbox.numPlanet,
+                                                                                                         moduleBig                 = Actuator.wolfromPlanetaryGearbox.moduleBig,
+                                                                                                         moduleSmall               = Actuator.wolfromPlanetaryGearbox.moduleSmall,
+                                                                                                         gearDensity               = Actuator.wolfromPlanetaryGearbox.gearDensity,
+                                                                                                         carrierDensity            = Actuator.wolfromPlanetaryGearbox.carrierDensity,
+                                                                                                         fwSunMM                   = Actuator.wolfromPlanetaryGearbox.fwSunMM,
+                                                                                                         fwPlanetBigMM             = Actuator.wolfromPlanetaryGearbox.fwPlanetBigMM,
+                                                                                                         fwPlanetSmallMM           = Actuator.wolfromPlanetaryGearbox.fwPlanetSmallMM,
+                                                                                                         fwRingBigMM               = Actuator.wolfromPlanetaryGearbox.fwRingBigMM,
+                                                                                                         fwRingSmallMM             = Actuator.wolfromPlanetaryGearbox.fwRingSmallMM,
+                                                                                                         maxGearAllowableStressMPa = Actuator.wolfromPlanetaryGearbox.maxGearAllowableStressMPa)
+                                                        opt_actuator = wolfromPlanetaryActuator(design_parameters        = self.design_parameters,
+                                                                                                motor                    = Actuator.motor, 
+                                                                                                wolfromPlanetaryGearbox  = opt_planetaryGearbox, 
+                                                                                                FOS                      = Actuator.FOS, 
+                                                                                                serviceFactor            = Actuator.serviceFactor, 
+                                                                                                maxGearboxDiameter       = Actuator.maxGearboxDiameter, # mm 
+                                                                                                stressAnalysisMethodName = "Lewis") # Lewis or AGMA
+                                            
+                                            Actuator.wolfromPlanetaryGearbox.setNumPlanet(Actuator.wolfromPlanetaryGearbox.numPlanet + 1)
+                                        # Actuator.wolfromPlanetaryGearbox.setNrBig(Actuator.wolfromPlanetaryGearbox.NrBig + 1)
+                                        # Actuator.wolfromPlanetaryGearbox.setNrSmall(Actuator.wolfromPlanetaryGearbox.NrSmall + 1)
+                                    Actuator.wolfromPlanetaryGearbox.setNpSmall(Actuator.wolfromPlanetaryGearbox.NpSmall + 1)
+                                Actuator.wolfromPlanetaryGearbox.setNpBig(Actuator.wolfromPlanetaryGearbox.NpBig + 1)
+                            Actuator.wolfromPlanetaryGearbox.setNs(Actuator.wolfromPlanetaryGearbox.Ns + 1)
+                        Actuator.wolfromPlanetaryGearbox.setModuleSmall(Actuator.wolfromPlanetaryGearbox.moduleSmall + 0.100)
+                        Actuator.wolfromPlanetaryGearbox.setModuleSmall(round(Actuator.wolfromPlanetaryGearbox.moduleSmall, 1)) # Round Off
+                    Actuator.wolfromPlanetaryGearbox.setModuleBig(Actuator.wolfromPlanetaryGearbox.moduleBig + 0.100)
+                    Actuator.wolfromPlanetaryGearbox.setModuleBig(round(Actuator.wolfromPlanetaryGearbox.moduleBig, 1)) # Round Off
+                if (opt_done == 1):
+                    self.wpgOpt = optimal_continuous_PSC_wpg(GEAR_RATIO_MIN = opt_parameters[0],
+                                                             numPlanet      = opt_parameters[1],
+                                                             Ns_init        = opt_parameters[2],
+                                                             Np1_init       = opt_parameters[3],
+                                                             Nr1_init       = opt_parameters[4],
+                                                             Np2_init       = opt_parameters[5],
+                                                             Nr2_init       = opt_parameters[6],
+                                                             M1_init        = opt_parameters[7] * 10,
+                                                             M2_init        = opt_parameters[8] * 10)
+                    _, calc_centerDistForManufacturing = self.wpgOpt.solve()
+                    self.wpgOpt.solve(optimizeForManufacturing=True,
+                                      centerDistForManufacturing=calc_centerDistForManufacturing)
+                    self.printOptimizationResults(opt_actuator, log, csv)  
+                self.gearRatioIter += self.GEAR_RATIO_STEP
+
+    
+                if log:
+                    print("Number of iterations: ", self.iter)
+                    print("Total Feasible Gearboxes:", self.totalFeasibleGearboxes)
+                    print("Total Gearboxes with requires Gear Ratio:", self.totalGearboxesWithReqGR)
+                    print("*****************************************************************")
+                    print("----------------------------END----------------------------------")
+                    print(" ")
+
+        sys.stdout = sys.__stdout__
+
+    def printOptimizationParameters(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
+        # Motor Parameters
+        maxMotorAngVelRPM       = Actuator.motor.maxMotorAngVelRPM
+        maxMotorAngVelRadPerSec = Actuator.motor.maxMotorAngVelRadPerSec
+        maxMotorTorque          = Actuator.motor.maxMotorTorque
+        maxMotorPower           = Actuator.motor.maxMotorPower
+        motorMass               = Actuator.motor.massKG
+        motorDia                = Actuator.motor.motorDiaMM
+        motorLength             = Actuator.motor.motorLengthMM
+        
+        # Planetary Gearbox Parameters
+        maxGearAllowableStressMPa = Actuator.wolfromPlanetaryGearbox.maxGearAllowableStressMPa
+        
+        # Gear strength parameters
+        FOS                      = Actuator.FOS
+        serviceFactor            = Actuator.serviceFactor
+        maxGearBoxDia            = Actuator.maxGearboxDiameter
+        stressAnalysisMethodName = Actuator.stressAnalysisMethodName
+        
+        if log:
+           # Printing the parameters below
+            print("--------------------Motor Parameters--------------------")
+            print("maxMotorAngVelRPM:       ", maxMotorAngVelRPM)
+            print("maxMotorAngVelRadPerSec: ", maxMotorAngVelRadPerSec)
+            print("maxMotorTorque:          ", maxMotorTorque)
+            print("maxMotorPower:           ", maxMotorPower)
+            print("motorMass:               ", motorMass)
+            print("motorDia:                ", motorDia)
+            print("motorLength:             ", motorLength)
+            print(" ")
+            print("--------------Planetary Gearbox Parameters--------------")
+            print("maxGearAllowableStressMPa: ", maxGearAllowableStressMPa)
+            print(" ")
+            print("-----------Gear strength and size parameters------------")
+            print("FOS:                     ", FOS)
+            print("serviceFactor:           ", serviceFactor)
+            print("stressAnalysisMethodName:", stressAnalysisMethodName)
+            print("maxGearBoxDia:           ", maxGearBoxDia)
+            print(" ")
+            print("-----------------Optimization Parameters-----------------")
+            print("K_Mass:                     ", self.K_Mass)
+            print("K_Eff:                      ", self.K_Eff)
+            print("MODULE_BIG_MIN:             ", self.MODULE_BIG_MIN)
+            print("MODULE_BIG_MAX:             ", self.MODULE_BIG_MAX)
+            print("MODULE_SMALL_MIN:           ", self.MODULE_SMALL_MIN)
+            print("MODULE_SMALL_MAX:           ", self.MODULE_SMALL_MAX)
+            print("NUM_PLANET_MIN:             ", self.NUM_PLANET_MIN)
+            print("NUM_PLANET_MAX:             ", self.NUM_PLANET_MAX)
+            print("NUM_TEETH_SUN_MIN:          ", self.NUM_TEETH_SUN_MIN)
+            print("NUM_TEETH_PLANET_BIG_MIN:   ", self.NUM_TEETH_PLANET_BIG_MIN)
+            print("NUM_TEETH_PLANET_SMALL_MIN: ", self.NUM_TEETH_PLANET_SMALL_MIN)
+            print("GEAR_RATIO_MIN:             ", self.GEAR_RATIO_MIN)
+            print("GEAR_RATIO_MAX:             ", self.GEAR_RATIO_MAX)
+            print("GEAR_RATIO_STEP:            ", self.GEAR_RATIO_STEP)
+        elif csv:
+            print("Motor Parameters:")
+            print("maxMotorAngVelRPM,","maxMotorAngVelRadPerSec,","maxMotorTorque,","maxMotorPower,","motorMass,","motorDia,", "motorLength")
+            print(maxMotorAngVelRPM,",", maxMotorAngVelRadPerSec,",", maxMotorTorque,",",maxMotorPower,",",motorMass,",",motorDia,",", motorLength)
+            print(" ")
+            print("Gear strength and size parameters:")
+            print("FOS,", "serviceFactor,", "stressAnalysisMethodName,", "maxGearBoxDia,","maxGearAllowableStressMPa")
+            print(FOS,",", serviceFactor,",", stressAnalysisMethodName,",", maxGearBoxDia,",",maxGearAllowableStressMPa)
+            print(" ")
+            print("Optimization Parameters:")            
+            print("K_mass, K_Eff, MODULE_BIG_MIN, MODULE_BIG_MAX, MODULE_SMALL_MIN, MODULE_SMALL_MAX, NUM_PLANET_MIN, NUM_PLANET_MAX, NUM_TEETH_SUN_MIN, NUM_TEETH_PLANET_BIG_MIN, NUM_TEETH_PLANET_SMALL_MIN, GEAR_RATIO_MIN, GEAR_RATIO_MAX, GEAR_RATIO_STEP")
+            print(self.K_Mass,",", self.K_Eff,",", self.MODULE_BIG_MIN,",", self.MODULE_BIG_MAX,",", self.MODULE_SMALL_MIN,",", self.MODULE_SMALL_MAX,",",self.NUM_PLANET_MIN,",", self.NUM_PLANET_MAX,",", self.NUM_TEETH_SUN_MIN,",", self.NUM_TEETH_PLANET_BIG_MIN,",",self.NUM_TEETH_PLANET_SMALL_MIN,",", self.GEAR_RATIO_MIN,",", self.GEAR_RATIO_MAX,",", self.GEAR_RATIO_STEP)
+
+    def printOptimizationResults(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
+        if log:
+            # Printing the parameters below
+            print("Iteration: ", self.iter)
+            Actuator.printParametersLess()
+            Actuator.printVolumeAndMassParameters()
+            if self.UsePSCasVariable == 1 :
+                Opt_PSC_ring1 = self.wpgOpt.model.PSCr1.value
+                Opt_PSC_ring2 = self.wpgOpt.model.PSCr2.value
+                Opt_PSC_planet1 = self.wpgOpt.model.PSCp1.value
+                Opt_PSC_planet2 = self.wpgOpt.model.PSCp2.value
+                Opt_PSC_sun = self.wpgOpt.model.PSCs.value
+            else :
+                Opt_PSC_ring1   = 0
+                Opt_PSC_ring2   = 0
+                Opt_PSC_planet1 = 0
+                Opt_PSC_planet2 = 0
+                Opt_PSC_sun     = 0            
+            eff = round(Actuator.planetaryGearbox.getEfficiency(), 3)
+            if self.UsePSCasVariable == 1 : 
+                eff  = round(self.wpgOpt.getEfficiency(Var=False), 3)
+                print ("Efficiency with PSC", eff)
+                print(f"PSC Values - Ring: {Opt_PSC_ring1}, Planet: {Opt_PSC_planet1}, Ring2: {Opt_PSC_ring2}, Planet2: {Opt_PSC_planet2}, Sun: {Opt_PSC_sun}")
+            print(" ")
+            print("Cost:", self.Cost)
+            print("*****************************************************************")
+            print(" ")
+            print("Cost:", self.Cost)
+            print("*****************************************************************")
+        elif csv:
+            iter            = self.iter
+            gearRatio       = Actuator.wolfromPlanetaryGearbox.gearRatio()
+            moduleBig       = Actuator.wolfromPlanetaryGearbox.moduleBig
+            moduleSmall     = Actuator.wolfromPlanetaryGearbox.moduleSmall
+            Ns              = Actuator.wolfromPlanetaryGearbox.Ns 
+            NpBig           = Actuator.wolfromPlanetaryGearbox.NpBig
+            NpSmall         = Actuator.wolfromPlanetaryGearbox.NpSmall 
+            NrBig           = Actuator.wolfromPlanetaryGearbox.NrBig
+            NrSmall         = Actuator.wolfromPlanetaryGearbox.NrSmall 
+            numPlanet       = Actuator.wolfromPlanetaryGearbox.numPlanet
+            fwSunMM         = round(Actuator.wolfromPlanetaryGearbox.fwSunMM    , 3)
+            fwPlanetBigMM   = round(Actuator.wolfromPlanetaryGearbox.fwPlanetBigMM , 3)
+            fwPlanetSmallMM = round(Actuator.wolfromPlanetaryGearbox.fwPlanetSmallMM , 3)
+            fwRingBigMM     = round(Actuator.wolfromPlanetaryGearbox.fwRingBigMM   , 3)
+            fwRingSmallMM   = round(Actuator.wolfromPlanetaryGearbox.fwRingSmallMM   , 3)
+            if self.UsePSCasVariable == 1 :
+                Opt_PSC_ring1   = self.wpgOpt.model.PSCr1.value
+                Opt_PSC_ring2   = self.wpgOpt.model.PSCr2.value
+                Opt_PSC_planet1 = self.wpgOpt.model.PSCp1.value
+                Opt_PSC_planet2 = self.wpgOpt.model.PSCp2.value
+                Opt_PSC_sun     = self.wpgOpt.model.PSCs.value
+                Opt_CD_SP1, Opt_CD_PR1, Opt_CD_PR2 = self.wpgOpt.getCenterDistance(Var=False)
+            else :
+                Opt_PSC_ring1   = 0.0
+                Opt_PSC_ring2   = 0.0
+                Opt_PSC_planet1 = 0.0
+                Opt_PSC_planet2 = 0.0
+                Opt_PSC_sun     = 0.0
+                Opt_CD_SP1 = ((Ns      + NpBig)/2)   * moduleBig
+                Opt_CD_PR1 = ((NrBig   - NpBig)/2)   * moduleBig
+                Opt_CD_PR2 = ((NrSmall - NpSmall)/2) * moduleSmall
+
+            # mass       = round(Actuator.getMassStructureKG(), 3)
+            mass       = round(Actuator.getMassKG_3DP(), 3)
+            eff        = round(Actuator.wolfromPlanetaryGearbox.getEfficiency(), 3)
+            if self.UsePSCasVariable == 1 :
+                eff  = round(self.wpgOpt.getEfficiency(Var=False), 3)
+            peakTorque      = round(Actuator.motor.getMaxMotorTorque()*Actuator.wolfromPlanetaryGearbox.gearRatio(), 3)
+            Cost       = self.K_Mass * mass + self.K_Eff * eff
+            torque_density  = round(peakTorque/mass, 3)
+            print(iter,",", gearRatio,",",moduleBig,",",moduleSmall,",", Ns,",", NpBig,",", NpSmall,",", NrBig,",",NrSmall,",", numPlanet,",", Opt_PSC_sun,",",  Opt_PSC_planet1,",", Opt_PSC_planet2,",", Opt_PSC_ring1,",",Opt_PSC_ring2,",", fwSunMM,",", fwPlanetBigMM,",",fwPlanetSmallMM,",", fwRingBigMM,",",fwRingSmallMM,",", mass, ",", eff,",", peakTorque,",", Cost, ",", torque_density)
