@@ -4358,13 +4358,13 @@ class wolfromPlanetaryActuator:
 
     def setVariables(self):
         # --- Optimization Variables --- 
-        self.Ns = 20
-        self.Np_b = 26
-        self.Np_s = 22
+        self.Ns   = self.wolfromPlanetaryGearbox.Ns
+        self.Np_b = self.wolfromPlanetaryGearbox.NpBig
+        self.Np_s = self.wolfromPlanetaryGearbox.NpSmall
         self.Nr_b = self.Ns + self.Np_b * 2
         self.Nr_s = self.Ns + self.Np_b + self.Np_s
-        self.module = 1
-        self.num_planet = 4
+        self.module = self.wolfromPlanetaryGearbox.moduleBig
+        self.num_planet = self.wolfromPlanetaryGearbox.numPlanet
 
         #------------------------
         # --- Fixed Variables ---
@@ -4383,8 +4383,8 @@ class wolfromPlanetaryActuator:
         self.pressure_angle_deg = 20
 
         # --- Motor ---
-        self.motor_OD = 72
-        self.motor_height = 27
+        self.motor_OD = self.motorDiaMM
+        self.motor_height = self.motorLengthMM
         self.motor_mount_hole_PCD = 32
         self.motor_mount_hole_dia = 4
         self.motor_mount_hole_num = 4
@@ -4432,7 +4432,7 @@ class wolfromPlanetaryActuator:
         self.sun_central_bolt_dia = 5
         self.sun_central_bolt_socket_head_dia = 8.5
 
-        self.fw_s_calc = 10
+        self.fw_s_calc = self.wolfromPlanetaryGearbox.fwSunMM
 
         self.motor_output_hole_CSK_OD = 9
         self.motor_output_hole_CSK_head_height = 2.5
@@ -4450,11 +4450,11 @@ class wolfromPlanetaryActuator:
         self.planet_bearing_width = 3.5
         self.planet_bore = 10
 
-        self.fw_p_b = 8
+        self.fw_p_b = self.wolfromPlanetaryGearbox.fwPlanetBigMM
 
         # --- Ring Gear ---
         self.ring_radial_thickness = 5
-        self.fw_r_s = 8
+        self.fw_r_s = self.wolfromPlanetaryGearbox.fwRingSmallMM
 
         # --- Gearbox Casing ---
         self.gear_casing_thickness = 4
@@ -4569,6 +4569,7 @@ class wolfromPlanetaryActuator:
         # writing values into text file imported which is imported into solidworks
         self.setVariables()
         file_path = os.path.join(os.path.dirname(__file__), 'WPG', 'wpg_equations.txt')
+        print("File Path: ",file_path)
         with open(file_path, 'w') as eqFile:
             l = [
                 f'"Np_b" = {self.Np_b}\n',
@@ -6975,8 +6976,8 @@ class optimizationWolfromPlanetaryActuator:
                                                                                                 maxGearboxDiameter       = Actuator.maxGearboxDiameter, # mm 
                                                                                                 stressAnalysisMethodName = "Lewis") # Lewis or AGMA
                                                         
-                                                        # opt_actuator.updateFacewidth()
-                                                        # opt_actuator.getMassKG_3DP()
+                                                        opt_actuator.updateFacewidth()
+                                                        opt_actuator.getMassKG_3DP()
                                             
                                                         # self.printOptimizationResults(Actuator, log, csv)
                                             Actuator.wolfromPlanetaryGearbox.setNumPlanet(Actuator.wolfromPlanetaryGearbox.numPlanet + 1)
