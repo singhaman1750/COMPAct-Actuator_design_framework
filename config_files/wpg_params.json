@@ -1,6 +1,6 @@
 {   
     "wpg_design_parameters":{        
-        "planetMinDistanceMM"              : 5.0,
+        "planetMinDistanceMM"              : 7.5,
         "ringRadialWidthMMSmall"           : 5.0,
         "ringRadialWidthMMBig"             : 5.0,
         "mainCoverThicknessMM"             : 2,
@@ -36,7 +36,7 @@
         "NUM_PLANET_MIN"             : 3,  
         "NUM_PLANET_MAX"             : 5,  
         "NUM_TEETH_SUN_MIN"          : 20, 
-        "NUM_TEETH_PLANET_BIG_MIN"   : 20, 
-        "NUM_TEETH_PLANET_SMALL_MIN" : 20 
+        "NUM_TEETH_PLANET_BIG_MIN"   : 28, 
+        "NUM_TEETH_PLANET_SMALL_MIN" : 28 
     }
 }

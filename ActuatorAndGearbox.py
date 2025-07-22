@@ -4221,6 +4221,7 @@ class compoundPlanetaryActuator:
         #----------------------------------------
         # Total Actuator Mass
         #----------------------------------------
+
         Actuator_mass = (self.motorMassKG 
                         + self.Motor_case_mass 
                         + self.gearbox_casing_mass 
@@ -4232,7 +4233,7 @@ class compoundPlanetaryActuator:
                         + self.sun_shaft_bearing_mass 
                         + self.bearing_mass 
                         + self.bearing_retainer_mass)
-        
+
         return Actuator_mass
 
     def print_mass_of_parts_3DP(self):
@@ -4261,7 +4262,7 @@ class wolfromPlanetaryActuator:
                  serviceFactor            = 2.0,
                  maxGearboxDiameter       = 140.0,
                  stressAnalysisMethodName = "Lewis",
-                 densityPLA = 1240):
+                 densityPLA = 1020):
         
         self.motor                    = motor
         self.wolfromPlanetaryGearbox  = wolfromPlanetaryGearbox
@@ -5459,6 +5460,9 @@ class wolfromPlanetaryActuator:
         Ring1OuterRadiusMM = Rr1_MM + self.ring1RadialWidthMM
         Ring2OuterRadiusMM = Rr2_MM + self.ring2RadialWidthMM
 
+        ring1_radial_thickness = self.ring1RadialWidthMM
+        ring2_radial_thickness = self.ring2RadialWidthMM
+
         #----------------------------------
         # Facewidths
         #----------------------------------         
@@ -5568,6 +5572,28 @@ class wolfromPlanetaryActuator:
         carrier_mass = carrier_volume * densityPLA
 
         #-------------------------------------------------------
+        # wpg_motor_casing
+        #-------------------------------------------------------
+        ring1_OD  = Nr1 * module1 + ring1_radial_thickness*2
+        motor_OD = self.motorDiaMM
+
+        if (ring1_OD < motor_OD):
+            clearance_motor_and_case = 5
+        else: 
+            clearance_motor_and_case = (ring1_OD - motor_OD)/2 + 5
+
+        motor_height      = self.motorLengthMM
+        Motor_case_height = motor_height + case_mounting_surface_height + standard_clearance_1_5mm
+
+        Motor_case_ID     = motor_OD + clearance_motor_and_case * 2
+        Motor_case_OD = Motor_case_ID + Motor_case_thickness * 2
+
+        Motor_case_volume = ( np.pi * ((Motor_case_OD * 0.5)**2) * base_plate_thickness 
+                            + np.pi * ((Motor_case_OD * 0.5)**2 - (Motor_case_ID * 0.5)**2) * Motor_case_height) * 1e-9
+
+        Motor_case_mass = Motor_case_volume * densityPLA
+
+        #-------------------------------------------------------
         # wpg_gearbox_casing
         # ---
         # Mass of the gearbox casign includes the mass of:
@@ -5578,9 +5604,6 @@ class wolfromPlanetaryActuator:
         #-------------------------------------------------------
         ring1_ID      = Nr1 * module2
         ringFwUsedMM = ring1FwMM
-
-        ring1_radial_thickness = self.ring1RadialWidthMM
-        ring2_radial_thickness = self.ring2RadialWidthMM
 
         # --- Bearing holding structure --- 
         if ((bearing_OD + output_mounting_hole_dia * 4) > ((Nr2 * module2 + 2 * ring2_radial_thickness) + standard_clearance_1_5mm * 2)):
@@ -5613,34 +5636,10 @@ class wolfromPlanetaryActuator:
         ring_gear1_volume = np.pi * (((ring_gear1_OD*0.5)**2) - 
                                      ((ring_gear1_ID*0.5)**2)) * ring_gear1_height * 1e-9
 
-
-        #-------------------------------------------------------
-        # wpg_motor_casing
-        #-------------------------------------------------------
-        ring1_OD  = Nr1 * module1 + ring1_radial_thickness*2
-        motor_OD = self.motorDiaMM
-
-        if (ring1_OD < motor_OD):
-            clearance_motor_and_case = 5
-        else: 
-            clearance_motor_and_case = (ring1_OD - motor_OD)/2 + 5
-
-        motor_height      = self.motorLengthMM
-        Motor_case_height = motor_height + case_mounting_surface_height + standard_clearance_1_5mm
-
-        Motor_case_ID     = motor_OD + clearance_motor_and_case * 2
-        Motor_case_OD = Motor_case_ID + Motor_case_thickness * 2
-
-        Motor_case_volume = ( np.pi * ((Motor_case_OD * 0.5)**2) * base_plate_thickness 
-                            + np.pi * ((Motor_case_OD * 0.5)**2 - (Motor_case_ID * 0.5)**2) * Motor_case_height) * 1e-9
-
-        Motor_case_mass = Motor_case_volume * densityPLA
-
         # --- Case mounting structure --- 
         case_dist = (sec_carrier_thickness 
-                     + clearance_planet * 2 
+                     + clearance_planet
                      + sun_coupler_hub_thickness 
-                     + planet1FwMM 
                      - case_mounting_surface_height)
 
         case_mounting_structure_ID     = Motor_case_OD - Motor_case_OD_base_to_chamfer * 2
@@ -5651,9 +5650,16 @@ class wolfromPlanetaryActuator:
                                                     ((case_mounting_structure_ID*0.5)**2)) * case_mounting_structure_height * 1e-9
 
 
+        large_fillet_ID     = ring1_OD
+        large_fillet_OD     = Motor_case_OD
+        large_fillet_height = ring1FwMM/2
+        large_fillet_volume = 0.5 * (np.pi * (((large_fillet_OD*0.5)**2) - ((large_fillet_ID)*0.5)**2) * large_fillet_height) * 1e-9
+
+
         gearbox_casing_mass = (bearing_holding_structure_volume
                                + spacer_wall_for_ring2_volume
                                + case_mounting_structure_volume 
+                               + large_fillet_volume
                                + ring_gear1_volume) * densityPLA
 
         #-------------------------------------------------------
@@ -5795,18 +5801,35 @@ class wolfromPlanetaryActuator:
         sun_volume       = sun_hub_volume + sun_gear_volume + sun_shaft_volume
         sun_mass         = sun_volume * densityPLA
 
+        print(f"carrier_small_ring_inner_bearing_mass: {carrier_small_ring_inner_bearing_mass} kg")
+        print(f"carrier_mass: {carrier_mass} kg")
+        print(f"gearbox_casing_mass: {gearbox_casing_mass} kg")
+        print(f"Motor_case_mass: {Motor_case_mass} kg")
+        print(f"motor_mass: {motor_mass} kg")
+        print(f"planet_bearing_combined_mass: {planet_bearing_combined_mass} kg")
+        print(f"planet_mass (per planet): {planet_mass} kg")
+        print(f"numPlanet: {numPlanet}")
+        print(f"planet_mass * numPlanet: {planet_mass * numPlanet} kg")
+        print(f"sec_carrier_mass: {sec_carrier_mass} kg")
+        print(f"small_ring_bearing_shaft_mass: {small_ring_bearing_shaft_mass} kg")
+        print(f"small_ring_mass: {small_ring_mass} kg")
+        print(f"sun_shaft_bearing_mass: {sun_shaft_bearing_mass} kg")
+        print(f"sun_mass: {sun_mass} kg")
+
         Actuator_mass = (carrier_small_ring_inner_bearing_mass + 
-                         carrier_mass + 
-                         gearbox_casing_mass +
-                         Motor_case_mass + 
-                         motor_mass +
-                         planet_bearing_combined_mass +
-                         planet_mass * numPlanet +
-                         sec_carrier_mass +
-                         small_ring_bearing_shaft_mass +
-                         small_ring_mass +
-                         sun_shaft_bearing_mass +
-                         sun_mass)
+                        carrier_mass + 
+                        gearbox_casing_mass +
+                        Motor_case_mass + 
+                        motor_mass +
+                        planet_bearing_combined_mass +
+                        planet_mass * numPlanet +
+                        sec_carrier_mass +
+                        small_ring_bearing_shaft_mass +
+                        small_ring_mass +
+                        sun_shaft_bearing_mass +
+                        sun_mass)
+
+        print(f"Total Actuator_mass: {Actuator_mass} kg")
 
         return Actuator_mass
 

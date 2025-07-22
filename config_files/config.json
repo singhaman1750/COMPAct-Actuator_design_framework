@@ -20,7 +20,7 @@
             "density": 2710
         },
         "PLA": {
-            "density": 1240,
+            "density": 1020,
             "maxAllowableStressMPa": 70
         }
     },

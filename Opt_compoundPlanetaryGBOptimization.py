@@ -304,7 +304,7 @@ Optimizer_U12 = optimizationCompoundPlanetaryActuator(design_parameters         
 # Optimize
 #-------------------------------------------------
 # totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
-totalTime_U8 = Optimizer_U8.genOptimalActuator(Actuator_U8, UsePSCasVariable = 0, gear_ratio= 10.97, log=0, csv=1)
+totalTime_U8 = Optimizer_U8.genOptimalActuator(Actuator_U8, UsePSCasVariable = 0, gear_ratio= 8.97, log=0, csv=1)
 print("Optimization Completed : CPG U8 : Total Time:", totalTime_U8)
 
 # totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
