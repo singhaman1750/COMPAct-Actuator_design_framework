@@ -1,0 +1,51 @@
+{   
+    "dspg_design_parameters":{
+        "sCarrierExtrusionDiaMM_Stg1"       : 12,
+        "sCarrierExtrusionClearanceMM_Stg1" : 2,
+        "sCarrierExtrusionDiaMM_Stg2"       : 12,
+        "sCarrierExtrusionClearanceMM_Stg2" : 2,
+        "Ring1RadialWidthMM"                : 5,
+        "Ring2RadialWidthMM"                : 5,
+        "planetMinDistanceMM"               : 5,
+        "carrier1ShaftHeightMM"             : 10,
+        "mainCase2AttachmentHeightMM"       : 6,
+        "baseThicknessMM"                   : 3,
+        "sCarrierThicknessMM"               : 5, 
+        "mainCoverThicknessMM"              : 2,
+        "planetBoreMM"                      : 8,
+        "sunBoreMM"                         : 6,
+        "couplerRadiusMM"                   : 16.5,
+        "couplerThicknessMM"                : 3,
+        "couplerShaftHeightMM"              : 12,
+        "CarrierRadialThicknessClearance1"  : 10,
+        "CarrierRadialThicknessClearance2"  : 10,
+        "carrierInnerDiaClearanceMM1"       : 2,
+        "sCarrierInnerDiaClearanceMM1"      : 2,
+        "carrierInnerDiaClearanceMM2"       : 2,
+        "sCarrierInnerDiaClearanceMM2"      : 2,
+        "clearanceMotorandCaseMM"           : 2.3,
+        "clearanceRingandCaseMM"            : 1.5,
+        "clearance1RingandCaseMM"           : 1.5,
+        "clearanceCarrierPlanetMM"          : 1.5,
+        "upperHousingHeight"                : 5,
+        "clearanceSCarrierMotorMM"          : 2
+    },
+    "dspg_optimization_parameters":{
+        "GEAR_RATIO_MIN"        : 4,
+        "GEAR_RATIO_MAX"        : 45, 
+        "GEAR_RATIO_STEP"       : 1,
+        "MODULE_STAGE1_MIN"     : 0.5, 
+        "MODULE_STAGE1_MAX"     : 0.8, 
+        "MODULE_STAGE2_MIN"     : 0.9, 
+        "MODULE_STAGE2_MAX"     : 1.2, 
+        "NUM_PLANET_STAGE1_MIN" : 3, 
+        "NUM_PLANET_STAGE1_MAX" : 5, 
+        "NUM_PLANET_STAGE2_MIN" : 3, 
+        "NUM_PLANET_STAGE2_MAX" : 5, 
+        "NUM_TEETH_SUN_MIN"     : 20, 
+        "NUM_TEETH_PLANET_MIN"  : 20 
+    },
+    "dspg_design_parameters_3DP":{
+
+    }
+}
