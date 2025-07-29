@@ -142,11 +142,11 @@ doubleStagePlanetaryGearboxInstance = doubleStagePlanetaryGearbox(design_paramet
 #----------------------------------------
 # Actuator
 #----------------------------------------
-maxGearboxDiameter_U8     = MotorU8.motorDiaMM * 1.5    - 2*dspg_design_params["Ring2RadialWidthMM"]
-maxGearboxDiameter_U10    = MotorU10.motorDiaMM * 1.5   - 2*dspg_design_params["Ring2RadialWidthMM"]
-maxGearboxDiameter_MN8014 = MotorMN8014.motorDiaMM - 2*dspg_design_params["Ring2RadialWidthMM"]
-maxGearboxDiameter_VT8020 = Motor8020.motorDiaMM   - 2*dspg_design_params["Ring2RadialWidthMM"]
-maxGearboxDiameter_U12    = MotorU12.motorDiaMM    - 2*dspg_design_params["Ring2RadialWidthMM"] 
+maxGearboxDiameter_U8     = MotorU8.motorDiaMM * 1.5    - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_U10    = MotorU10.motorDiaMM * 1.5   - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_MN8014 = MotorMN8014.motorDiaMM - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_VT8020 = Motor8020.motorDiaMM   - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_U12    = MotorU12.motorDiaMM    - 2*dspg_design_params["ring_radial_thickness"] 
 
 # U8-Actuator
 Actuator_U8 = doubleStagePlanetaryActuator(design_parameters           = dspg_design_params,
