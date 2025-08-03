@@ -2294,6 +2294,16 @@ class singleStagePlanetaryActuator:
     #---------------------------------------------
     # Generate Equation file for 3DP Actuators
     #---------------------------------------------
+
+    def cost(self):
+        mass = self.getMassKG_3DP()
+        eff = self.planetaryGearbox.getEfficiency()
+        width = self.planetaryGearbox.fwPlanetMM
+        cost = mass - eff + 0.1 * width
+        return cost
+
+
+
     def setVariables(self):
         #------------------------------------------------------
         # Optimization Variables
@@ -4204,29 +4214,8 @@ class wolfromPlanetaryActuator:
         #-----------------------------------------
         # Actuator Design Free Parameters
         #-----------------------------------------
-        self.mainCoverThicknessMM         = design_parameters["mainCoverThicknessMM"] # 2
-        self.baseThicknessMM              = design_parameters["baseThicknessMM"]      # 3 
-
-        self.planetBoreMM                 = design_parameters["planetBoreMM"]                 # 8
-        self.sunBoreMM                    = design_parameters["sunBoreMM"]                    # 6
-        self.couplerRadiusMM              = design_parameters["couplerRadiusMM"]              # 16.5
-        self.couplerThicknessMM           = design_parameters["couplerThicknessMM"]           # 3
-        self.couplerShaftHeightMM         = design_parameters["couplerShaftHeightMM"]         # 12
         self.sCarrierExtrusionDiaMM       = design_parameters["sCarrierExtrusionDiaMM"]       # 12 # TODO: depends on the numPlanet, planet radii and clearance of planets
         self.sCarrierExtrusionClearanceMM = design_parameters["sCarrierExtrusionClearanceMM"] # 2
-        self.clearanceMotorandCaseMM      = design_parameters["clearanceMotorandCaseMM"]      # 2.3 # TODO: Why such a "odd" number?
-        self.clearanceCarrierPlanetMM     = design_parameters["clearanceCarrierPlanetMM"]     # 1.5
-        self.clearanceSCarrierMotorMM     = design_parameters["clearanceSCarrierMotorMM"]     # 2
-        self.carrierThicknessMM           = design_parameters["carrierThicknessMM"]           # 5
-
-        self.CarrierRadialThicknessClearance1 = design_parameters["CarrierRadialThicknessClearance1"] # 10 
-
-        self.carrierInnerDiaClearanceMM1      = design_parameters["carrierInnerDiaClearanceMM1"]  # 2
-        self.sCarrierInnerDiaClearanceMM1     = design_parameters["sCarrierInnerDiaClearanceMM1"] # 2
-
-        self.MainCover3AndCarrierClearanceMM  = design_parameters["MainCover3AndCarrierClearanceMM"] # 2
-
-        self.CarrierAndMainCaseClearanceMM    = design_parameters["CarrierAndMainCaseClearanceMM"] # 3
 
         self.gearbox_casing_thickness         = design_parameters["gearbox_casing_thickness"]
         self.small_ring_gear_casing_thickness = design_parameters["small_ring_gear_casing_thickness"]
@@ -4271,6 +4260,14 @@ class wolfromPlanetaryActuator:
 
         # --- Setting the variables ---
         self.setVariables()
+
+    def cost(self):
+        massActuator = self.getMassKG_3DP()
+        effActuator  = self.wolfromPlanetaryGearbox.getEfficiency()
+        widthActuator = self.wolfromPlanetaryGearbox.fwPlanetBigMM + self.wolfromPlanetaryGearbox.fwPlanetSmallMM
+        cost = massActuator - effActuator + 0.1 * widthActuator
+        return cost
+
 
     def setVariables(self):
         # --- Optimization Variables --- 
@@ -5318,12 +5315,12 @@ class wolfromPlanetaryActuator:
         carrier_height = carrier_thickness
 
         carrier_bearing_mount_ID     = carrier_small_ring_inner_bearing_OD
-        carrier_bearing_mount_OD     = standard_clearance_1_5mm * (8/3)
+        carrier_bearing_mount_OD     = standard_clearance_1_5mm * (8/3) + carrier_small_ring_inner_bearing_OD
         carrier_bearing_mount_height = carrier_small_ring_inner_bearing_height - carrier_thickness + standard_clearance_1_5mm
 
         carrier_shaft_OD     = planet_shaft_dia
         carrier_shaft_height = planet1FwMM  + planet2FwMM + clearance_planet * 2
-        carrier_shaft_num    = numPlanet * 2
+        carrier_shaft_num    = numPlanet * 2 + numPlanet # assuming support triangle weighs twice as much as shaft
 
         carrier_volume = (np.pi * (((carrier_OD*0.5)**2) - ((carrier_ID)*0.5)**2) * carrier_height
                         + np.pi * (((carrier_bearing_mount_OD*0.5)**2) - ((carrier_bearing_mount_ID)*0.5)**2) * carrier_bearing_mount_height  
@@ -5444,7 +5441,7 @@ class wolfromPlanetaryActuator:
         #-------------------------------------------------------
         # wpg_sec_carrier
         #-------------------------------------------------------
-        sec_carrier_OD = bearing_ID
+        sec_carrier_OD = ((Ns + Np1) * module1 + planet_shaft_dia + self.planet_shaft_step_offset * 2 + standard_clearance_1_5mm * 2)
         sec_carrier_ID = (DiaSunMM + DiaPlanet1MM) - planet_shaft_dia - 2 * standard_clearance_1_5mm
 
         sec_carrier_volume = (np.pi * ((sec_carrier_OD*0.5)**2 - (sec_carrier_ID*0.5)**2) * sec_carrier_thickness) * 1e-9
@@ -7584,7 +7581,8 @@ class optimizationSingleStageActuator:
                                             effActuator = Actuator.planetaryGearbox.getEfficiency()
                                             # massActuator = Actuator.getMassKG_3DP()
                                             massActuator = Actuator.getMassKG_3DP()
-                                            self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                            # self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                            self.Cost = Actuator.cost()
                                             #self.Cost = massActuator/effActuator
                                             if self.Cost <= MinCost:
                                                 MinCost = self.Cost
@@ -8440,7 +8438,8 @@ class optimizationWolfromPlanetaryActuator:
                                                     # massActuator = Actuator.getMassStructureKG()
                                                     massActuator = Actuator.getMassKG_3DP()
                                                     effActuator = Actuator.wolfromPlanetaryGearbox.getEfficiency()
-                                                    self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                                    # self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                                    self.Cost = Actuator.cost()
                                                     if self.Cost < MinCost:
                                                         MinCost = self.Cost
                                                         self.iter += 1
