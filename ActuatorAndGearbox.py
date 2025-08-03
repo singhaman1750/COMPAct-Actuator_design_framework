@@ -227,7 +227,6 @@ class nuts_and_bolts_dimensions:
 
         return [width_across_flats, height]
 
-
 #=========================================================================
 # Gearbox classes
 #=========================================================================
@@ -2289,196 +2288,6 @@ class singleStagePlanetaryActuator:
         #--------------------------------------------
         self.ringRadialWidthMM = self.planetaryGearbox.ringRadialWidthMM
 
-        #------------------------------------------------------
-        # Optimization Variables
-        #------------------------------------------------------
-        self.Ns         : int | None = None
-        self.Np         : int | None = None
-        self.Nr         : int | None = None
-        self.module     : float | None = None
-        self.num_planet : int | None = None
-
-        #------------------------------------------------------
-        # Indepent Constant variables
-        #------------------------------------------------------
-        # --- Gear Profile parameters ---
-        self.pressure_angle     : float | None = None
-        self.pressure_angle_deg : float | None = None
-
-        # --- variable used in gearbox class not used here ---
-        # self.ringRadialWidthMM            = 5.0
-        # self.planetMinDistanceMM          = 5.0
-        # self.sCarrierExtrusionDiaMM       = 8.0
-        # self.sCarrierExtrusionClearanceMM = 1.0
-        self.bearingIDClearanceMM           : float | None = None
-        
-        # --- Clearances -----------------
-        self.clearance_planet                           : float | None = None
-        self.clearance_case_mount_holes_shell_thickness : float | None = None
-        self.standard_clearance_1_5mm                   : float | None = None
-        self.clearance_sun_coupler_sec_carrier          : float | None = None
-        self.ring_to_chamfer_clearance                  : float | None = None
-        self.standard_fillet_1_5mm                      : float | None = None
-        self.standard_bearing_insertion_chamfer         : float | None = None
-
-        # --- Secondary Carrier dimensions ---
-        self.sec_carrier_thickness : float | None = None
-
-        # --- Sun coupler, sun gear & sun gear dimensions ---
-        self.sun_coupler_hub_thickness : float | None = None
-        self.sun_shaft_bearing_OD      : float | None = None
-        self.sun_shaft_bearing_width   : float | None = None
-        self.sun_shaft_bearing_ID      : float | None = None
-        self.sun_central_bolt_dia      : float | None = None
-
-        # --- casing Motor and gearbox casing dimensions ---
-        self.case_mounting_surface_height             : float | None = None
-        self.case_mounting_hole_dia                   : float | None = None
-        self.case_mounting_bolt_depth                 : float | None = None
-        self.case_mounting_nut_clearance              : float | None = None
-        self.base_plate_thickness                     : float | None = None
-        self.Motor_case_thickness                     : float | None = None
-        self.air_flow_hole_offset                     : float | None = None
-        self.central_hole_offset_from_motor_mount_PCD : float | None = None
-        self.output_mounting_hole_dia                 : float | None = None
-        self.output_mounting_nut_depth                : float | None = None
-        self.Motor_case_OD_base_to_chamfer            : float | None = None
-        self.pattern_offset_from_motor_case_OD_base   : float | None = None
-        self.pattern_bulge_dia                        : float | None = None
-        self.pattern_num_bulge                        : float | None = None
-        self.pattern_depth                            : float | None = None
-
-        # --- carrier dimensions ---
-        self.carrier_trapezoidal_support_sun_offset                 : float | None = None
-        self.carrier_trapezoidal_support_hole_PCD_offset_bearing_ID : float | None = None
-        self.carrier_trapezoidal_support_hole_dia                   : float | None = None
-        self.carrier_bearing_step_width                             : float | None = None
-        
-        # --- Driver Dimensions ---
-        self.driver_upper_holes_dist_from_center : float | None = None
-        self.driver_lower_holes_dist_from_center : float | None = None
-        self.driver_side_holes_dist_from_center  : float | None = None
-        self.driver_mount_holes_dia              : float | None = None
-        self.driver_mount_inserts_OD             : float | None = None
-        self.driver_mount_thickness              : float | None = None
-        self.driver_mount_height                 : float | None = None
-
-        # --- Planet Gear dimensions ---
-        self.planet_pin_bolt_dia      : float | None = None
-        self.planet_shaft_dia         : float | None = None
-        self.planet_shaft_step_offset : float | None = None
-        self.planet_bearing_OD        : float | None = None
-        self.planet_bearing_width     : float | None = None
-        self.planet_bore              : float | None = None
-
-        # --- bearing retainer dimensions ---
-        self.bearing_retainer_thickness : float | None = None
-
-        # --- carrier nuts and bolts ---
-        self.carrier_trapezoidal_support_hole_socket_head_dia : float | None = None
-        self.carrier_trapezoidal_support_hole_wrench_size     : float | None = None
-
-        # --- Motor --- 
-        self.motor_OD                   : float | None = None
-        self.motor_height               : float | None = None
-        self.motor_mount_hole_PCD       : float | None = None 
-        self.motor_mount_hole_dia       : float | None = None
-        self.motor_mount_hole_num       : float | None = None
-        self.motor_output_hole_PCD      : float | None = None 
-        self.motor_output_hole_dia      : float | None = None
-        self.motor_output_hole_num      : float | None = None
-        self.wire_slot_dist_from_center : float | None = None 
-        self.wire_slot_length           : float | None = None 
-        self.wire_slot_radius           : float | None = None
-
-        #------------------------------------------------------
-        # Depent variables
-        #------------------------------------------------------
-        # --- Gear Profile parameters ---
-        self.h_a          : float | None = None
-        self.h_b          : float | None = None
-        self.h_f          : float | None = None
-        self.clr_tip_root : float | None = None
-
-        # --- Planet Gear Geometry ---
-        self.dp_s      : float | None = None
-        self.db_s      : float | None = None
-        self.fw_s_calc : float | None = None
-        self.alpha_s   : float | None = None 
-        self.beta_s    : float | None = None
-
-        self.dp_p    : float | None = None
-        self.db_p    : float | None = None
-        self.fw_p    : float | None = None
-        self.alpha_p : float | None = None 
-        self.beta_p  : float | None = None
-
-        # --- 
-        self.planet_pin_socket_head_dia  : float | None = None
-        self.planet_pin_bolt_wrench_size : float | None = None
-        # ---
-
-        self.dp_r                  : float | None = None
-        self.db_r                  : float | None = None
-        self.fw_r                  : float | None = None
-        self.alpha_r               : float | None = None 
-        self.beta_r                : float | None = None
-        self.ring_radial_thickness : float | None = None
-
-        self.ring_OD : float | None = None
-
-        # --- casing Motor and gearbox casing dimensions ---
-        self.clearance_motor_and_case : float | None = None 
-        
-        self.Motor_case_ID      : float | None = None
-        self.motor_case_OD_base : float | None = None
-
-        self.case_dist : float | None = None
-
-        self.case_mounting_hole_shift : float | None = None
-        self.case_mounting_PCD        : float | None = None
-
-        self.case_mounting_hole_allen_socket_dia : float | None = None
-        self.Motor_case_OD_max                   : float | None = None
-
-        self.case_mounting_wrench_size   : float | None = None
-        self.case_mounting_nut_thickness : float | None = None
-
-        # --- Bearing Dimensions ---
-        self.bearing_ID     : float | None = None
-        self.bearing_OD     : float | None = None
-        self.bearing_height : float | None = None
-
-        self.bearing_mount_thickness : float | None = None
-        self.output_mounting_PCD     : float | None = None
-        self.carrier_PCD             : float | None = None
-
-        self.output_mounting_nut_thickness   : float | None = None
-        self.output_mounting_nut_wrench_size : float | None = None
-
-        # ------------ Motors ------------------
-        self.motor_output_hole_CSK_OD          : float | None = None
-        self.motor_output_hole_CSK_head_height : float | None = None
-
-        # --- Sun coupler & sun gear dimensions ---
-        self.sun_hub_dia                      : float | None = None
-        self.sun_central_bolt_socket_head_dia : float | None = None
-        self.fw_s_used                        : float | None = None
-
-        #-----------------------------------------------------
-        ##  3D printed actuator mass function parameters
-        #-----------------------------------------------------
-        self.Motor_case_mass              : float | None = None
-        self.gearbox_casing_mass          : float | None = None
-        self.carrier_mass                 : float | None = None
-        self.sun_mass                     : float | None = None
-        self.sec_carrier_mass             : float | None = None
-        self.planet_mass                  : float | None = None
-        self.planet_bearing_combined_mass : float | None = None
-        self.sun_shaft_bearing_mass       : float | None = None
-        self.bearing_mass                 : float | None = None
-        self.bearing_retainer_mass        : float | None = None
-
         #---------------- Setting all design variables ---------------
         self.setVariables()
     
@@ -2886,8 +2695,6 @@ class singleStagePlanetaryActuator:
         wSun = self.motor.getMaxMotorAngVelRadPerSec()
         wCarrier = wSun/self.planetaryGearbox.gearRatio()
         wPlanet = ( -Ns / (Nr - Ns) ) * wSun
-
-        # Ft = (self.serviceFactor*self.motor.getMaxMotorTorque())/( numPlanet * Rs_Mt)
         
         Ft = self.getToothForces(False)
 
@@ -3104,36 +2911,6 @@ class singleStagePlanetaryActuator:
         bMin_sun    = (self.FOS * Wt * Kv_sun    * Ks * Kh * Kb) / (module * Yj_sun    * self.planetaryGearbox.maxGearAllowableStressPa * 0.001)
         bMin_ring   = (self.FOS * Wt * Kv_ring   * Ks * Kh * Kb) / (module * Yj_ring   * self.planetaryGearbox.maxGearAllowableStressPa * 0.001)
 
-        # C_pm = 1.1
-        # X_planet = (self.FOS * Wt * Kv_planet * Ks * Kb)/(module * Y_planet * self.planetaryGearbox.maxGearAllowableStressPa * 0.001)
-        # X_sun = (self.FOS * Wt * Kv_sun * Ks * Kb) / (module * Y_sun * self.planetaryGearbox.maxGearAllowableStressPa * 0.001)
-        # X_ring = (self.FOS * Wt * Kv_ring * Ks * Kb) / (module * Y_ring * self.planetaryGearbox.maxGearAllowableStressPa * 0.001)
-
-        # co_eff_of_fwSqr = 0.93/10000
-        # co_eff_of_fw_planet = -(C_pm/(module*Np*10*0.03937)) + 1/(39.37*X_planet) - 0.0158
-        # co_eff_of_fw_sun = -(C_pm/(module*Ns*10*0.03937)) + 1/(39.37*X_sun) - 0.0158
-        # co_eff_of_fw_ring = -(C_pm/(module*Nr*10*0.03937)) + 1/(39.37*X_ring) - 0.0158
-        # constant = -1.0995
-
-        # bMin_planet = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_planet, constant]))/39.37
-        # bMin_sun = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_sun, constant]))/39.37
-        # bMin_ring = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_ring, constant]))/39.37
-
-        # if bMin_planet > 0.026:
-        #     co_eff_of_fw_planet = -(C_pm/(module*Np*10*0.03937)) + 1/(39.37*X_planet) - 0.1533
-        #     constant = -1.08575
-        #     bMin_planet = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_planet, constant]))/39.37
-
-        # if bMin_ring > 0.026:
-        #     co_eff_of_fw_ring = -(C_pm/(module*Nr*10*0.03937)) + 1/(39.37*X_ring) - 0.1533
-        #     constant = -1.08575
-        #     bMin_ring = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_ring, constant]))/39.37
-
-        # if bMin_sun > 0.026:
-        #     co_eff_of_fw_sun = -(C_pm/(module*Ns*10*0.03937)) + 1/(39.37*X_sun) - 0.1533
-        #     constant = -1.08575
-        #     bMin_sun = max(np.roots([co_eff_of_fwSqr, co_eff_of_fw_sun, constant]))/39.37
-
         if bMin_ring < bMin_planet:
             bMin_ring = bMin_planet
         else:
@@ -3142,17 +2919,6 @@ class singleStagePlanetaryActuator:
         self.planetaryGearbox.setfwSunMM    ( bMin_sun    * 1000)
         self.planetaryGearbox.setfwPlanetMM ( bMin_planet * 1000)
         self.planetaryGearbox.setfwRingMM   ( bMin_ring   * 1000)
-
-        # print("AGMA:")
-        # print(f"bMin_planet = {self.planetaryGearbox.fwPlanetMM}")
-        # print(f"bMin_sun = {self.planetaryGearbox.fwSunMM}")
-        # print(f"bMin_ring = {self.planetaryGearbox.fwRingMM}")
-        # print(f"Yj_planet = {Yj_planet}")
-        # print(f"Yj_sun = {Yj_sun}")
-        # print(f"Yj_ring = {Yj_ring}")
-        # print(f"Kf_planet = {Kf_planet}")
-        # print(f"Kf_sun = {Kf_sun}")
-        # print(f"Kf_ring = {Kf_ring}")
 
     def updateFacewidth(self):
         if self.stressAnalysisMethodName == "Lewis":
@@ -3660,7 +3426,6 @@ class compoundPlanetaryActuator:
         self.motor_case_OD_base = self.motor_OD + self.clearance_motor_and_case * 2 + self.Motor_case_thickness * 2
         self.case_mounting_PCD = self.motor_case_OD_base + self.case_mounting_hole_shift * 2
         self.Motor_case_OD_max = self.case_mounting_PCD + self.case_mounting_hole_allen_socket_dia + self.clearance_case_mount_holes_shell_thickness * 2
-
 
         # IIF: bearing_mount_thickness
         if (self.bearing_OD + self.output_mounting_hole_dia * 4) > (self.Nr * self.module + 2 * self.h_b):
@@ -4436,7 +4201,6 @@ class wolfromPlanetaryActuator:
         self.MaxMotorAngVelRPM       = self.motor.maxMotorAngVelRPM
         self.MaxMotorAngVelRadPerSec = self.motor.maxMotorAngVelRadPerSec
 
-
         #-----------------------------------------
         # Actuator Design Free Parameters
         #-----------------------------------------
@@ -4897,16 +4661,6 @@ class wolfromPlanetaryActuator:
     # ----------------------------------------
     # Mass of New Design 
     #-----------------------------------------
-    def wolfromNetInertia(self):
-        I_net = (self.getSpinMomentofInertiaPlanetBig()*self.Ns/self.Ns + self.NpBig)
-        - (self.getOrbitalMomentofInertiaPlanetBig()*self.Ns/(2 * self.NpBig))
-        + (self.getSpinMomentofInertiaPlanetSmall()*self.Ns/self.Ns + self.NpBig)
-        - (self.getOrbitalMomentofInertiaPlanetSmall()*self.Ns/(2 * self.NpBig))
-        + self.getMomentofInertiaSun()
-        + (self.getMomentofInertiaCarrier()*self.Ns/(self.Ns + self.NpBig))
-        + (self.getMomentofInertiaRingSmall*self.Ns*(self.NpBig - self.NpSmall)/(2*self.NrSmall*self.NpBig))
-        return I_net
-
     def getToothForces(self, constraintCheck=False):
         if constraintCheck:
             # Check if the constraints are satisfied
@@ -5433,273 +5187,6 @@ class wolfromPlanetaryActuator:
         elif self.stressAnalysisMethodName == "MIT":
             self.mitStressAnalysisMinFacewidth()
 
-    def getMassKG_new(self, Var = True):
-        module1   = self.wolfromPlanetaryGearbox.moduleBig
-        module2   = self.wolfromPlanetaryGearbox.moduleSmall
-        Ns        = self.wolfromPlanetaryGearbox.Ns
-        Np1       = self.wolfromPlanetaryGearbox.NpBig
-        Nr1       = self.wolfromPlanetaryGearbox.NrBig
-        Np2       = self.wolfromPlanetaryGearbox.NpSmall
-        Nr2       = self.wolfromPlanetaryGearbox.NrSmall
-        numPlanet = self.wolfromPlanetaryGearbox.numPlanet 
-
-        #----------------------------------
-        # Density of Materials
-        #----------------------------------
-        densityGears = 7850
-        densityAl    = 2710
-
-        #----------------------------------
-        # Diameter and Radius
-        #----------------------------------
-        Ds_MM  =  Ns * module1
-        Dp1_MM = Np1 * module1
-        Dr1_MM = Nr1 * module1
-        Dp2_MM = Np2 * module2
-        Dr2_MM = Nr2 * module2
-
-        Rs_MM  =  Ds_MM / 2
-        Rp1_MM = Dp1_MM / 2
-        Rp2_MM = Dp2_MM / 2
-        Rr1_MM = Dr1_MM / 2
-        Rr2_MM = Dr2_MM / 2
-        
-        Ring1OuterRadiusMM = Rr1_MM + self.ring1RadialWidthMM
-        Ring2OuterRadiusMM = Rr2_MM + self.ring2RadialWidthMM
-
-        #----------------------------------
-        # Facewidths
-        #----------------------------------         
-        sunFwMM      = self.wolfromPlanetaryGearbox.fwSunMM
-        planet1FwMM  = self.wolfromPlanetaryGearbox.fwPlanetBigMM
-        planet2FwMM  = self.wolfromPlanetaryGearbox.fwPlanetSmallMM
-        ring1FwMM    = self.wolfromPlanetaryGearbox.fwRingBigMM
-        ring2FwMM    = self.wolfromPlanetaryGearbox.fwRingSmallMM
-
-        sunFwM     = sunFwMM     * 0.001 
-        planet1FwM = planet1FwMM * 0.001
-        planet2FwM = planet2FwMM * 0.001
-        ring1FwM   = ring1FwMM   * 0.001
-        ring2FwM   = ring2FwMM   * 0.001
-
-        #-----------------------------------------
-        # Motor Dimensions & Mass
-        #-----------------------------------------
-        MotorLengthMM = self.motorLengthMM
-        MotorDiaMM    = self.motorDiaMM
-        MotorMassKG   = self.motorMassKG
-
-        #-------------------------------
-        # Bearings: Bearing1 & Bearing2
-        #-------------------------------
-        IdRequired1MM      = module1 * (Ns + Np1) + self.CarrierRadialThicknessClearance1 
-        IdRequired2MM      = Ring2OuterRadiusMM * 2 + self.mainCoverThicknessMM * 2 # CHANGE THIS ID to RING + MAINCASE
-                                                                               
-        Bearing1           = bearings_continuous(IdRequired1MM)
-        Bearing2           = bearings_continuous(IdRequired2MM)
-
-        InnerDiaBearing1MM = Bearing1.getBearingIDMM()
-        OuterDiaBearing1MM = Bearing1.getBearingODMM()
-        WidthBearing1MM    = Bearing1.getBearingWidthMM()
-        BearingMass1KG     = Bearing1.getBearingMassKG()
-        
-        InnerDiaBearing2MM = Bearing2.getBearingIDMM()
-        OuterDiaBearing2MM = Bearing2.getBearingODMM()
-        WidthBearing2MM    = Bearing2.getBearingWidthMM()
-        BearingMass2KG     = Bearing2.getBearingMassKG()
-
-        #-----------------------------------------
-        # Dimensions
-        #-----------------------------------------
-        CarrierInnerDiameterMM  = (Rp1_MM + Rs_MM - self.planetBoreMM/2) * 2 - self.carrierInnerDiaClearanceMM1
-        SCarrierInnerDiameterMM = (Rp1_MM + Rs_MM - self.sCarrierExtrusionDiaMM/2) * 2 - self.sCarrierInnerDiaClearanceMM1
-
-        ClearanceSCarrierMotorMM_withCouplerThickness = self.clearanceSCarrierMotorMM + self.couplerThicknessMM ##### NOTE: HAD AN IF CONDITION
-                                                                                                                ##### TODO: READ BELOW
-                                                                                                                ##### NOTE: This is also not being used?????
-                                                                                                                #####       WHY ?????
-        
-        #-----------------------------------------
-        # NOTE: The following code removal may cause an error
-        # TODO: Use a constraint to satisfy one of the conditions
-        # THis is not a problem : 10-08-2024
-        #-----------------------------------------
-        # ClearanceSCarrierMotorMM = 
-        #     if SCarrierInnerDiameterMM < self.couplerRadiusMM * 2:
-        #         return self.clearanceSCarrierMotorMM + self.couplerThicknessMM
-        #     else:
-        #         return self.clearanceSCarrierMotorMM
-        #     #self.clearanceSCarrierMotorMM += self.couplerThicknessMM * self.smooth_if_factor(self.couplerRadiusMM * 2 - SCarrierInnerDiameterMM)
-        
-        #-----------------------------------------
-        # Main cover Dimensions
-        #-----------------------------------------
-        # LengthMainCoverMM          = MotorLengthMM + 
-        #                              self.baseThicknessMM + 
-        #                              self.clearanceSCarrierMotorMM + 
-        #                              WidthBearing1MM # TODO: Use ClearanceSCarrierMotorMM here in place of self.clearanceSCarrierMotorMM
-        LengthMainCoverMM            = MotorLengthMM + self.baseThicknessMM + ClearanceSCarrierMotorMM_withCouplerThickness + WidthBearing1MM
-        MainCoverInnerRadiusMM       = MotorDiaMM * 0.5 + self.clearanceMotorandCaseMM
-        MainCoverOuterRadiusMM       = MainCoverInnerRadiusMM + self.mainCoverThicknessMM
-        MainCoverProtrusion1RadiusMM = OuterDiaBearing1MM * 0.5
-        HeightMainCoverProtrusion1MM = WidthBearing1MM
-        
-        #-----------------------------------------
-        # Base, 
-        # Coupler shaft & 
-        # Carrier (& secondary carrier) Dimensions
-        #-----------------------------------------
-        RadiusBaseMM                      = MainCoverInnerRadiusMM
-        RadiusCouplerShaftMM              = self.sunBoreMM * 0.5
-        CarrierOuterDiameterMM            = InnerDiaBearing1MM
-        SCarrierThicknessMM               = WidthBearing1MM
-        CarrierExtrusionDiameterMM        = self.planetBoreMM
-        CarrierExtrusionHeightMM          = planet1FwMM + planet2FwMM + self.clearanceCarrierPlanetMM * 2
-        SecondaryCarrierExtrusionHeightMM = CarrierExtrusionHeightMM
-        SecondaryCarrierOuterDiameterMM   = InnerDiaBearing1MM
-
-        #-----------------------------------------
-        # Main cover-2 Dimensions
-        #-----------------------------------------
-        MainCover3HeightMM          = (ring2FwMM + 
-                                       self.clearanceCarrierPlanetMM + 
-                                       WidthBearing2MM + 
-                                       self.mainCoverThicknessMM + 
-                                       self.MainCover3AndCarrierClearanceMM)
-        # CHANGED FROM PREVIOUS
-        MainCover2InnerDiaMM         = Ring1OuterRadiusMM * 2
-        MainCover2ProtrusionRadiusMM = OuterDiaBearing2MM / 2
-        MainCover2ProtrusionHeightMM = WidthBearing2MM
-        MainCover2OuterDiaMM         = MainCover2ProtrusionRadiusMM*2 + self.mainCoverThicknessMM * 2 ##### NOTE: HAD AN IF CONDITION, 
-                                                                                            ##### TODO: READ BELOW
-        HeightMainCover2MM           = ring1FwMM + self.clearanceCarrierPlanetMM + MainCover2ProtrusionHeightMM
-        #-----------------------------------------
-        # MainCover2OuterDiaMM
-        # NOTE: The following code removal may cause an error
-        # TODO: Use a constraint to satisfy one of the conditions
-        # Change the design of 3k Actuator making the 2nd bearing smaller in CAD and re-write the mass fucntions: Deepak 
-        #-----------------------------------------
-        # MainCover2OuterDiaMM = 
-        #     if MainCover2InnerDiaMM < OuterDiaBearing2MM:
-        #         return OuterDiaBearing2MM + self.mainCoverThicknessMM * 2
-        #     else:
-        #         return MainCover2InnerDiaMM + self.mainCoverThicknessMM * 2
-        #     #mainCover2OuterDia = MainCover2InnerDiaMM + 
-        #                           self.mainCoverThicknessMM * 2 + 
-        #                           (OuterDiaBearing2MM - MainCover2InnerDiaMM) * self.smooth_if_factor(OuterDiaBearing2MM - MainCover2InnerDiaMM)
-        #     #return mainCover2OuterDia
-
-        #-----------------------------------------
-        # Main cover-3 Dimensions
-        #-----------------------------------------
-        # CHANGED FROM PREVIOUS
-        MainCover3InnerDiaMM        = Ring2OuterRadiusMM * 2 
-        MainCover3OuterDiaMM        = InnerDiaBearing2MM
-        MainCover3HeightMM        = (ring2FwMM + 
-                                      self.clearanceCarrierPlanetMM +
-                                      self.carrierThicknessMM +
-                                      self.mainCoverThicknessMM + 
-                                      self.MainCover3AndCarrierClearanceMM)
-        #MainCover3ProtInnerRadiusMM = CarrierOuterDiameterMM * 0.5 + self.CarrierAndMainCaseClearanceMM
-        #MainCover3ProtOuterRadiusMM = MainCover3ProtInnerRadiusMM + self.mainCoverThicknessMM
-        #MainCover3ProtHeightMM      = WidthBearing2MM + self.mainCoverThicknessMM + self.clearanceCarrierPlanetMM
-
-        #-----------------------------------------
-        # NOTE: Instead of this constraint we will have to add a deterministic dimension of sCarrierExtrusionDiaMM
-        # TODO: Sit with Deepak and add this code
-        #-----------------------------------------
-        # def geometricConstraintSCarrier(self):
-        #     return self.sCarrierExtrusionDiaMM * 0.5 < ((Rp1_MM + Rs_MM) * np.sin(np.pi / numPlanet) * 2 - Rp1_MM)
-
-        #####################################################################################################
-        # Volumes
-        #####################################################################################################
-        #----------------------------------
-        # Gears, Carrier and Base Volumes
-        #----------------------------------
-        SunVolume      = (np.pi * sunFwMM * ((Rs_MM ** 2) - (self.sunBoreMM * 0.5) ** 2) * 10 ** -9)
-        PlanetVolume   = (np.pi * planet1FwMM * ((Rp1_MM ** 2) - (self.planetBoreMM * 0.5) ** 2) + 
-                          np.pi * planet2FwMM * ((Rp2_MM ** 2) - (self.planetBoreMM * 0.5) ** 2)) * 10 ** -9
-          
-        Ring1Volume    = (np.pi * ring1FwMM * (Ring1OuterRadiusMM ** 2 - Rr1_MM ** 2) * 10 ** -9)
-        Ring2Volume    =  np.pi * ring2FwMM * ((Rr2_MM + 5) ** 2 - Rr2_MM ** 2) * 10 ** -9
- 
-        CarrierVolume  = (np.pi * self.carrierThicknessMM  * ((CarrierOuterDiameterMM * 0.5) ** 2 - (CarrierInnerDiameterMM * 0.5) ** 2) + 
-                          np.pi * CarrierExtrusionHeightMM * (CarrierExtrusionDiameterMM * 0.5) ** 2 * numPlanet) * 10 ** -9
-        
-        SCarrierVolume = (np.pi * SCarrierThicknessMM * ((SecondaryCarrierOuterDiameterMM * 0.5) ** 2 - (SCarrierInnerDiameterMM * 0.5) ** 2) + 
-                          np.pi * SecondaryCarrierExtrusionHeightMM * (self.sCarrierExtrusionDiaMM * 0.5) ** 2 * numPlanet) * 10 ** -9
-
-        BaseVolume     = (np.pi * self.baseThicknessMM * RadiusBaseMM ** 2) * 10 ** -9
-
-        #----------------------------------
-        # Main Case Volumes
-        #----------------------------------
-        #CHANGED FROM PREVIOUS
-        MainCase1Volume = (np.pi * (MainCoverOuterRadiusMM ** 2 - MainCoverInnerRadiusMM ** 2) * (LengthMainCoverMM - HeightMainCoverProtrusion1MM) + 
-                           np.pi * (MainCoverOuterRadiusMM ** 2 - MainCoverProtrusion1RadiusMM ** 2) * HeightMainCoverProtrusion1MM) * 10 ** -9
-
-        MainCase2Volume = (np.pi * ((MainCover2OuterDiaMM * 0.5) ** 2 - (MainCover2InnerDiaMM * 0.5) ** 2) * (HeightMainCover2MM - MainCover2ProtrusionHeightMM) + 
-                           np.pi * ((MainCover2OuterDiaMM * 0.5) ** 2 - MainCover2ProtrusionRadiusMM ** 2) * MainCover2ProtrusionHeightMM) * 10 ** -9
-
-        MainCase3Volume = (np.pi * ((MainCover3OuterDiaMM * 0.5) ** 2 - (MainCover3InnerDiaMM * 0.5) ** 2) * (MainCover3HeightMM - self.mainCoverThicknessMM) + 
-                          (np.pi * ((MainCover3OuterDiaMM * 0.5) ** 2) * self.mainCoverThicknessMM))* 10 ** -9
-
-        MainCaseVolume = MainCase1Volume + MainCase2Volume + MainCase3Volume
-
-        #----------------------------------
-        # Coupler Volume
-        #----------------------------------
-        CouplerVolume = np.pi * (self.couplerRadiusMM ** 2 * self.couplerThicknessMM + RadiusCouplerShaftMM ** 2 * self.couplerShaftHeightMM) * 10 ** -9
-
-        #==================================
-        # Total Mass
-        #==================================
-        MassOfGearsKG   = ((SunVolume + (PlanetVolume * numPlanet) + Ring1Volume + Ring2Volume) * densityGears)
-        MassOfAlPartsKG = ((CarrierVolume + SCarrierVolume + BaseVolume + MainCaseVolume + CouplerVolume) * densityAl)
-        
-        TotalMassKG     = (MassOfGearsKG + MassOfAlPartsKG + BearingMass1KG + BearingMass2KG)
-        MassStructureKG = TotalMassKG + MotorMassKG
-
-        #-----------------------------------------------------------
-        # Dependent parameters
-        #-----------------------------------------------------------
-        self.InnerDiaBearing1MM                = InnerDiaBearing1MM                
-        self.OuterDiaBearing1MM                = OuterDiaBearing1MM                
-        self.WidthBearing1MM                   = WidthBearing1MM                   
-        self.InnerDiaBearing2MM                = InnerDiaBearing2MM                
-        self.OuterDiaBearing2MM                = OuterDiaBearing2MM                
-        self.WidthBearing2MM                   = WidthBearing2MM                   
-        self.SCarrierThicknessMM               = SCarrierThicknessMM               
-        self.RingBigOuterRadiusMM              = Ring1OuterRadiusMM
-        self.RingSmallOuterRadiusMM            = Ring2OuterRadiusMM
-        self.CarrierInnerDiameterMM            = CarrierInnerDiameterMM            
-        self.SCarrierInnerDiameterMM           = SCarrierInnerDiameterMM           
-        self.LengthMainCoverMM                 = LengthMainCoverMM                 
-        self.MainCoverInnerRadiusMM            = MainCoverInnerRadiusMM            
-        self.MainCoverOuterRadiusMM            = MainCoverOuterRadiusMM            
-        self.MainCoverProtrusion1RadiusMM      = MainCoverProtrusion1RadiusMM      
-        self.HeightMainCoverProtrusion1MM      = HeightMainCoverProtrusion1MM      
-        self.MainCover2InnerDiaMM              = MainCover2InnerDiaMM              
-        self.MainCover2OuterDiaMM              = MainCover2OuterDiaMM              
-        self.MainCover3InnerDiaMM              = MainCover3InnerDiaMM              
-        self.MainCover3OuterDiaMM              = MainCover3OuterDiaMM              
-        self.HeightMainCover2MM                = HeightMainCover2MM                
-        self.MainCover3HeightMM                = MainCover3HeightMM                
-        self.MainCover2ProtrusionRadiusMM      = MainCover2ProtrusionRadiusMM      
-        self.MainCover2ProtrusionHeightMM      = MainCover2ProtrusionHeightMM      
-        self.RadiusBaseMM                      = RadiusBaseMM                      
-        self.RadiusCouplerShaftMM              = RadiusCouplerShaftMM              
-        self.SecondaryCarrierOuterDiameterMM   = SecondaryCarrierOuterDiameterMM   
-        self.CarrierExtrusionDiameterMM        = CarrierExtrusionDiameterMM        
-        self.CarrierExtrusionHeightMM          = CarrierExtrusionHeightMM          
-        self.SecondaryCarrierExtrusionHeightMM = SecondaryCarrierExtrusionHeightMM 
-
-        #-----------------------------------------
-        # Returning the mass of the gearbox
-        #-----------------------------------------
-        return MassStructureKG
-
     def getMassKG_3DP(self):
         module1   = self.wolfromPlanetaryGearbox.moduleBig
         module2   = self.wolfromPlanetaryGearbox.moduleSmall
@@ -5875,7 +5362,7 @@ class wolfromPlanetaryActuator:
         # 3. Ring gear-1
         # 4. Case mounting structure
         #-------------------------------------------------------
-        ring1_ID      = Nr1 * module2
+        ring1_ID     = Nr1 * module2
         ringFwUsedMM = ring1FwMM
 
         # --- Bearing holding structure --- 
@@ -6074,21 +5561,6 @@ class wolfromPlanetaryActuator:
         sun_volume       = sun_hub_volume + sun_gear_volume + sun_shaft_volume
         sun_mass         = sun_volume * densityPLA
 
-        # print(f"carrier_small_ring_inner_bearing_mass: {carrier_small_ring_inner_bearing_mass} kg")
-        # print(f"carrier_mass: {carrier_mass} kg")
-        # print(f"gearbox_casing_mass: {gearbox_casing_mass} kg")
-        # print(f"Motor_case_mass: {Motor_case_mass} kg")
-        # print(f"motor_mass: {motor_mass} kg")
-        # print(f"planet_bearing_combined_mass: {planet_bearing_combined_mass} kg")
-        # print(f"planet_mass (per planet): {planet_mass} kg")
-        # print(f"numPlanet: {numPlanet}")
-        # print(f"planet_mass * numPlanet: {planet_mass * numPlanet} kg")
-        # print(f"sec_carrier_mass: {sec_carrier_mass} kg")
-        # print(f"small_ring_bearing_shaft_mass: {small_ring_bearing_shaft_mass} kg")
-        # print(f"small_ring_mass: {small_ring_mass} kg")
-        # print(f"sun_shaft_bearing_mass: {sun_shaft_bearing_mass} kg")
-        # print(f"sun_mass: {sun_mass} kg")
-
         Actuator_mass = (carrier_small_ring_inner_bearing_mass + 
                         carrier_mass + 
                         gearbox_casing_mass +
@@ -6102,12 +5574,34 @@ class wolfromPlanetaryActuator:
                         sun_shaft_bearing_mass +
                         sun_mass)
 
-        # print(f"Total Actuator_mass: {Actuator_mass} kg")
+        self.carrier_small_ring_inner_bearing_mass = carrier_small_ring_inner_bearing_mass
+        self.carrier_mass                          = carrier_mass
+        self.gearbox_casing_mass                   = gearbox_casing_mass
+        self.Motor_case_mass                       = Motor_case_mass
+        self.motor_mass                            = motor_mass
+        self.planet_bearing_combined_mass          = planet_bearing_combined_mass
+        self.planet_mass                           = planet_mass
+        self.sec_carrier_mass                      = sec_carrier_mass
+        self.small_ring_bearing_shaft_mass         = small_ring_bearing_shaft_mass
+        self.small_ring_mass                       = small_ring_mass
+        self.sun_shaft_bearing_mass                = sun_shaft_bearing_mass
+        self.sun_mass                              = sun_mass
 
         return Actuator_mass
 
     def print_mass_of_parts_3DP(self):
-        pass
+        print("carrier_small_ring_inner_bearing_mass :", 1000 * self.carrier_small_ring_inner_bearing_mass)
+        print("carrier_mass :", 1000 * self.carrier_mass)                         
+        print("gearbox_casing_mass :", 1000 * self.gearbox_casing_mass)                  
+        print("Motor_case_mass :", 1000 * self.Motor_case_mass)                      
+        print("motor_mass :", 1000 * self.motor_mass)                           
+        print("planet_bearing_combined_mass :", 1000 * self.planet_bearing_combined_mass)         
+        print("planet_mass :", 1000 * self.planet_mass)                          
+        print("sec_carrier_mass :", 1000 * self.sec_carrier_mass)                     
+        print("small_ring_bearing_shaft_mass :", 1000 * self.small_ring_bearing_shaft_mass)        
+        print("small_ring_mass :", 1000 * self.small_ring_mass)                      
+        print("sun_shaft_bearing_mass :", 1000 * self.sun_shaft_bearing_mass)               
+        print("sun_mass :", 1000 * self.sun_mass)                             
 
 #-------------------------------------------------------------------------
 # Double Stage Actuator class
@@ -6757,7 +6251,6 @@ class doubleStagePlanetaryActuator:
             ]
         file2.writelines(lines)
        file2.close()
-
 
     #--------------------------------
     # Update Facewidths
@@ -7483,9 +6976,6 @@ class doubleStagePlanetaryActuator:
 
         carrier_stg1_mass = sun2_mass + carrier_mass
 
-
-
-
         #----------------------------------
         # Mass: dspg_sun
         #----------------------------------
@@ -7545,31 +7035,31 @@ class doubleStagePlanetaryActuator:
 
         bearing_retainer_mass   = bearing_retainer_volume * densityPLA
 
-        self.Motor_case_mass              = Motor_case_mass
-        self.gearbox_casing_mass          = gearbox_casing_mass
-        self.carrier_stg1_mass                 = carrier_stg1_mass
-        self.sun_mass                     = sun_mass
-        self.sec_carrier_mass             = sec_carrier_mass
-        self.planet_mass                  = planet_mass
-        self.planet_bearing_combined_mass = planet_bearing_combined_mass
-        self.sun_shaft_bearing_mass       = sun_shaft_bearing_mass
-        self.bearing_mass                 = bearing_mass
-        self.bearing_retainer_mass        = bearing_retainer_mass
+        self.Motor_case_mass_stg1              = Motor_case_mass
+        self.gearbox_casing_mass_stg1          = gearbox_casing_mass
+        self.carrier_mass_stg1                 = carrier_stg1_mass
+        self.sun_mass_stg1                     = sun_mass
+        self.sec_carrier_mass_stg1             = sec_carrier_mass
+        self.planet_mass_stg1                  = planet_mass
+        self.planet_bearing_combined_mass_stg1 = planet_bearing_combined_mass
+        self.sun_shaft_bearing_mass_stg1       = sun_shaft_bearing_mass
+        self.bearing_mass_stg1                 = bearing_mass
+        self.bearing_retainer_mass_stg1        = bearing_retainer_mass
 
         #----------------------------------------
         # Total Actuator Mass
         #----------------------------------------
         Actuator_mass = (self.motorMassKG 
-                        + self.Motor_case_mass 
-                        + self.gearbox_casing_mass 
-                        + self.carrier_stg1_mass 
-                        + self.sun_mass 
-                        + self.sec_carrier_mass 
-                        + self.planet_mass * numPlanet 
-                        + self.planet_bearing_combined_mass 
-                        + self.sun_shaft_bearing_mass 
-                        + self.bearing_mass 
-                        + self.bearing_retainer_mass)
+                        + self.Motor_case_mass_stg1 
+                        + self.gearbox_casing_mass_stg1 
+                        + self.carrier_mass_stg1 
+                        + self.sun_mass_stg1 
+                        + self.sec_carrier_mass_stg1 
+                        + self.planet_mass_stg1 * numPlanet 
+                        + self.planet_bearing_combined_mass_stg1 
+                        + self.sun_shaft_bearing_mass_stg1 
+                        + self.bearing_mass_stg1 
+                        + self.bearing_retainer_mass_stg1)
         
         return Actuator_mass
 
@@ -7782,33 +7272,53 @@ class doubleStagePlanetaryActuator:
 
         bearing_retainer_mass   = bearing_retainer_volume * densityPLA
 
-        self.gearbox_casing_mass          = gearbox_casing_mass
-        self.carrier_mass                 = carrier_mass
-        self.sec_carrier_mass             = sec_carrier_mass
-        self.planet_mass                  = planet_mass
-        self.planet_bearing_combined_mass = planet_bearing_combined_mass
-        self.sun_shaft_bearing_mass       = sun_shaft_bearing_mass
-        self.bearing_mass                 = bearing_mass
-        self.bearing_retainer_mass        = bearing_retainer_mass
+        self.gearbox_casing_mass_stg2          = gearbox_casing_mass
+        self.carrier_mass_stg2                 = carrier_mass
+        self.sec_carrier_mass_stg2             = sec_carrier_mass
+        self.planet_mass_stg2                  = planet_mass
+        self.planet_bearing_combined_mass_stg2 = planet_bearing_combined_mass
+        self.sun_shaft_bearing_mass_stg2       = sun_shaft_bearing_mass
+        self.bearing_mass_stg2                 = bearing_mass
+        self.bearing_retainer_mass_stg2        = bearing_retainer_mass
 
         #----------------------------------------
         # Total Actuator Mass
         #----------------------------------------
-        Actuator_mass = (self.gearbox_casing_mass 
-                       + self.carrier_mass 
-                       + self.sec_carrier_mass 
-                       + self.planet_mass * numPlanet 
-                       + self.planet_bearing_combined_mass 
-                       + self.sun_shaft_bearing_mass 
-                       + self.bearing_mass 
-                       + self.bearing_retainer_mass)
+        Actuator_mass = (self.gearbox_casing_mass_stg2 
+                       + self.carrier_mass_stg2 
+                       + self.sec_carrier_mass_stg2 
+                       + self.planet_mass_stg2 * numPlanet 
+                       + self.planet_bearing_combined_mass_stg2 
+                       + self.sun_shaft_bearing_mass_stg2 
+                       + self.bearing_mass_stg2 
+                       + self.bearing_retainer_mass_stg2)
         
         return Actuator_mass
         
     def getMassKG_3DP(self):
         totalMass = self.getMassKG_3DP_stg1() + self.getMassKG_3DP_stg2()
         return totalMass
-    
+
+    def print_mass_of_parts_3DP(self):
+        print("motorMassKG :", 1000 * self.motorMassKG )
+        print("Motor_case_mass_stg1 :", 1000 * self.Motor_case_mass_stg1 )
+        print("gearbox_casing_mass_stg1 :", 1000 * self.gearbox_casing_mass_stg1 )
+        print("carrier_mass_stg1 :", 1000 * self.carrier_mass_stg1 )
+        print("sun_mass_stg1 :", 1000 * self.sun_mass_stg1 )
+        print("sec_carrier_mass_stg1 :", 1000 * self.sec_carrier_mass_stg1 )
+        print("planet_mass_stg1 :", 1000 * self.planet_mass_stg1)
+        print("planet_bearing_combined_mass_stg1 :", 1000 * self.planet_bearing_combined_mass_stg1 )
+        print("sun_shaft_bearing_mass_stg1 :", 1000 * self.sun_shaft_bearing_mass_stg1 )
+        print("bearing_mass_stg1 :", 1000 * self.bearing_mass_stg1 )
+        print("bearing_retainer_mass_stg1 :", 1000 * self.bearing_retainer_mass_stg1)
+        print("gearbox_casing_mass_stg2 :", 1000 * self.gearbox_casing_mass_stg2 )
+        print("carrier_mass_stg2 :", 1000 * self.carrier_mass_stg2 )
+        print("sec_carrier_mass_stg2 :", 1000 * self.sec_carrier_mass_stg2 )
+        print("planet_mass_stg2 :", 1000 * self.planet_mass_stg2)
+        print("planet_bearing_combined_mass_stg2 :", 1000 * self.planet_bearing_combined_mass_stg2 )
+        print("sun_shaft_bearing_mass_stg2 :", 1000 * self.sun_shaft_bearing_mass_stg2 )
+        print("bearing_mass_stg2 :", 1000 * self.bearing_mass_stg2 )
+        print("bearing_retainer_mass_stg2 :", 1000 * self.bearing_retainer_mass_stg2)
 
 #========================================================================
 # Class: Actuator Optimization
