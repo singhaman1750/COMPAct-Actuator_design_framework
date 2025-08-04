@@ -135,6 +135,26 @@
         }
         
     },
+    "Motor_drivers":{
+        "Moteus":{
+            "driver_upper_holes_dist_from_center" : 23,
+            "driver_lower_holes_dist_from_center" : 15,
+            "driver_side_holes_dist_from_center"  : 20,
+            "driver_mount_holes_dia"              : 2.5,
+            "driver_mount_inserts_OD"             : 3.5,
+            "driver_mount_thickness"              : 1.5,
+            "driver_mount_height"                 : 4
+        },
+        "OdrivePro":{
+            "driver_upper_holes_dist_from_center" : 29,
+            "driver_lower_holes_dist_from_center" : 13,
+            "driver_side_holes_dist_from_center"  : 22.5,
+            "driver_mount_holes_dia"              : 2.5,
+            "driver_mount_inserts_OD"             : 3.5,
+            "driver_mount_thickness"              : 1.5,
+            "driver_mount_height"                 : 4
+        }
+    },
     "Design_parameters":{
         "Internal_designs": {
             "ringRadialWidthMM": 2.5,

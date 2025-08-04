@@ -2241,6 +2241,33 @@ class motor:
             print (' Height of Stator = ', self.motorStatorIDMM, ' mm')
 
 #=========================================================================
+# Motor Driver class
+#=========================================================================
+class motor_driver:
+    def __init__(self, driver_name, motor_driver_data):
+        self.driver_name                          = driver_name
+        self.driver_upper_holes_dist_from_center  = motor_driver_data["driver_upper_holes_dist_from_center"]
+        self.driver_lower_holes_dist_from_center  = motor_driver_data["driver_lower_holes_dist_from_center"]
+        self.driver_side_holes_dist_from_center   = motor_driver_data["driver_side_holes_dist_from_center"]
+        self.driver_mount_holes_dia               = motor_driver_data["driver_mount_holes_dia"]
+        self.driver_mount_inserts_OD              = motor_driver_data["driver_mount_inserts_OD"]
+        self.driver_mount_thickness               = motor_driver_data["driver_mount_thickness"]
+        self.driver_mount_height                  = motor_driver_data["driver_mount_height"]
+
+        # self.print_vars()
+    
+    def print_vars(self):
+        print("driver_name:", self.driver_name)
+        print("driver_upper_holes_dist_from_center: ", self.driver_upper_holes_dist_from_center)
+        print("driver_lower_holes_dist_from_center: ", self.driver_lower_holes_dist_from_center)
+        print("driver_side_holes_dist_from_center: ", self.driver_side_holes_dist_from_center)
+        print("driver_mount_holes_dia: ", self.driver_mount_holes_dia)
+        print("driver_mount_inserts_OD: ", self.driver_mount_inserts_OD)
+        print("driver_mount_thickness: ", self.driver_mount_thickness)
+        print("driver_mount_height: ", self.driver_mount_height)
+        print("---")
+
+#=========================================================================
 # Actuator classes
 #=========================================================================
 #-------------------------------------------------------------------------
@@ -2249,6 +2276,7 @@ class motor:
 class singleStagePlanetaryActuator:
     def __init__(self, 
                  design_params,
+                 motor_driver_params,
                  motor                    = motor,
                  planetaryGearbox         = singleStagePlanetaryGearbox,
                  FOS                      = 2.0,
@@ -2282,6 +2310,7 @@ class singleStagePlanetaryActuator:
         # Design Parameters
         #--------------------------------------------
         self.design_params = design_params
+        self.motor_driver_params  = motor_driver_params
 
         #--------------------------------------------
         # Independent parameters
@@ -2299,10 +2328,8 @@ class singleStagePlanetaryActuator:
         mass = self.getMassKG_3DP()
         eff = self.planetaryGearbox.getEfficiency()
         width = self.planetaryGearbox.fwPlanetMM
-        cost = mass - eff + 0.1 * width
+        cost = 2 * mass - eff + 0.1 * width
         return cost
-
-
 
     def setVariables(self):
         #------------------------------------------------------
@@ -2338,7 +2365,8 @@ class singleStagePlanetaryActuator:
         self.bearingIDClearanceMM                       = self.design_params["bearingIDClearanceMM"]
         self.clearance_sun_coupler_sec_carrier          = self.design_params["clearance_sun_coupler_sec_carrier"]          # 1.5
         self.ring_to_chamfer_clearance                  = self.design_params["ring_to_chamfer_clearance"]                  # 2
-
+        self.tight_clearance_3DP                        = self.design_params["tight_clearance_3DP"]        
+        self.loose_clearance_3DP                        = self.design_params["loose_clearance_3DP"]
 
         # --- Secondary Carrier dimensions ---
         self.sec_carrier_thickness = self.design_params["sec_carrier_thickness"] # 5
@@ -2373,13 +2401,13 @@ class singleStagePlanetaryActuator:
         self.carrier_bearing_step_width                             = self.design_params["carrier_bearing_step_width"] # 1.5
         
         # --- Driver Dimensions ---
-        self.driver_upper_holes_dist_from_center = self.design_params["driver_upper_holes_dist_from_center"] # 23
-        self.driver_lower_holes_dist_from_center = self.design_params["driver_lower_holes_dist_from_center"] # 15
-        self.driver_side_holes_dist_from_center  = self.design_params["driver_side_holes_dist_from_center"] # 20
-        self.driver_mount_holes_dia              = self.design_params["driver_mount_holes_dia"] # 2.5
-        self.driver_mount_inserts_OD             = self.design_params["driver_mount_inserts_OD"] # 3.5
-        self.driver_mount_thickness              = self.design_params["driver_mount_thickness"] # 1.5
-        self.driver_mount_height                 = self.design_params["driver_mount_height"] # 4
+        self.driver_upper_holes_dist_from_center = self.motor_driver_params["driver_upper_holes_dist_from_center"]
+        self.driver_lower_holes_dist_from_center = self.motor_driver_params["driver_lower_holes_dist_from_center"]
+        self.driver_side_holes_dist_from_center  = self.motor_driver_params["driver_side_holes_dist_from_center"]
+        self.driver_mount_holes_dia              = self.motor_driver_params["driver_mount_holes_dia"]
+        self.driver_mount_inserts_OD             = self.motor_driver_params["driver_mount_inserts_OD"]
+        self.driver_mount_thickness              = self.motor_driver_params["driver_mount_thickness"]
+        self.driver_mount_height                 = self.motor_driver_params["driver_mount_height"]
 
         # --- Planet Gear dimensions ---
         self.planet_pin_bolt_dia      = self.design_params["planet_pin_bolt_dia"] # 5 
@@ -2643,6 +2671,8 @@ class singleStagePlanetaryActuator:
                 f'"sun_central_bolt_socket_head_dia"= {self.sun_central_bolt_socket_head_dia}\n',
                 f'"fw_s_used"= {self.fw_s_used}\n',
                 f'"bearing_retainer_thickness"= {self.bearing_retainer_thickness}\n',
+                f'"tight_clearance_3DP" = {self.tight_clearance_3DP}\n',
+                f'"loose_clearance_3DP" = {self.loose_clearance_3DP}\n'                
             ])
 
     #--------------------------------------------
@@ -3152,7 +3182,7 @@ class singleStagePlanetaryActuator:
         # Mass: sspg_bearing_retainer
         #--------------------------------------
         bearing_retainer_OD        = bearing_holding_structure_OD
-        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm
+        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm * 2
 
         bearing_retainer_volume = (np.pi * ((bearing_retainer_OD*0.5)**2 - (bearing_retainer_ID*0.5)**2) * bearing_retainer_thickness) * 1e-9
 
@@ -4132,7 +4162,7 @@ class compoundPlanetaryActuator:
         # Mass: cpg_bearing_retainer
         #--------------------------------------
         bearing_retainer_OD        = bearing_holding_structure_OD
-        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm
+        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm * 2
 
         bearing_retainer_volume = (np.pi * ((bearing_retainer_OD*0.5)**2 - (bearing_retainer_ID*0.5)**2) * bearing_retainer_thickness) * 1e-9
 
@@ -5683,6 +5713,13 @@ class doubleStagePlanetaryActuator:
            
         self.setVariables()
 
+    def cost(self):
+        mass = self.getMassKG_3DP()
+        eff = self.doubleStagePlanetaryGearbox.getEfficiency()
+        width = self.doubleStagePlanetaryGearbox.Stage1.fwPlanetMM + self.doubleStagePlanetaryGearbox.Stage2.fwPlanetMM
+        cost = mass - eff + 0.1 * width
+        return cost 
+
     def setVariables_stg1(self):
         ## --------------------------------------------------------------------
         ## Stage 1 - Input Parameters & Constants
@@ -7033,7 +7070,8 @@ class doubleStagePlanetaryActuator:
         # Mass: dspg_bearing_retainer
         #--------------------------------------
         bearing_retainer_OD        = bearing_holding_structure_OD
-        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm
+        bearing_retainer_ID        = bearing_OD - standard_clearance_1_5mm * 2
+
 
         bearing_retainer_volume = (np.pi * ((bearing_retainer_OD*0.5)**2 - (bearing_retainer_ID*0.5)**2) * bearing_retainer_thickness) * 1e-9
 
@@ -7191,17 +7229,18 @@ class doubleStagePlanetaryActuator:
                                       - bearing_retainer_thickness)
         case_mounting_structure_ID = ring_OD
         
-        stg1_stg2_mounting_radius_gear_side = ((Nr * module) 
-                                               + (ring_radial_thickness * 2) 
+        #IF( (("Nr" * "module" + "ring_radial_thickness" * 2 + "stg1_stg2_allen_socket_head_dia") / 2 + "standard_clearance_1_5mm" * 2 + "stg1_stg2_allen_socket_head_dia" / 2) > (("bearing1_OD" + "bearing mount thickness1" * 2) / 2), (("Nr" * "module" + "ring_radial_thickness" * 2 + "stg1_stg2_allen_socket_head_dia") / 2 + "standard_clearance_1_5mm" * 2 + "stg1_stg2_allen_socket_head_dia" / 2), (("bearing1_OD" + "bearing mount thickness1" * 2) / 2) )
+
+        stg1_stg2_mounting_radius_gear_side = (((Nr * module) + (ring_radial_thickness * 2))/2 
                                                + stg1_stg2_allen_socket_head_dia 
                                                + standard_clearance_1_5mm * 2)
         
         stg1_stg2_mounting_radius_bearing_side = (self.Bearing_OD_stg1_MM + self.bearing_mounting_thickness_stg1* 2) / 2
 
         if (stg1_stg2_mounting_radius_gear_side > stg1_stg2_mounting_radius_bearing_side):
-            case_mounting_structure_OD = stg1_stg2_mounting_radius_gear_side
+            case_mounting_structure_OD = stg1_stg2_mounting_radius_gear_side * 2
         else:
-            case_mounting_structure_OD = stg1_stg2_mounting_radius_bearing_side
+            case_mounting_structure_OD = stg1_stg2_mounting_radius_bearing_side * 2
 
         case_mounting_structure_height = case_dist
 
@@ -7270,7 +7309,7 @@ class doubleStagePlanetaryActuator:
         # Mass: dspg_bearing_retainer
         #--------------------------------------
         bearing_retainer_OD = bearing_holding_structure_OD
-        bearing_retainer_ID = bearing_OD - standard_clearance_1_5mm
+        bearing_retainer_ID = bearing_OD - standard_clearance_1_5mm * 2
 
         bearing_retainer_volume = (np.pi * ((bearing_retainer_OD * 0.5)**2 - (bearing_retainer_ID * 0.5)**2) * bearing_retainer_thickness) * 1e-9
 
@@ -7301,6 +7340,7 @@ class doubleStagePlanetaryActuator:
         
     def getMassKG_3DP(self):
         totalMass = self.getMassKG_3DP_stg1() + self.getMassKG_3DP_stg2()
+        self.print_mass_of_parts_3DP()
         return totalMass
 
     def print_mass_of_parts_3DP(self):
@@ -7333,6 +7373,7 @@ class doubleStagePlanetaryActuator:
 class optimizationSingleStageActuator:
     def __init__(self,
                  design_params,
+                 motor_driver_params,
                  gear_standard_paramaeters,
                  K_Mass               = 1.0,
                  K_Eff                = -2.0,
@@ -7365,6 +7406,7 @@ class optimizationSingleStageActuator:
         self.iter                         = 0
         self.gearRatioIter                = self.GEAR_RATIO_MIN
         self.design_params = design_params
+        self.motor_driver_params = motor_driver_params
         self.gear_standard_parameters = gear_standard_paramaeters
 
     def printOptimizationParameters(self, Actuator=singleStagePlanetaryActuator, log=1, csv=0):
@@ -7487,7 +7529,7 @@ class optimizationSingleStageActuator:
                 eff  = round(self.sspgOpt.getEfficiency(Var=False), 3)
             
             peakTorque = round(Actuator.motor.getMaxMotorTorque()*Actuator.planetaryGearbox.gearRatio(), 3)
-            Cost       = self.K_Mass * mass + self.K_Eff * eff
+            Cost       = Actuator.cost() #self.K_Mass * mass + self.K_Eff * eff
             Torque_Density = peakTorque / mass
             print(iter,",", gearRatio,",",module,",", Ns,",", Np,",", Nr,",", numPlanet,",",  fwSunMM,",", fwPlanetMM,",", fwRingMM,",",Opt_PSC_sun,",", Opt_PSC_planet,",", Opt_PSC_ring,",", Opt_CD_SP, ",", Opt_CD_PR,",", mass,",", eff,",", peakTorque,",", Cost, ",", Torque_Density)
 
@@ -7619,6 +7661,7 @@ class optimizationSingleStageActuator:
 
                                                 opt_actuator = singleStagePlanetaryActuator(design_params            = self.design_params,
                                                                                             motor                    = Actuator.motor, 
+                                                                                            motor_driver_params      = self.motor_driver_params,
                                                                                             planetaryGearbox         = opt_planetaryGearbox, 
                                                                                             FOS                      = Actuator.FOS, 
                                                                                             serviceFactor            = Actuator.serviceFactor, 
@@ -8972,7 +9015,7 @@ class optimizationDoubleStagePlanetaryActuator:
                                                                 effActuator = Actuator.doubleStagePlanetaryGearbox.getEfficiency()
                                                                 # massActuator = Actuator.getMassStructureKG()
                                                                 massActuator = Actuator.getMassKG_3DP()
-                                                                self.Cost = (self.K_Mass * massActuator) + (self.K_Eff * effActuator)
+                                                                self.Cost =  Actuator.cost()#(self.K_Mass * massActuator) + (self.K_Eff * effActuator)
 
                                                                 if self.Cost < MinCost:
                                                                     MinCost = self.Cost

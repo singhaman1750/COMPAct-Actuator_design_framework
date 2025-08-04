@@ -32,7 +32,7 @@
         "GEAR_RATIO_MAX"       : 15.0,
         "GEAR_RATIO_STEP"      : 0.1,
         "MODULE_MIN"           : 0.5,
-        "MODULE_MAX"           : 1.2,
+        "MODULE_MAX"           : 1.5,
         "NUM_PLANET_MIN"       : 3,
         "NUM_PLANET_MAX"       : 7,
         "NUM_TEETH_SUN_MIN"    : 18,
@@ -111,6 +111,8 @@
         "planet_bearing_OD"                                      : 12, 
         "planet_bearing_width"                                   : 3.5,
         "planet_bore"                                            : 10,
-        "bearing_retainer_thickness"                             : 2
+        "bearing_retainer_thickness"                             : 2,
+        "tight_clearance_3DP"                                    : 0.4,
+        "loose_clearance_3DP"                                    : 0.8
     }
 }
