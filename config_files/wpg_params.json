@@ -26,8 +26,8 @@
         "bearingIDClearanceMM"             : 6
     },
     "wpg_optimization_parameters":{
-        "GEAR_RATIO_MIN"             : 32,
-        "GEAR_RATIO_MAX"             : 33,
+        "GEAR_RATIO_MIN"             : 18,
+        "GEAR_RATIO_MAX"             : 20,
         "GEAR_RATIO_STEP"            : 1,
         "MODULE_BIG_MIN"             : 0.5,
         "MODULE_BIG_MAX"             : 1.2,
@@ -80,8 +80,8 @@
         "case_mounting_surface_height"                           : 4,
         "air_flow_hole_offset"                                   : 3,
 
-        "sun_shaft_bearing_OD"                                   : 12,
-        "sun_shaft_bearing_width"                                : 3.5,
+        "sun_shaft_bearing_OD"                                   : 16,
+        "sun_shaft_bearing_width"                                : 5,
         "sun_shaft_bearing_ID"                                   : 8,
         "sun_central_bolt_dia"                                   : 5,
         "sun_coupler_hub_thickness"                              : 4,
@@ -111,6 +111,9 @@
         "small_ring_output_wall_to_bearing_shaft_attachement_hole_num"               : 3,
         "carrier_small_ring_inner_bearing_ID"                                        : 20,
         "carrier_small_ring_inner_bearing_flap"                                      : 2,
-        "small_ring_case_thickness"                                                  : 4
+        "small_ring_case_thickness"                                                  : 4,
+
+        "tight_clearance_3DP"                                                        : 0.4,
+        "loose_clearance_3DP"                                                        : 0.8
     }
 }

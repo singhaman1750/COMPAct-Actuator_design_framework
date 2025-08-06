@@ -3281,7 +3281,7 @@ class compoundPlanetaryActuator:
         massActuator = self.getMassKG_3DP()
         effActuator  = self.compoundPlanetaryGearbox.getEfficiency()
         widthActuator = self.compoundPlanetaryGearbox.fwPlanetBigMM + self.compoundPlanetaryGearbox.fwPlanetSmallMM
-        cost = massActuator - effActuator + 0.1 * widthActuator
+        cost = massActuator - effActuator + 0.5 * widthActuator
         return cost
 
     def setVariables(self):
@@ -3310,6 +3310,8 @@ class compoundPlanetaryActuator:
         self.bearingIDClearanceMM                       = self.design_params["bearingIDClearanceMM"]                       # 10
         self.clearance_sun_coupler_sec_carrier          = self.design_params["clearance_sun_coupler_sec_carrier"]          # standard_clearance_1_5mm
         self.ring_to_chamfer_clearance                  = self.design_params["ring_to_chamfer_clearance"]                  # clearance_planet
+        self.tight_clearance_3DP                        = self.design_params["tight_clearance_3DP"]        
+        self.loose_clearance_3DP                        = self.design_params["loose_clearance_3DP"]
 
         #-----------Motor----------------------------
         self.motor_OD                   = self.motorDiaMM                     # 86.8
@@ -3615,6 +3617,8 @@ class compoundPlanetaryActuator:
                     f'"db_p_s"= {self.db_p_s}\n',
                     f'"alpha_p_s"= {self.alpha_p_s}\n',
                     f'"beta_p_s"= {self.beta_p_s}\n',
+                    f'"tight_clearance_3DP" = {self.tight_clearance_3DP}\n',
+                    f'"loose_clearance_3DP" = {self.loose_clearance_3DP}\n' 
             ]
             eqFile.writelines(l)
         eqFile.close()
@@ -4302,7 +4306,11 @@ class wolfromPlanetaryActuator:
         massActuator = self.getMassKG_3DP()
         effActuator  = self.wolfromPlanetaryGearbox.getEfficiency()
         widthActuator = self.wolfromPlanetaryGearbox.fwPlanetBigMM + self.wolfromPlanetaryGearbox.fwPlanetSmallMM
-        cost = massActuator - effActuator + 0.1 * widthActuator
+        module = self.wolfromPlanetaryGearbox.moduleBig
+        # print (module)
+        # print (widthActuator)
+        cost = massActuator - effActuator + 0.02 * widthActuator - module * 10
+        # print(cost)
         return cost
 
 
@@ -4327,6 +4335,8 @@ class wolfromPlanetaryActuator:
         self.standard_clearance_1_5mm                       = self.design_params["standard_clearance_1_5mm"]
         self.standard_fillet_1_5mm                          = self.design_params["standard_fillet_1_5mm"]
         self.standard_bearing_insertion_chamfer             = self.design_params["standard_bearing_insertion_chamfer"]
+        self.tight_clearance_3DP                        = self.design_params["tight_clearance_3DP"]        
+        self.loose_clearance_3DP                        = self.design_params["loose_clearance_3DP"]
 
         # --- Gear Variables ---
         self.pressure_angle = self.wolfromPlanetaryGearbox.getPressureAngleRad()
@@ -4689,6 +4699,8 @@ class wolfromPlanetaryActuator:
                 f'"wire_slot_dist_from_center" = {self.wire_slot_dist_from_center}\n',
                 f'"wire_slot_length" = {self.wire_slot_length}\n',
                 f'"wire_slot_radius" = {self.wire_slot_radius}\n',
+                f'"tight_clearance_3DP" = {self.tight_clearance_3DP}\n',
+                f'"loose_clearance_3DP" = {self.loose_clearance_3DP}\n' 
             ]
             eqFile.writelines(l)
     
@@ -5738,6 +5750,8 @@ class doubleStagePlanetaryActuator:
         self.pressure_angle = self.doubleStagePlanetaryGearbox.Stage1.getPressureAngleRad() * 180 / np.pi
 
         self.clearance_planet                           = self.design_params["clearance_planet"] # 1.5
+        self.tight_clearance_3DP                        = self.design_params["tight_clearance_3DP"]        
+        self.loose_clearance_3DP                        = self.design_params["loose_clearance_3DP"]
         self.standard_clearance_1_5mm                   = self.design_params["standard_clearance_1_5mm"] # 1.5
         self.standard_fillet_1_5mm                      = self.design_params["standard_fillet_1_5mm"] # 1.5
         self.standard_bearing_insertion_chamfer         = self.design_params["standard_bearing_insertion_chamfer"] # 0.5
@@ -6157,6 +6171,8 @@ class doubleStagePlanetaryActuator:
                 f'"beta_s2" = {self.beta_s2}\n',
                 f'"fw_s_used2" = {self.fw_s2_used}\n',
                 f'"fw_p2" = {self.fw_p2}\n',
+                f'"tight_clearance_3DP" = {self.tight_clearance_3DP}\n',
+                f'"loose_clearance_3DP" = {self.loose_clearance_3DP}\n' 
             ]
         file1.writelines(lines)
        file1.close()
@@ -6288,7 +6304,9 @@ class doubleStagePlanetaryActuator:
             f'"stg1_stg2_mounting_pattern_width" = {self.stg1_stg2_mounting_pattern_width}\n',
             f'"stg1_stg2_allen_socket_head_dia" = {self.stg1_stg2_allen_socket_head_dia}\n',
             f'"stg1_stg2_mounting_hole_dia" = {self.stg1_stg2_mounting_hole_dia}\n',
-            f'"stg1_stg2_mounting_extra_width" = {self.stg1_stg2_mounting_extra_width}\n'
+            f'"stg1_stg2_mounting_extra_width" = {self.stg1_stg2_mounting_extra_width}\n',
+            f'"tight_clearance_3DP" = {self.tight_clearance_3DP}\n',
+            f'"loose_clearance_3DP" = {self.loose_clearance_3DP}\n' 
             ]
         file2.writelines(lines)
        file2.close()
@@ -7340,7 +7358,7 @@ class doubleStagePlanetaryActuator:
         
     def getMassKG_3DP(self):
         totalMass = self.getMassKG_3DP_stg1() + self.getMassKG_3DP_stg2()
-        self.print_mass_of_parts_3DP()
+        #self.print_mass_of_parts_3DP()
         return totalMass
 
     def print_mass_of_parts_3DP(self):
@@ -7997,7 +8015,7 @@ class optimizationCompoundPlanetaryActuator:
             if self.UsePSCasVariable == 1 : 
                 eff  = round(self.cspgOpt.getEfficiency(Var=False), 3)
             
-            Cost = self.K_Mass * mass + self.K_Eff * eff
+            Cost = Actuator.cost()
             
             print(iter, ",", gearRatio, ",", moduleBig, ",", moduleSmall, ",", Ns, ",", NpBig, ",", NpSmall, ",", Nr, ",", numPlanet, ",", fwSunMM, ",", fwPlanetBigMM, ",", fwPlanetSmallMM, ",", fwRingMM, ",", Opt_PSC_sun, ",", Opt_PSC_planetBig, ",", Opt_PSC_planetSmall, ",", Opt_PSC_ring, ",", CenterDist_SP, ",", CenterDist_PR, ",", mass, ",", eff, ",", peakTorque, ",", Cost, ",", tooth_forces, ",", Torque_Density)
 
@@ -8858,7 +8876,7 @@ class optimizationWolfromPlanetaryActuator:
             if self.UsePSCasVariable == 1 :
                 eff  = round(self.wpgOpt.getEfficiency(Var=False), 3)
             peakTorque      = round(Actuator.motor.getMaxMotorTorque()*Actuator.wolfromPlanetaryGearbox.gearRatio(), 3)
-            Cost       = self.K_Mass * mass + self.K_Eff * eff
+            Cost       = Actuator.cost() #self.K_Mass * mass + self.K_Eff * eff
             torque_density  = round(peakTorque/mass, 3)
             print(iter,",", gearRatio,",",moduleBig,",",moduleSmall,",", Ns,",", NpBig,",", NpSmall,",", NrBig,",",NrSmall,",", numPlanet,",", Opt_PSC_sun,",",  Opt_PSC_planet1,",", Opt_PSC_planet2,",", Opt_PSC_ring1,",",Opt_PSC_ring2,",", fwSunMM,",", fwPlanetBigMM,",",fwPlanetSmallMM,",", fwRingBigMM,",",fwRingSmallMM,",", mass, ",", eff,",", peakTorque,",", Cost, ",", torque_density)
 

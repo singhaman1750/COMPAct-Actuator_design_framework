@@ -31,8 +31,8 @@
         "clearanceSCarrierMotorMM"          : 2
     },
     "dspg_optimization_parameters":{
-        "GEAR_RATIO_MIN"        : 26,
-        "GEAR_RATIO_MAX"        : 28, 
+        "GEAR_RATIO_MIN"        : 36,
+        "GEAR_RATIO_MAX"        : 38, 
         "GEAR_RATIO_STEP"       : 1,
         "MODULE_STAGE1_MIN"     : 0.8, 
         "MODULE_STAGE1_MAX"     : 1.0, 
@@ -91,9 +91,9 @@
         "carrier_trapezoidal_support_sun_offset1"                 : 5,
         "carrier_trapezoidal_support_hole_PCD_offset_bearing_ID1" : 4,
         "sun_shaft_bearing_OD1"                                   : 16,
-        "sun_shaft_bearing_width1"                                : 4,
+        "sun_shaft_bearing_width1"                                : 5,
         "planet_bearing_OD1"                                      : 12,
-        "planet_bearing_width1"                                   : 3,
+        "planet_bearing_width1"                                   : 3.5,
         "planet_bore1"                                            : 10,
         "sun_shaft_bearing_ID1"                                   : 8,
         "planet_pin_bolt_dia1"                                    : 5,
@@ -108,9 +108,9 @@
         "carrier_trapezoidal_support_hole_PCD_offset_bearing_ID2" : 4,
         "carrier_bearing_step_width2"                             : 1.5,
         "sun_shaft_bearing_OD2"                                   : 16,
-        "sun_shaft_bearing_width2"                                : 4,
+        "sun_shaft_bearing_width2"                                : 5,
         "planet_bearing_OD2"                                      : 12,
-        "planet_bearing_width2"                                   : 3,
+        "planet_bearing_width2"                                   : 3.5,
         "planet_bore2"                                            : 10,
         "sun_shaft_bearing_ID2"                                   : 8,
         "bearing_retainer_thickness2"                             : 2,
@@ -120,6 +120,8 @@
         "sun_central_bolt_dia2"                                   : 5,
         "stg1_stg2_mounting_hole_dia"                             : 4,
         "stg1_stg2_mounting_pattern_width"                        : 12,
-        "output_mounting_nut_depth2"                              : 3
+        "output_mounting_nut_depth2"                              : 3,
+        "tight_clearance_3DP"                                    : 0.4,
+        "loose_clearance_3DP"                                    : 0.8
     }
 }

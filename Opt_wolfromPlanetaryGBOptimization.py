@@ -43,6 +43,8 @@ PLA      = material_properties["PLA"]
 wpg_design_params       = wpg_params["wpg_3DP_design_parameters"]
 wpg_optimization_params = wpg_params["wpg_optimization_parameters"]
 
+maxTorqueReductionFactor = 0.6
+
 #--------------------------------------------------------
 # Motors
 #--------------------------------------------------------
@@ -93,7 +95,7 @@ MotorU10_wire_slot_radius           = motor_data["MotorU10_framed"]["wire_slot_r
 MotorMN8014_Kv                   = motor_data["MotorMN8014_framed"]["Kv"]                   # rpm/V
 MotorMN8014_maxContinuousCurrent = motor_data["MotorMN8014_framed"]["maxContinuousCurrent"] # A
 
-MotorMN8014_maxTorque         = MotorMN8014_maxContinuousCurrent / (MotorMN8014_Kv * 2 * np.pi / 60)
+MotorMN8014_maxTorque         = MotorMN8014_maxContinuousCurrent / (MotorMN8014_Kv * 2 * np.pi / 60) * maxTorqueReductionFactor
 MotorMN8014_power             = motor_data["MotorMN8014_framed"]["power"]                  # W
 MotorMN8014_ratedVoltage               = motor_data["MotorMN8014_framed"]["ratedVoltage"]   
 MotorMN8014_maxMotorAngVelRPM          = MotorMN8014_Kv * MotorMN8014_ratedVoltage   # RPM
@@ -293,12 +295,12 @@ wolfromPlanetaryGearboxInstance = wolfromPlanetaryGearbox(design_parameters     
 #-------------------------------------------------------
 # Actuator
 #-------------------------------------------------------
-maxGearboxDiameter_U8     = 1.5 * MotorU8.motorDiaMM     - 2*wpg_design_params["ringRadialWidthMMBig"]
-maxGearboxDiameter_U10    = 1.5 * MotorU10.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"]
-maxGearboxDiameter_MN8014 = 1.5 * MotorMN8014.motorDiaMM - 2*wpg_design_params["ringRadialWidthMMBig"]
-maxGearboxDiameter_VT8020 = 1.5 * Motor8020.motorDiaMM   - 2*wpg_design_params["ringRadialWidthMMBig"]
-maxGearboxDiameter_U12    = 1.5 * MotorU12.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"] 
-maxGearboxDiameter_MAD_M6C12    = 1.5 * MotorMAD_M6C12.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"] 
+maxGearboxDiameter_U8     = 1.0 * MotorU8.motorDiaMM     - 2*wpg_design_params["ringRadialWidthMMBig"]
+maxGearboxDiameter_U10    = 1.0 * MotorU10.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"]
+maxGearboxDiameter_MN8014 = 1.0 * MotorMN8014.motorDiaMM - 2*wpg_design_params["ringRadialWidthMMBig"]
+maxGearboxDiameter_VT8020 = 1.0 * Motor8020.motorDiaMM   - 2*wpg_design_params["ringRadialWidthMMBig"]
+maxGearboxDiameter_U12    = 1.0 * MotorU12.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"] 
+maxGearboxDiameter_MAD_M6C12    = 1.0 * MotorMAD_M6C12.motorDiaMM    - 2*wpg_design_params["ringRadialWidthMMBig"] 
 
 Actuator_U8     = wolfromPlanetaryActuator(design_parameters        = wpg_design_params,
                                            motor                    = MotorU8,
@@ -482,8 +484,8 @@ Optimizer_MAD_M6C12 = optimizationWolfromPlanetaryActuator(design_parameters    
 # totalTime_U10    = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
 # print("Optimization Completed : WPG  U10 : Time Taken:", totalTime_U10)
 
-# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1)
-# print("Optimization Completed : WPG  MN8014 : Time Taken:", totalTime_MN8014)
+totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1)
+print("Optimization Completed : WPG  MN8014 : Time Taken:", totalTime_MN8014)
 
 # totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 0, log=0, csv=1)
 # print("Optimization Completed : WPG  VT8020 : Time Taken:", totalTime_VT8020)
@@ -491,5 +493,5 @@ Optimizer_MAD_M6C12 = optimizationWolfromPlanetaryActuator(design_parameters    
 # totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 0, log=0, csv=1)
 # print("Optimization Completed : WPG  U12 : Time Taken:", totalTime_U12)
 
-totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1)
-print("Optimization Completed : WPG  MAD_M6C12 : Time Taken:", totalTime_MAD_M6C12)
+# totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1)
+# print("Optimization Completed : WPG  MAD_M6C12 : Time Taken:", totalTime_MAD_M6C12)

@@ -28,8 +28,8 @@
         "smallBearingWidth"            : 5
     },
     "sspg_optimization_parameters":{
-        "GEAR_RATIO_MIN"       : 4.0,
-        "GEAR_RATIO_MAX"       : 15.0,
+        "GEAR_RATIO_MIN"       : 5.0,
+        "GEAR_RATIO_MAX"       : 10.0,
         "GEAR_RATIO_STEP"      : 0.1,
         "MODULE_MIN"           : 0.5,
         "MODULE_MAX"           : 1.5,

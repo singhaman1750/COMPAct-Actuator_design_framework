@@ -143,7 +143,7 @@
             "driver_mount_holes_dia"              : 2.5,
             "driver_mount_inserts_OD"             : 3.5,
             "driver_mount_thickness"              : 1.5,
-            "driver_mount_height"                 : 4
+            "driver_mount_height"                 : 6
         },
         "OdrivePro":{
             "driver_upper_holes_dist_from_center" : 29,
@@ -152,7 +152,7 @@
             "driver_mount_holes_dia"              : 2.5,
             "driver_mount_inserts_OD"             : 3.5,
             "driver_mount_thickness"              : 1.5,
-            "driver_mount_height"                 : 4
+            "driver_mount_height"                 : 6
         }
     },
     "Design_parameters":{
