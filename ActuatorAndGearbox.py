@@ -2328,7 +2328,7 @@ class singleStagePlanetaryActuator:
         mass = self.getMassKG_3DP()
         eff = self.planetaryGearbox.getEfficiency()
         width = self.planetaryGearbox.fwPlanetMM
-        cost = 2 * mass - eff + 0.1 * width
+        cost = mass - 2 * eff + 0.2 * width
         return cost
 
     def setVariables(self):
@@ -3281,7 +3281,7 @@ class compoundPlanetaryActuator:
         massActuator = self.getMassKG_3DP()
         effActuator  = self.compoundPlanetaryGearbox.getEfficiency()
         widthActuator = self.compoundPlanetaryGearbox.fwPlanetBigMM + self.compoundPlanetaryGearbox.fwPlanetSmallMM
-        cost = massActuator - effActuator + 0.5 * widthActuator
+        cost = massActuator - 2 * effActuator + 0.2 * widthActuator
         return cost
 
     def setVariables(self):
@@ -4309,7 +4309,7 @@ class wolfromPlanetaryActuator:
         module = self.wolfromPlanetaryGearbox.moduleBig
         # print (module)
         # print (widthActuator)
-        cost = massActuator - effActuator + 0.02 * widthActuator - module * 10
+        cost = massActuator - 2 * effActuator + 0.2 * widthActuator
         # print(cost)
         return cost
 
@@ -5729,7 +5729,7 @@ class doubleStagePlanetaryActuator:
         mass = self.getMassKG_3DP()
         eff = self.doubleStagePlanetaryGearbox.getEfficiency()
         width = self.doubleStagePlanetaryGearbox.Stage1.fwPlanetMM + self.doubleStagePlanetaryGearbox.Stage2.fwPlanetMM
-        cost = mass - eff + 0.1 * width
+        cost = mass - 2 * eff + 0.1 * width
         return cost 
 
     def setVariables_stg1(self):

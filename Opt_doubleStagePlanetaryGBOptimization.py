@@ -292,12 +292,12 @@ doubleStagePlanetaryGearboxInstance = doubleStagePlanetaryGearbox(design_paramet
 #----------------------------------------
 # Actuator
 #----------------------------------------
-maxGearboxDiameter_U8     = MotorU8.motorDiaMM * 1.5    - 2*dspg_design_params["ring_radial_thickness"]
-maxGearboxDiameter_U10    = MotorU10.motorDiaMM * 1.5   - 2*dspg_design_params["ring_radial_thickness"]
-maxGearboxDiameter_MN8014 = MotorMN8014.motorDiaMM * 1.5 - 2*dspg_design_params["ring_radial_thickness"]
-maxGearboxDiameter_VT8020 = Motor8020.motorDiaMM * 1.5   - 2*dspg_design_params["ring_radial_thickness"]
-maxGearboxDiameter_U12    = MotorU12.motorDiaMM * 1.5   - 2*dspg_design_params["ring_radial_thickness"] 
-maxGearboxDiameter_MAD_M6C12    = MotorMAD_M6C12.motorDiaMM * 1.5   - 2*dspg_design_params["ring_radial_thickness"] 
+maxGearboxDiameter_U8     = MotorU8.motorDiaMM * 1   - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_U10    = MotorU10.motorDiaMM * 1  - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_MN8014 = MotorMN8014.motorDiaMM * 1 - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_VT8020 = Motor8020.motorDiaMM * 1  - 2*dspg_design_params["ring_radial_thickness"]
+maxGearboxDiameter_U12    = MotorU12.motorDiaMM * 1   - 2*dspg_design_params["ring_radial_thickness"] 
+maxGearboxDiameter_MAD_M6C12    = MotorMAD_M6C12.motorDiaMM * 1   - 2*dspg_design_params["ring_radial_thickness"] 
 
 # U8-Actuator
 Actuator_U8 = doubleStagePlanetaryActuator(design_parameters           = dspg_design_params,
@@ -485,63 +485,63 @@ Optimizer_MAD_M6C12 = optimizationDoubleStagePlanetaryActuator(design_parameters
 #-----------------------
 # Optimization: U8
 #-----------------------
-# totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
+totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1)
 
-# # Convert to hours, minutes, and seconds
-# hours_U8, remainder_U8 = divmod(totalTime_U8, 3600)
-# minutes_U8, seconds_U8 = divmod(remainder_U8, 60)
+# Convert to hours, minutes, and seconds
+hours_U8, remainder_U8 = divmod(totalTime_U8, 3600)
+minutes_U8, seconds_U8 = divmod(remainder_U8, 60)
 
-# Print
-# print("Optimization Completed : DSPG U8")
-# print(f"Time taken: {hours_U8} hours, {minutes_U8} minutes, and {seconds_U8} seconds")
+#Print
+print("Optimization Completed : DSPG U8")
+print(f"Time taken: {hours_U8} hours, {minutes_U8} minutes, and {seconds_U8} seconds")
 
 #-----------------------
 # Optimization: U10
 #-----------------------
-# totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
+totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1)
 
-# # Convert to hours, minutes, and seconds
-# hours_U10, remainder_U10 = divmod(totalTime_U10, 3600)
-# minutes_U10, seconds_U10 = divmod(remainder_U10, 60)
+# Convert to hours, minutes, and seconds
+hours_U10, remainder_U10 = divmod(totalTime_U10, 3600)
+minutes_U10, seconds_U10 = divmod(remainder_U10, 60)
 
-# # Print
-# print("Optimization Completed : DSPG U10")
-# print(f"Time taken: {hours_U10} hours, {minutes_U10} minutes, and {seconds_U10} seconds")
+# Print
+print("Optimization Completed : DSPG U10")
+print(f"Time taken: {hours_U10} hours, {minutes_U10} minutes, and {seconds_U10} seconds")
 
-# #-----------------------
-# # Optimization: MN8014
-# #-----------------------
-# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 1, log=0, csv=1)
+#-----------------------
+# Optimization: MN8014
+#-----------------------
+totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 1, log=0, csv=1)
 
-# # Convert to hours, minutes, and seconds
-# hours_MN8014, remainder_MN8014 = divmod(totalTime_MN8014, 3600)
-# minutes_MN8014, seconds_MN8014 = divmod(remainder_MN8014, 60)
+# Convert to hours, minutes, and seconds
+hours_MN8014, remainder_MN8014 = divmod(totalTime_MN8014, 3600)
+minutes_MN8014, seconds_MN8014 = divmod(remainder_MN8014, 60)
 
-# # Print
-# print("Optimization Completed : DSPG MN8014")
-# print(f"Time taken: {hours_MN8014} hours, {minutes_MN8014} minutes, and {seconds_MN8014} seconds")
+# Print
+print("Optimization Completed : DSPG MN8014")
+print(f"Time taken: {hours_MN8014} hours, {minutes_MN8014} minutes, and {seconds_MN8014} seconds")
 
-# #-----------------------
-# # Optimization: VT8020
-# #-----------------------
-# totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 1, log=0, csv=1)
+#-----------------------
+# Optimization: VT8020
+#-----------------------
+totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 1, log=0, csv=1)
 
-# # Convert to hours, minutes, and seconds
-# hours_VT8020, remainder_VT8020 = divmod(totalTime_VT8020, 3600)
-# minutes_VT8020, seconds_VT8020 = divmod(remainder_VT8020, 60)
+# Convert to hours, minutes, and seconds
+hours_VT8020, remainder_VT8020 = divmod(totalTime_VT8020, 3600)
+minutes_VT8020, seconds_VT8020 = divmod(remainder_VT8020, 60)
 
-# # Print
-# print("Optimization Completed : DSPG VT8020")
-# print(f"Time taken: {hours_VT8020} hours, {minutes_VT8020} minutes, and {seconds_VT8020} seconds")
+# Print
+print("Optimization Completed : DSPG VT8020")
+print(f"Time taken: {hours_VT8020} hours, {minutes_VT8020} minutes, and {seconds_VT8020} seconds")
 
-# # --------------------
-# # Optimization: U12
-# # --------------------
-# totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 1, log=0, csv=1)
+# --------------------
+# Optimization: U12
+# --------------------
+totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 1, log=0, csv=1)
  
-# # Convert to hours, minutes, and seconds
-# hours_U12, remainder_U12 = divmod(totalTime_U12, 3600)
-# minutes_U12, seconds_U12 = divmod(remainder_U12, 60)
+# Convert to hours, minutes, and seconds
+hours_U12, remainder_U12 = divmod(totalTime_U12, 3600)
+minutes_U12, seconds_U12 = divmod(remainder_U12, 60)
 
 
 totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1)
@@ -555,6 +555,6 @@ print("Optimization Completed : DSPG MAD_M6C12")
 print(f"Time taken: {hours_MAD_M6C12} hours, {minutes_MAD_M6C12} minutes, and {seconds_MAD_M6C12} seconds")
 
 
-# # Print
-# print("Optimization Completed : DSPG U12")
-# print(f"Time taken: {hours_U12} hours, {minutes_U12} minutes, and {seconds_U12} seconds")
+# Print
+print("Optimization Completed : DSPG U12")
+print(f"Time taken: {hours_U12} hours, {minutes_U12} minutes, and {seconds_U12} seconds")
