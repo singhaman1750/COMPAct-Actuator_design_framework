@@ -27,7 +27,7 @@
     },
     "wpg_optimization_parameters":{
         "GEAR_RATIO_MIN"             : 4,
-        "GEAR_RATIO_MAX"             : 45,
+        "GEAR_RATIO_MAX"             : 60,
         "GEAR_RATIO_STEP"            : 1,
         "MODULE_BIG_MIN"             : 0.5,
         "MODULE_BIG_MAX"             : 1.2,

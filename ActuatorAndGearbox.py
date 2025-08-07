@@ -4545,7 +4545,7 @@ class wolfromPlanetaryActuator:
         self.output_mounting_PCD = self.bearing_OD + self.bearing_mount_thickness
         self.Motor_case_ID = self.motor_OD + self.clearance_motor_and_case * 2
 
-        self.gear_casing_big_ring_to_bearing_dist = self.fw_p_s + self.clearance_planet + self.carrier_thickness + self.standard_clearance_1_5mm*2/3 + self.small_ring_case_thickness
+        self.gear_casing_big_ring_to_bearing_dist = self.fw_p_s + self.clearance_planet + self.carrier_thickness + self.standard_clearance_1_5mm*2/3 + self.small_ring_case_thickness - self.standard_clearance_1_5mm # last - is because of change in flap position
 
         # --- Carrier ---
         self.carrier_PCD = ( self.Np_b + self.Ns ) * self.module
