@@ -4786,6 +4786,19 @@ class wolfromPlanetaryActuator:
         # --- Carrier ---
         self.carrier_PCD = ( self.Np_b + self.Ns ) * self.module
 
+        # Actuator Width
+        self.actuator_width = (  self.fw_r_b
+                               + self.clearance_planet
+                               + self.gear_casing_big_ring_to_bearing_dist
+                               + self.bearing_height
+                               + self.standard_clearance_1_5mm
+                               + self.case_dist
+                               + self.bearing_retainer_thickness
+                               + self.motor_height
+                               + self.case_mounting_surface_height
+                               + self.standard_clearance_1_5mm
+                               + self.base_plate_thickness)
+
     def genEquationFile(self, motor_name="NO_MOTOR", gearRatioLL = 0.0, gearRatioUL = 0.0):
         # writing values into text file imported which is imported into solidworks
         self.setVariables()
