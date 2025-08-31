@@ -17,7 +17,7 @@ current_dir = os.path.dirname(__file__)
 
 # Build the file path
 config_path = os.path.join(current_dir, "config_files/config.json")
-wpg_params_path = os.path.join(current_dir, "config_files/wpg_params.json")
+wpg_params_path = os.path.join(current_dir, "config_files/wpg_params.json") 
 
 # Load the JSON file
 with open(config_path, "r") as config_file:
