@@ -9664,7 +9664,7 @@ class optimizationDoubleStagePlanetaryActuator:
 
         self.gearRatioReq            = 0
 
-    def optimizeActuator(self, Actuator=doubleStagePlanetaryActuator, UsePSCasVariable=1, log=1, csv=0, gearRatioReq = 0, printOptParams = 1):
+    def optimizeActuator(self, Actuator=doubleStagePlanetaryActuator, UsePSCasVariable=0, log=1, csv=0, gearRatioReq = 0, printOptParams = 1):
         self.UsePSCasVariable = UsePSCasVariable
         totalTime = 0
         self.gearRatioReq = gearRatioReq
@@ -9714,7 +9714,7 @@ class optimizationDoubleStagePlanetaryActuator:
             elif csv:
                 # Printing the optimization iterations below
                 # print("iter, gearRatio, module1, module2, Ns1, Np1, Nr1, numPlanet1, Ns2, Np2, Nr2, numPlanet2, fwSun1MM, fwPlanet1MM, fwRing1MM, fwSun2MM, fwPlanet2MM, fwRing2MM, Opt_PSC_sun1,  Opt_PSC_planet1, Opt_PSC_ring1, Opt_PSC_sun2, Opt_PSC_planet2, Opt_PSC_ring2, Opt_CD_SP1, Opt_CD_PR1, Opt_CD_SP2, Opt_CD_PR2, mass, eff, peakTorque, Cost, Torque_Density")
-                print("iter, gearRatio, module1, module2, Ns1, Np1, Nr1, numPlanet1, Ns2, Np2, Nr2, numPlanet2, fwSun1MM, fwPlanet1MM, fwRing1MM, fwSun2MM, fwPlanet2MM, fwRing2MM, mass, eff, peakTorque, Cost, Torque_Density, ")
+                print("iter, gearRatio, module1, module2, Ns1, Np1, Nr1, numPlanet1, Ns2, Np2, Nr2, numPlanet2, fwSun1MM, fwPlanet1MM, fwRing1MM, fwSun2MM, fwPlanet2MM, fwRing2MM, mass, eff, peakTorque, Cost, Torque_Density, Outer_Bearing_mass_stg1, Outer_Bearing_mass_stg2, Actuator_width")
 
             while self.gearRatioIter <= self.GEAR_RATIO_MAX:
                 opt_done  = 0
@@ -9775,7 +9775,9 @@ class optimizationDoubleStagePlanetaryActuator:
                                                                 if self.Cost < MinCost:
                                                                     MinCost = self.Cost
                                                                     self.iter +=1
-                                                                    Actuator.genEquationFile()
+                                                                    # Actuator.genEquationFile()
+                                                                    Actuator.genEquationFile(motor_name=Actuator.motor.motorName, gearRatioLL=round(self.gearRatioIter, 1), gearRatioUL = (round(self.gearRatioIter + self.GEAR_RATIO_STEP,1)))
+
                                                                     opt_done = 1
                                                                     opt_parameters = [Actuator.doubleStagePlanetaryGearbox.gearRatio(),
                                                                                       Actuator.doubleStagePlanetaryGearbox.Stage1.numPlanet,
