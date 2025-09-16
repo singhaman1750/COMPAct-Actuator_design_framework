@@ -507,9 +507,9 @@ Optimizer_MAD_M6C12 = optimizationDoubleStagePlanetaryActuator(design_parameters
                                                          GEAR_RATIO_MAX           = GEAR_RATIO_MAX        ,
                                                          GEAR_RATIO_STEP          = GEAR_RATIO_STEP       )
 
-# #-----------------------
-# # Optimization: U8
-# #-----------------------
+#-----------------------
+# Optimization: U8
+#-----------------------
 totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
 
 # Convert to hours, minutes, and seconds

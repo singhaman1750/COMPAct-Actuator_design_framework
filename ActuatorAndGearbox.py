@@ -8181,6 +8181,7 @@ class optimizationSingleStageActuator:
             print(self.K_Mass,",", self.K_Eff,",", self.K_Width,",", self.MODULE_MIN,",", self.MODULE_MAX,",", self.NUM_PLANET_MIN,",", self.NUM_PLANET_MAX,",", self.NUM_TEETH_SUN_MIN,",", self.NUM_TEETH_PLANET_MIN,",", self.GEAR_RATIO_MIN,",", self.GEAR_RATIO_MAX,",", self.GEAR_RATIO_STEP)
 
     def printOptimizationResults(self, Actuator=singleStagePlanetaryActuator, log=1, csv=0):
+        Actuator.setVariables()
         if log:
             # Printing the parameters below
             print("Iteration: ", self.iter)
@@ -8665,6 +8666,7 @@ class optimizationCompoundPlanetaryActuator:
             print(self.K_Mass,",", self.K_Eff,",", self.MODULE_BIG_MIN,",", self.MODULE_BIG_MAX,",", self.MODULE_SMALL_MIN,",", self.MODULE_SMALL_MAX,",",self.NUM_PLANET_MIN,",", self.NUM_PLANET_MAX,",", self.NUM_TEETH_SUN_MIN,",", self.NUM_TEETH_PLANET_BIG_MIN,",",self.NUM_TEETH_PLANET_SMALL_MIN,",", self.GEAR_RATIO_MIN,",", self.GEAR_RATIO_MAX,",", self.GEAR_RATIO_STEP)
         
     def printOptimizationResults(self, Actuator=compoundPlanetaryActuator, log=1, csv=0):
+        Actuator.setVariables()
         if log:
             # Printing the parameters below
             print("Iteration: ", self.iter)
@@ -9522,6 +9524,7 @@ class optimizationWolfromPlanetaryActuator:
             print(self.K_Mass,",", self.K_Eff,",", self.MODULE_BIG_MIN,",", self.MODULE_BIG_MAX,",", self.MODULE_SMALL_MIN,",", self.MODULE_SMALL_MAX,",",self.NUM_PLANET_MIN,",", self.NUM_PLANET_MAX,",", self.NUM_TEETH_SUN_MIN,",", self.NUM_TEETH_PLANET_BIG_MIN,",",self.NUM_TEETH_PLANET_SMALL_MIN,",", self.GEAR_RATIO_MIN,",", self.GEAR_RATIO_MAX,",", self.GEAR_RATIO_STEP)
 
     def printOptimizationResults(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
+        Actuator.setVariables()
         if log:
             # Printing the parameters below
             print("Iteration: ", self.iter)
@@ -9593,7 +9596,7 @@ class optimizationWolfromPlanetaryActuator:
             torque_density  = round(peakTorque/mass, 3)
             Outer_bearing_mass = Actuator.bearing_mass
             Actuator_width = Actuator.actuator_width
-            print(iter,",", gearRatio,",",moduleBig,",",moduleSmall,",", Ns,",", NpBig,",", NpSmall,",", NrBig,",",NrSmall,",", numPlanet,",", Opt_PSC_sun,",",  Opt_PSC_planet1,",", Opt_PSC_planet2,",", Opt_PSC_ring1,",",Opt_PSC_ring2,",", fwSunMM,",", fwPlanetBigMM,",",fwPlanetSmallMM,",", fwRingBigMM,",",fwRingSmallMM,",", mass, ",", eff,",", peakTorque,",", Cost, ",", torque_density, ",", Outer_bearing_mass, ",", Actuator_width)
+            print(iter,",", gearRatio,",",moduleBig,",",moduleSmall,",", Ns,",", NpBig,",", NpSmall,",", NrBig,",",NrSmall,",", numPlanet,",", fwSunMM,",", fwPlanetBigMM,",",fwPlanetSmallMM,",", fwRingBigMM,",",fwRingSmallMM,",", mass, ",", eff,",", peakTorque,",", Cost, ",", torque_density, ",", Outer_bearing_mass, ",", Actuator_width)
 
     def cost(self, Actuator=wolfromPlanetaryActuator):
         K_gearRatio = 0
@@ -10115,6 +10118,7 @@ class optimizationDoubleStagePlanetaryActuator:
             print(self.K_Mass,",", self.K_Eff,",", self.MODULE_STAGE1_MIN,",", self.MODULE_STAGE1_MAX,",", self.MODULE_STAGE2_MIN,",", self.MODULE_STAGE2_MAX,",", self.NUM_PLANET_STAGE1_MIN,",", self.NUM_PLANET_STAGE1_MAX,",", self.NUM_PLANET_STAGE2_MIN,",", self.NUM_PLANET_STAGE2_MAX,",", self.NUM_TEETH_SUN_MIN,",", self.NUM_TEETH_PLANET_MIN,",", self.GEAR_RATIO_MIN,",", self.GEAR_RATIO_MAX,",", self.GEAR_RATIO_STEP)
 
     def printOptimizationResults(self, Actuator=doubleStagePlanetaryActuator, log=1, csv=0):
+        Actuator.setVariables()
         if log:
             # Printing the parameters below
             print("Iteration: ", self.iter)
