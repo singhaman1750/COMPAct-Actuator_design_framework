@@ -19,11 +19,45 @@ def main(motor, gearbox_type, gear_ratio=0):
     print(f"  Gearbox     : {gearbox_type}")
     print(f"  Gear Ratio  : {gear_ratio}")
 
-    total_time = module.run(motor, gear_ratio)
-
-    print("Optimization completed.")
+    total_time, opt_parameters = module.run(motor, gear_ratio)
     print("Time taken:", total_time, "sec")
-
+    if opt_parameters is None:
+        print("No feasible solution found.")
+        return
+    else:
+        print("Optimization Completed.")
+    if(gearbox_type=="sspg"):
+        print("-------------------------------")
+        print("Optimal Parameters:")
+        print("Number of teeth: Sun(Ns):", opt_parameters[2], ", Planet(Np):", opt_parameters[3], ", Ring(Nr):", opt_parameters[4],
+              ", Module(m):", opt_parameters[5], ", NumPlanet(n_p):", opt_parameters[1])
+        print("---")
+        print("Gear Ratio(GR):", opt_parameters[0],": 1")
+        print("-------------------------------")
+    elif(gearbox_type=="cpg"):
+        print("-------------------------------")
+        print("Optimal Parameters:")
+        print("Number of teeth: Sun1(Ns1):", opt_parameters[2], ", Planet1(Np1):", opt_parameters[3], ", Planet2(Np2):", opt_parameters[4], ", Ring(Nr):", opt_parameters[5],
+              ", Module(m):", opt_parameters[6], ", NumPlanet(n_p):", opt_parameters[1])
+        print("---")
+        print("Gear Ratio(GR):", opt_parameters[0],": 1")
+        print("-------------------------------")
+    elif(gearbox_type=="wpg"):
+        print("-------------------------------")
+        print("Optimal Parameters:")
+        print("Number of teeth: Sun1(Ns1):", opt_parameters[2], ", Planet1(Np1):", opt_parameters[3], ", Ring1(R1):", opt_parameters[4], ", Planet2(Np2):", opt_parameters[5], ", Ring2(Nr2):", opt_parameters[6],
+              ", Module1(m1):", opt_parameters[7], ", Module2(m2):", opt_parameters[8], ", NumPlanet(n_p):", opt_parameters[1])
+        print("---")
+        print("Gear Ratio(GR):", opt_parameters[0],": 1")
+        print("-------------------------------")
+    elif(gearbox_type=="dspg"):
+        print("-------------------------------")
+        print("Optimal Parameters:")
+        print("Number of teeth: Sun1(Ns1):", opt_parameters[3], ", Planet1(Np1):", opt_parameters[4], ", Ring1(R1):", opt_parameters[5], "Sun2(Ns2):", opt_parameters[6], ", Planet2(Np2):", opt_parameters[7], ", Ring2(Nr2):", opt_parameters[8],
+              ", Module1(m1):", opt_parameters[9], ", Module2(m2):", opt_parameters[10], ", NumPlanet1(n_p1):", opt_parameters[1], "NumPlanet2(n_p2):", opt_parameters[2])
+        print("---")
+        print("Gear Ratio(GR):", opt_parameters[0],": 1")
+        print("-------------------------------")
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:

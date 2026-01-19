@@ -496,24 +496,90 @@ Optimizer_MAD_M6C12 = optimizationWolfromPlanetaryActuator(design_parameters    
                                                      GEAR_RATIO_MAX             = GEAR_RATIO_MAX            ,
                                                      GEAR_RATIO_STEP            = GEAR_RATIO_STEP           )
 
+#=============================================================
+# run function to select the gearbox_type
+#=============================================================
+def run(motor_name, gear_ratio):
+    if motor_name == "U8":
+        return Optimizer_U8.optimizeActuator(
+            Actuator_U8,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-#-----------------------------------------------------
-# Optimize 
-#-----------------------------------------------------
-totalTime_U8    = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  U8 : Time Taken:", totalTime_U8)
+    elif motor_name == "U10":
+        return Optimizer_U10.optimizeActuator(
+            Actuator_U10,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-totalTime_U10    = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  U10 : Time Taken:", totalTime_U10)
+    elif motor_name == "MN8014":
+        return Optimizer_MN8014.optimizeActuator(
+            Actuator_MN8014,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  MN8014 : Time Taken:", totalTime_MN8014)
+    elif motor_name == "VT8020":
+        return Optimizer_VT8020.optimizeActuator(
+            Actuator_VT8020,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  VT8020 : Time Taken:", totalTime_VT8020)
+    elif motor_name == "U12":
+        return Optimizer_U12.optimizeActuator(
+            Actuator_U12,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  U12 : Time Taken:", totalTime_U12)
+    elif motor_name == "MAD_M6C12":
+        return Optimizer_MAD_M6C12.optimizeActuator(
+            Actuator_MAD_M6C12,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
-print("Optimization Completed : WPG  MAD_M6C12 : Time Taken:", totalTime_MAD_M6C12)
+    else:
+        raise ValueError(f"Unsupported motor: {motor_name}")
+
+# #-----------------------------------------------------
+# # Optimize 
+# #-----------------------------------------------------
+# totalTime_U8    = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  U8 : Time Taken:", totalTime_U8)
+
+# totalTime_U10    = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  U10 : Time Taken:", totalTime_U10)
+
+# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  MN8014 : Time Taken:", totalTime_MN8014)
+
+# totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  VT8020 : Time Taken:", totalTime_VT8020)
+
+# totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  U12 : Time Taken:", totalTime_U12)
+
+# totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# print("Optimization Completed : WPG  MAD_M6C12 : Time Taken:", totalTime_MAD_M6C12)

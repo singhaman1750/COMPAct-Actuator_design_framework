@@ -506,81 +506,148 @@ Optimizer_MAD_M6C12 = optimizationDoubleStagePlanetaryActuator(design_parameters
                                                          GEAR_RATIO_MIN           = GEAR_RATIO_MIN        ,
                                                          GEAR_RATIO_MAX           = GEAR_RATIO_MAX        ,
                                                          GEAR_RATIO_STEP          = GEAR_RATIO_STEP       )
+#=============================================================
+# run function to select the gearbox_type
+#=============================================================
+def run(motor_name, gear_ratio):
+    if motor_name == "U8":
+        return Optimizer_U8.optimizeActuator(
+            Actuator_U8,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-#-----------------------
-# Optimization: U8
-#-----------------------
-totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+    elif motor_name == "U10":
+        return Optimizer_U10.optimizeActuator(
+            Actuator_U10,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-# Convert to hours, minutes, and seconds
-hours_U8, remainder_U8 = divmod(totalTime_U8, 3600)
-minutes_U8, seconds_U8 = divmod(remainder_U8, 60)
+    elif motor_name == "MN8014":
+        return Optimizer_MN8014.optimizeActuator(
+            Actuator_MN8014,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-#Print
-print("Optimization Completed : DSPG U8")
-print(f"Time taken: {hours_U8} hours, {minutes_U8} minutes, and {seconds_U8} seconds")
+    elif motor_name == "VT8020":
+        return Optimizer_VT8020.optimizeActuator(
+            Actuator_VT8020,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-#-----------------------
-# Optimization: U10
-#-----------------------
-totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+    elif motor_name == "U12":
+        return Optimizer_U12.optimizeActuator(
+            Actuator_U12,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-# Convert to hours, minutes, and seconds
-hours_U10, remainder_U10 = divmod(totalTime_U10, 3600)
-minutes_U10, seconds_U10 = divmod(remainder_U10, 60)
+    elif motor_name == "MAD_M6C12":
+        return Optimizer_MAD_M6C12.optimizeActuator(
+            Actuator_MAD_M6C12,
+            UsePSCasVariable=0,
+            log=0,
+            csv=1,
+            printOptParams=1,
+            gearRatioReq=gear_ratio
+        )
 
-# Print
-print("Optimization Completed : DSPG U10")
-print(f"Time taken: {hours_U10} hours, {minutes_U10} minutes, and {seconds_U10} seconds")
+    else:
+        raise ValueError(f"Unsupported motor: {motor_name}")
 
-#-----------------------
-# Optimization: MN8014
-#-----------------------
-totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
 
-# Convert to hours, minutes, and seconds
-hours_MN8014, remainder_MN8014 = divmod(totalTime_MN8014, 3600)
-minutes_MN8014, seconds_MN8014 = divmod(remainder_MN8014, 60)
+# #-----------------------
+# # Optimization: U8
+# #-----------------------
+# totalTime_U8 = Optimizer_U8.optimizeActuator(Actuator_U8, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
 
-# Print
-print("Optimization Completed : DSPG MN8014")
-print(f"Time taken: {hours_MN8014} hours, {minutes_MN8014} minutes, and {seconds_MN8014} seconds")
+# # Convert to hours, minutes, and seconds
+# hours_U8, remainder_U8 = divmod(totalTime_U8, 3600)
+# minutes_U8, seconds_U8 = divmod(remainder_U8, 60)
 
-#-----------------------
-# Optimization: VT8020
-#-----------------------
-totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# #Print
+# print("Optimization Completed : DSPG U8")
+# print(f"Time taken: {hours_U8} hours, {minutes_U8} minutes, and {seconds_U8} seconds")
 
-# Convert to hours, minutes, and seconds
-hours_VT8020, remainder_VT8020 = divmod(totalTime_VT8020, 3600)
-minutes_VT8020, seconds_VT8020 = divmod(remainder_VT8020, 60)
+# #-----------------------
+# # Optimization: U10
+# #-----------------------
+# totalTime_U10 = Optimizer_U10.optimizeActuator(Actuator_U10, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
 
-# Print
-print("Optimization Completed : DSPG VT8020")
-print(f"Time taken: {hours_VT8020} hours, {minutes_VT8020} minutes, and {seconds_VT8020} seconds")
+# # Convert to hours, minutes, and seconds
+# hours_U10, remainder_U10 = divmod(totalTime_U10, 3600)
+# minutes_U10, seconds_U10 = divmod(remainder_U10, 60)
 
-# --------------------
-# Optimization: U12
-# --------------------
-totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# # Print
+# print("Optimization Completed : DSPG U10")
+# print(f"Time taken: {hours_U10} hours, {minutes_U10} minutes, and {seconds_U10} seconds")
+
+# #-----------------------
+# # Optimization: MN8014
+# #-----------------------
+# totalTime_MN8014 = Optimizer_MN8014.optimizeActuator(Actuator_MN8014, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+
+# # Convert to hours, minutes, and seconds
+# hours_MN8014, remainder_MN8014 = divmod(totalTime_MN8014, 3600)
+# minutes_MN8014, seconds_MN8014 = divmod(remainder_MN8014, 60)
+
+# # Print
+# print("Optimization Completed : DSPG MN8014")
+# print(f"Time taken: {hours_MN8014} hours, {minutes_MN8014} minutes, and {seconds_MN8014} seconds")
+
+# #-----------------------
+# # Optimization: VT8020
+# #-----------------------
+# totalTime_VT8020 = Optimizer_VT8020.optimizeActuator(Actuator_VT8020, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+
+# # Convert to hours, minutes, and seconds
+# hours_VT8020, remainder_VT8020 = divmod(totalTime_VT8020, 3600)
+# minutes_VT8020, seconds_VT8020 = divmod(remainder_VT8020, 60)
+
+# # Print
+# print("Optimization Completed : DSPG VT8020")
+# print(f"Time taken: {hours_VT8020} hours, {minutes_VT8020} minutes, and {seconds_VT8020} seconds")
+
+# # --------------------
+# # Optimization: U12
+# # --------------------
+# totalTime_U12 = Optimizer_U12.optimizeActuator(Actuator_U12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
  
-# Convert to hours, minutes, and seconds
-hours_U12, remainder_U12 = divmod(totalTime_U12, 3600)
-minutes_U12, seconds_U12 = divmod(remainder_U12, 60)
+# # Convert to hours, minutes, and seconds
+# hours_U12, remainder_U12 = divmod(totalTime_U12, 3600)
+# minutes_U12, seconds_U12 = divmod(remainder_U12, 60)
 
-# Print
-print("Optimization Completed : DSPG U12")
-print(f"Time taken: {hours_U12} hours, {minutes_U12} minutes, and {seconds_U12} seconds")
+# # Print
+# print("Optimization Completed : DSPG U12")
+# print(f"Time taken: {hours_U12} hours, {minutes_U12} minutes, and {seconds_U12} seconds")
 
-# -------------------------
-# Optimization: MAD_M6C12
-# -------------------------
-totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
+# # -------------------------
+# # Optimization: MAD_M6C12
+# # -------------------------
+# totalTime_MAD_M6C12 = Optimizer_MAD_M6C12.optimizeActuator(Actuator_MAD_M6C12, UsePSCasVariable = 0, log=0, csv=1, printOptParams=1, gearRatioReq=0)
 
-# Convert to hours, minutes, and seconds
-hours_MAD_M6C12, remainder_MAD_M6C12 = divmod(totalTime_MAD_M6C12, 3600)
-minutes_MAD_M6C12, seconds_MAD_M6C12 = divmod(remainder_MAD_M6C12, 60)
+# # Convert to hours, minutes, and seconds
+# hours_MAD_M6C12, remainder_MAD_M6C12 = divmod(totalTime_MAD_M6C12, 3600)
+# minutes_MAD_M6C12, seconds_MAD_M6C12 = divmod(remainder_MAD_M6C12, 60)
 
-# Print
-print("Optimization Completed : DSPG MAD_M6C12")
-print(f"Time taken: {hours_MAD_M6C12} hours, {minutes_MAD_M6C12} minutes, and {seconds_MAD_M6C12} seconds")
+# # Print
+# print("Optimization Completed : DSPG MAD_M6C12")
+# print(f"Time taken: {hours_MAD_M6C12} hours, {minutes_MAD_M6C12} minutes, and {seconds_MAD_M6C12} seconds")

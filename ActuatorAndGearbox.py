@@ -8244,19 +8244,21 @@ class optimizationSingleStageActuator:
     def optimizeActuator(self, Actuator=singleStagePlanetaryActuator, UsePSCasVariable = 1, log = 0, csv = 1, gearRatioReq = 0, printOptParams = 1):
         self.UsePSCasVariable = UsePSCasVariable
         totalTime = 0
+        opt_parameters = None # [Gear Ratio, numPlanet, Ns, Np, Nr, Module]
         self.gearRatioReq = gearRatioReq
         if UsePSCasVariable == 0:
-            totalTime = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams = printOptParams)
+            totalTime, opt_parameters = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams = printOptParams)
         elif UsePSCasVariable == 1:
             totalTime = self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv, printOptParams = printOptParams)
         else:
             totalTime = 0
             print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
         
-        return totalTime
+        return totalTime, opt_parameters
 
     def optimizeActuatorWithoutPSC(self, Actuator=singleStagePlanetaryActuator, log=1, csv=0, printOptParams = 1): 
         startTime = time.time()
+        opt_parameters = None # [Gear Ratio, numPlanet, Ns, Np, Nr, Module]
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -8394,7 +8396,7 @@ class optimizationSingleStageActuator:
                 print(totalTime) 
 
         sys.stdout = sys.__stdout__
-        return totalTime
+        return totalTime, opt_parameters
 
     def optimizeActuatorWithPSC(self, Actuator=singleStagePlanetaryActuator, log=1, csv=0, printOptParams = 1):
             startTime = time.time()
@@ -8535,7 +8537,7 @@ class optimizationSingleStageActuator:
     def cost(self, Actuator=singleStagePlanetaryActuator):
         K_gearRatio = 0
         if self.gearRatioReq != 0:
-            K_gearRatio = 1
+            K_gearRatio = 10
         
         gearRatio_err = np.sqrt((Actuator.planetaryGearbox.gearRatio() - self.gearRatioReq)**2)
 
@@ -8723,19 +8725,20 @@ class optimizationCompoundPlanetaryActuator:
         self.UsePSCasVariable = UsePSCasVariable
         totalTime = 0
         self.gearRatioReq = gearRatioReq
+        opt_parameters = None
         if UsePSCasVariable == 0:
-            totalTime = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv,printOptParams=printOptParams)
+            totalTime, opt_parameters = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv,printOptParams=printOptParams)
         elif UsePSCasVariable == 1:
             totalTime = self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv,printOptParams=printOptParams)
         else:
             totalTime = 0
             print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
 
-        return totalTime
+        return totalTime, opt_parameters
     
     def optimizeActuatorWithoutPSC(self, Actuator=compoundPlanetaryActuator, log=1, csv=0, printOptParams=1):
         startTime = time.time()
-        opt_parameters = []
+        opt_parameters = None
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -8895,7 +8898,7 @@ class optimizationCompoundPlanetaryActuator:
 
         sys.stdout = sys.__stdout__
 
-        return totalTime
+        return totalTime, opt_parameters
 
     def optimizeActuatorWithPSC(self, Actuator=compoundPlanetaryActuator, log=1, csv=0):
         startTime = time.time()
@@ -9059,7 +9062,7 @@ class optimizationCompoundPlanetaryActuator:
     def cost(self, Actuator=compoundPlanetaryActuator):
         K_gearRatio = 0
         if self.gearRatioReq != 0:
-            K_gearRatio = 1
+            K_gearRatio = 10
         
         gearRatio_err = np.sqrt((Actuator.compoundPlanetaryGearbox.gearRatio() - self.gearRatioReq)**2)
 
@@ -9126,10 +9129,11 @@ class optimizationWolfromPlanetaryActuator:
         startTime = time.time()
         self.UsePSCasVariable = UsePSCasVariable
         self.gearRatioReq = gearRatioReq
+        opt_parameters = None
         if UsePSCasVariable == 0:
-            self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams = printOptParams)
+            opt_parameters = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams = printOptParams)
         elif UsePSCasVariable == 1:
-            self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
+            opt_parameters =self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
         else:
             print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
         
@@ -9140,10 +9144,10 @@ class optimizationWolfromPlanetaryActuator:
         # print("Running Time (sec)")
         # print(totalTime) 
 
-        return (totalTime)
+        return totalTime, opt_parameters
 
     def optimizeActuatorWithoutPSC(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0, printOptParams = 1):
-        opt_parameters = []
+        opt_parameters = None
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -9304,7 +9308,10 @@ class optimizationWolfromPlanetaryActuator:
 
         sys.stdout = sys.__stdout__
 
+        return opt_parameters
+
     def optimizeActuatorWithPSC(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0, printOptParams = 1):
+        opt_parameters = None
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -9465,6 +9472,8 @@ class optimizationWolfromPlanetaryActuator:
                     print(" ")
 
         sys.stdout = sys.__stdout__
+
+        return opt_parameters
 
     def printOptimizationParameters(self, Actuator = wolfromPlanetaryActuator, log=1, csv=0):
         # Motor Parameters
@@ -9681,18 +9690,20 @@ class optimizationDoubleStagePlanetaryActuator:
         self.UsePSCasVariable = UsePSCasVariable
         totalTime = 0
         self.gearRatioReq = gearRatioReq
+        opt_parameters = None
         if UsePSCasVariable == 0:
-            totalTime = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
+            totalTime, opt_parameters = self.optimizeActuatorWithoutPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
         elif UsePSCasVariable == 1:
-            totalTime = self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
+            totalTime, opt_parameters = self.optimizeActuatorWithPSC(Actuator=Actuator, log=log, csv=csv, printOptParams=printOptParams)
         else:
             totalTime = 0
             print("ERROR: \"UsePSCasVariable\" can be either 0 or 1")
 
-        return totalTime
+        return totalTime, opt_parameters
     
     def optimizeActuatorWithoutPSC(self, Actuator=doubleStagePlanetaryActuator, log=1, csv=0, printOptParams = 1):
         startTime = time.time()
+        opt_parameters = None
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -9876,10 +9887,11 @@ class optimizationDoubleStagePlanetaryActuator:
 
         sys.stdout = sys.__stdout__
 
-        return totalTime
+        return totalTime, opt_parameters
 
     def optimizeActuatorWithPSC(self, Actuator=doubleStagePlanetaryActuator, log=1, csv=0):
         startTime = time.time()
+        opt_parameters = None
         if csv and log:
             print("WARNING: Both csv and Log cannot be true")
             print("WARNING: Please set either csv or log to be 0 in \"Optimizer.optimizeActuator(Actuator)\" function")
@@ -10064,7 +10076,7 @@ class optimizationDoubleStagePlanetaryActuator:
 
         sys.stdout = sys.__stdout__
 
-        return totalTime
+        return totalTime, opt_parameters
 
     def printOptimizationParameters(self, Actuator=doubleStagePlanetaryActuator, log=1, csv=0):
         # Motor Parameters
