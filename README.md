@@ -46,21 +46,20 @@ Replace `<motor_name>` with name of motors, `<gearbox_type>` with types of gearb
 
 1. `<motor_name>`: U8, U10, U12, MN8014, VT8020, MAD_M6C12
 2. `<gearbox_type>`: sspg, cpg, wpg, dspg
-3. `<gear_ratio>`: $2 <$ `<gear_ratio>` < $\infty$
+3. `<gear_ratio>`: $2 <$ `<gear_ratio>`
 
-#### Example
-
-    python actOpt.py U8 sspg 6.5
+##### Example
+```
+python actOpt.py U8 sspg 6.5
+```
 
 This command runs the optimization for a **T-motor U8** with a **Single-Stage Planetary Gearbox** and a **gear ratio of 6.5**.
 
----
+#### Available Options
 
-### 3. Available Options
+##### ✅ Supported Motors
 
-#### ✅ Supported Motors
-
-| Motor Code | Motor Description |
+| `<motor_name>` | Motor Description |
 |------------|------------------|
 | U8 | T-motor U8 |
 | U10 | T-motor U10+ |
@@ -69,9 +68,9 @@ This command runs the optimization for a **T-motor U8** with a **Single-Stage Pl
 | VT8020 | Vector Techniques 8020 |
 | MAD_M6C12 | MAD Components M6C12 |
 
-#### ⚙️ Supported Gearbox Types
+##### ⚙️ Supported Gearbox Types
 
-| Gearbox Code | Gearbox Description |
+| `<gearbox_type>` | Gearbox Description |
 |--------------|--------------------|
 | sspg | Single-Stage Planetary Gearbox |
 | cpg | Compound Planetary Gearbox |
