@@ -33,7 +33,7 @@ The **COMPAct Framework** streamlines the design of robotic actuators by automat
 * **SolidWorks 2024** (or higher) – *Required for CAD automation features.*
 
 ### Recommended Terminal
-* **Windows:** [Git Bash](https://git-scm.com/downloads) is highly recommended for running the automation scripts.
+* **Windows:** [Git Bash](https://git-scm.com/downloads) is highly recommended.
 * **Linux/macOS:** Default terminal.
 
 ### 1. Installation
