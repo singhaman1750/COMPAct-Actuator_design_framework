@@ -50,8 +50,10 @@ cd COMPAct-Actuator_design_framework
 pip install numpy matplotlib pandas
 ```
 
-### 2. Extract CAD Files
+### 2. Extract CAD Files (Optional)
 Due to file size limits, CAD files are zipped. You must extract them before running the framework.
+
+**NOTE:** _If you only need the optimized gear parameters (teeth count, module, etc.), you can skip this step. Extraction is only required if you intend to use the **automated 3D modeling**._
 
 1.  Navigate to the `CADs` directory.
 2.  Inside each gearbox folder (e.g., `CADs/SSPG/`), unzip the archive (e.g., `sspg_actuator.zip`) into the **same directory**.
@@ -112,6 +114,8 @@ Detailed parameter files (used by SolidWorks) are automatically generated in the
 * **WPG:** `CADs/WPG/wpg_equations.txt`
 
 ### Step 3: CAD Automation
+**NOTE:** _If you skipped the CAD extraction, you can stop at Step 2._
+
 1.  Open **SolidWorks**.
 2.  Open the assembly file (`.SLDASM`) for your specific gearbox type:
     * **SSPG:** `CADs/SSPG/sspg_actuator/sspg_actuator/sspg_actuator.SLDASM`
