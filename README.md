@@ -17,6 +17,20 @@ This repository provides an implementation of the paper:
 
 <br>
 
+----
+
+This framework provides the following features:
+1. **Optimize planetary gearbox** parameters for a **given motor** across the following gearbox types:
+      - Single Stage Planetary Gearbox (SSPG),
+      - Compound Planetary Gearbox (CPG),
+      - Wolfrom Planetary Gearbox (3K)(WPG), and
+      - Double Stage Planetary Gearbox (DSPG).
+
+2. Perform multi-objective optimization to **minimize actuator mass** and **axial width** while **maximizing efficiency**.
+3. **Automatically generate parametric actuator CAD** from optimization results, enabling direct **3D printing without manual redesign**.
+
+----
+
 ## ✅ Supported Hardware
 
 ### Supported Motors
