@@ -1,4 +1,4 @@
-# COMPAct Framework
+# COMPAct: Actuator design framework
 
 **Paper:** [*COMPAct: Computational Optimization and Automated Modular design of Planetary Actuators*](https://www.arxiv.org/abs/2510.07197)
 
