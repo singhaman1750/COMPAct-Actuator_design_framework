@@ -1,6 +1,19 @@
 # COMPAct: Actuator design framework
 
-**Paper:** [*COMPAct: Computational Optimization and Automated Modular design of Planetary Actuators*](https://www.arxiv.org/abs/2510.07197)
+<td style="padding:20px;width:75%;vertical-align:middle">
+      <a href="https://arxiv.org/abs/2510.07197" target="_blank">
+      <b> COMPAct: Computational Optimization and Automated Modular design of Planetary Actuators </b>
+      </a>
+      <br>
+      <a href="https://singhaman1750.github.io/" target="_blank">Aman Singh</a>, <a href="https://www.linkedin.com/in/deepak-kapa-iitr26/" target="_blank">Deepak Kapa</a>, <a href="https://www.linkedin.com/in/suryank-joshi/" target="_blank">Suryank Joshi</a>, and <a href="https://www.shishirny.com/" target="_blank">Shishir Kolathaya</a>
+      <br>
+      <em>IEEE International Conference on Robotics and Automation</em>, 2026
+      <br>
+      <a href="https://youtu.be/99zOKgxsDho?si=5hyMySFOMPunLLCl">Video-Overview</a>
+    <br>
+</td>
+
+<br>
 
 The **COMPAct Framework** streamlines the design of robotic actuators by automating the calculation of optimal gear parameters and updating 3D CAD models.
 
